@@ -4,11 +4,36 @@
              xmlns:local="clr-namespace:MarketMonitor"
              x:Class="MarketMonitor.MainPage">
 
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <!--<On Platform="iOS" Value="20, 40, 20, 20" />-->
+            <On Platform="Android, UWP" Value="20" />
+        </OnPlatform>
+    </ContentPage.Padding>
     <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Total Market Cap:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro"/>
+            <Label Text="{Binding TotalMarketCap}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Total Volume (24H):" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="{Binding TotalVolume24H}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="BTC Dominance:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="{Binding BtcDominance}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="ETH Dominance:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="{Binding EthDominance}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Time Stamp(GMT):" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="{Binding TimeStamp}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+
+        <Button Text="Refresh" Command="{Binding RefreshCommand}"/>
+        <ActivityIndicator IsRunning="{Binding IsBusy}" VerticalOptions="Center"/>
     </StackLayout>
 
 </ContentPage>
