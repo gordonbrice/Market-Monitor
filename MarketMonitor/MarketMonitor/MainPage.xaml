@@ -33,6 +33,10 @@
         </StackLayout>
 
         <Button Text="Refresh" Command="{Binding RefreshCommand}"/>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Message:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="{Binding RawData}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
         <ActivityIndicator IsRunning="{Binding IsBusy}" VerticalOptions="Center"/>
     </StackLayout>
 

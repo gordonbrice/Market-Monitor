@@ -7,11 +7,10 @@ namespace CoinMarketCap
     public static class CMCConnection
     {
         const string baseUrl = "https://pro-api.coinmarketcap.com";
-        //const string apiKey = "CMC_PRO_API_KEY=24a1792e-e16d-4a11-ba29-2cd79ed459bb";
 
-        public async static Task<string> ApiGet(string function)
+        public async static Task<string> ApiGet(string function, string apiKey)
         {
-            var response = await Get(string.Format("{0}{1}", baseUrl, function)).ConfigureAwait(false);
+            var response = await Get(string.Format("{0}{1}", baseUrl, function), apiKey).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -21,15 +20,22 @@ namespace CoinMarketCap
             return response.StatusCode.ToString();
         }
 
-        private async static Task<HttpResponseMessage> Get(string url)
+        private async static Task<HttpResponseMessage> Get(string url, string apiKey)
         {
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Add("X-CMC_PRO_API_KEY", "24a1792e-e16d-4a11-ba29-2cd79ed459bb");
-                client.Timeout = TimeSpan.FromSeconds(30);
+            var key = apiKey.Trim().Split('=');
 
-                return await client.GetAsync(url).ConfigureAwait(false);
+            if(key.Length > 1)
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add(key[0], key[1]);
+                    client.Timeout = TimeSpan.FromSeconds(30);
+
+                    return await client.GetAsync(url).ConfigureAwait(false);
+                }
             }
+
+            return null;
         }
     }
 }
