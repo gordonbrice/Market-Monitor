@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CoinMarketCap\CoinMarketCap.csproj" />
+    <ProjectReference Include="..\..\CypherUtil\CypherUtil.csproj" />
+    <ProjectReference Include="..\..\Nomics\Nomics.csproj" />
   </ItemGroup>
 
   <ItemGroup>

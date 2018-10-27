@@ -1,9 +1,12 @@
 ﻿using CoinMarketCap;
+using CypherUtil;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
 using MvvmHelpers;
+using Nomics;
 using System;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -14,15 +17,19 @@ namespace MarketMonitor.ViewModels
     {
         public MainPageViewModel()
         {
+            IsNotLoggedIn = true;
             Title = "EOS AssetMonitor";
-            //apiKey = GetApiKey().Result;
-            //GetGlobalMetrics();
             RefreshCommand = new Command(async () => await Refresh(), () => IsNotBusy);
+            LoginCommand = new Command(async () => await Login());
         }
 
         public ICommand RefreshCommand { get; private set; }
+        public ICommand LoginCommand { get; private set; }
 
         string name;
+        string apiKeyCMC;
+        string apiKeyNomics;
+
         public string RawData
         {
             get { return name; }
@@ -82,40 +89,88 @@ namespace MarketMonitor.ViewModels
             }
         }
 
-        string apiKey;
+        bool isNotLoggedIn;
+        public bool IsNotLoggedIn
+        {
+            get
+            {
+                return isNotLoggedIn;
+            }
+
+            set
+            {
+                SetProperty(ref isNotLoggedIn, value);
+            }
+        }
+
+        string password;
+        public string Password
+        {
+            get
+            {
+                return password;
+            }
+
+            set
+            {
+                SetProperty(ref password, value);
+            }
+        }
+        private async Task Login()
+        {
+            await Refresh();
+            IsNotLoggedIn = false;
+        }
 
         private async Task Refresh()
         {
             IsBusy = true;
 
-            if(string.IsNullOrEmpty(apiKey))
+            if(string.IsNullOrEmpty(apiKeyCMC) || string.IsNullOrEmpty(apiKeyNomics))
             {
-                apiKey = await GetApiKey();
-            }
-            else
-            {
-                var result = await GlobalMetricsRequest.GetGlobalMetrics(apiKey);
-
-                if(result == "Unauthorized")
+                if(string.IsNullOrEmpty(Password))
                 {
-                    RawData = result;
+                    RawData = "Password not set.";
                 }
                 else
                 {
-                    SetPropertiesFromGlobalMetrics(GlobalMetrics.FromJson(result));
+                    await GetApiKeys(Password);
                 }
             }
+
+            if(!string.IsNullOrEmpty(apiKeyCMC))
+            {
+                var resultCMC = await GlobalMetricsRequest.GetGlobalMetrics(apiKeyCMC);
+
+                if(resultCMC == "Unauthorized")
+                {
+                    RawData = resultCMC;
+                }
+                else
+                {
+                    SetPropertiesFromGlobalMetrics(GlobalMetrics.FromJson(resultCMC));
+                }
+            }
+
+            if(!string.IsNullOrEmpty(apiKeyNomics))
+            {
+                RawData = await MarketCapHistory.GetMarketCapHistory(apiKeyNomics);
+            }
+
             IsBusy = false;
         }
 
-        private async Task<string> GetApiKey()
+        private async Task GetApiKeys(string password)
         {
+            //mIWrBwmCu+/ZvZfwS2//R5YKYokBuIo7BRixpa1dpzY9EY6nV/7FMbR8aVC7D5okOU38a2QPYxLxK/Qsf6DqplVbU2irUtYEcBuxJt9wymu8KqiQLQIkd+lHUTxJxzmEGKnmI9JcVscWF5mkj9XANx5263PP7xh47d4NbDOSwn8Jud85ZZtvlWroemb9U2JI2uf/5I2hzhX7Op/shEVFDQbnM9YkJ3coIGRJm+cD9x2h7cDjYnyR1dNr1fJwB6Dx
+            string decrypted = Symmetric.Decrypt<AesManaged>("mIWrBwmCu+/ZvZfwS2//R5YKYokBuIo7BRixpa1dpzY9EY6nV/7FMbR8aVC7D5okOU38a2QPYxLxK/Qsf6DqplVbU2irUtYEcBuxJt9wymu8KqiQLQIkd+lHUTxJxzmEGKnmI9JcVscWF5mkj9XANx5263PP7xh47d4NbDOSwn8Jud85ZZtvlWroemb9U2JI2uf/5I2hzhX7Op/shEVFDQbnM9YkJ3coIGRJm+cD9x2h7cDjYnyR1dNr1fJwB6Dx"
+                , password, "apikeystore");
+
             var account = new CloudStorageAccount(
-                        new StorageCredentials("apikeystore", "faJKla6D7T/1vrzlOb7X1gtrlTrUEePqwudvN1xY9amjQ1X42cpDPx8Jo3WO904ppuqJeWw+FewSK8gFKp56TA=="), true);
+                        new StorageCredentials("apikeystore", decrypted), true);
             var tableClient = account.CreateCloudTableClient();
             var table = tableClient.GetTableReference("ApiKeys");
 
-            //TableQuery<ApiKeyEntity> query = new TableQuery<ApiKeyEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Dev"));
             TableQuery<ApiKeyEntity> query = new TableQuery<ApiKeyEntity>().Where(
                 TableQuery.CombineFilters(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Dev"), TableOperators.And
                 , TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, "d666bdc6d2d2643ea61a6d5df444f6ef84e084b269565a2b0b5bf805fe36702b")));
@@ -124,10 +179,19 @@ namespace MarketMonitor.ViewModels
 
             if(result.Results.Count > 0)
             {
-                return result.Results[0].ApiKey;
+                apiKeyCMC = result.Results[0].ApiKey;
             }
 
-            return null;
+            query = new TableQuery<ApiKeyEntity>().Where(
+                TableQuery.CombineFilters(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Dev"), TableOperators.And
+                , TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, "7f0889c0a7ec97519dff1cf6e1ed52a99422928f5412d53e01e5d546398da472")));
+
+            result = await table.ExecuteQuerySegmentedAsync<ApiKeyEntity>(query, new TableContinuationToken());
+
+            if (result.Results.Count > 0)
+            {
+                apiKeyNomics = result.Results[0].ApiKey;
+            }
         }
 
         private void SetPropertiesFromGlobalMetrics(GlobalMetrics globalMetrics)
@@ -139,27 +203,33 @@ namespace MarketMonitor.ViewModels
             EthDominance = string.Format("{0:n}%", globalMetrics.Data.EthDominance);
         }
 
-        private void GetGlobalMetrics()
+        private async Task<string> GetGlobalMetrics()
         {
             try
             {
-                if(!string.IsNullOrEmpty(apiKey))
+                if(!string.IsNullOrEmpty(apiKeyCMC))
                 {
-                    IsBusy = true;
-
-                    var task = GlobalMetricsRequest.GetGlobalMetrics(apiKey);
-
-                    task.Wait();
-                    IsBusy = false;
-
-                    if (task.IsCompleted)
-                    {
-                        //RawData = task.Result;
-                        SetPropertiesFromGlobalMetrics(GlobalMetrics.FromJson(task.Result));
-                    }
+                    return await GlobalMetricsRequest.GetGlobalMetrics(apiKeyCMC);
                 }
             }
             catch (Exception e)
+            {
+                RawData = e.Message;
+            }
+
+            return null;
+        }
+
+        private async Task GetMarketCapHistory()
+        {
+            try
+            {
+                if(!string.IsNullOrEmpty(apiKeyNomics))
+                {
+                    RawData = await MarketCapHistory.GetMarketCapHistory(apiKeyNomics);
+                }
+            }
+            catch(Exception e)
             {
                 RawData = e.Message;
             }

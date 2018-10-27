@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestApp", "ConsoleTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nomics", "Nomics\Nomics.csproj", "{423BF0E4-28B7-4043-ACD0-7F1FB433858E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CypherUtil", "CypherUtil\CypherUtil.csproj", "{2FFE2052-38BB-4BE4-9CFB-32D7572A384C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{423BF0E4-28B7-4043-ACD0-7F1FB433858E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{423BF0E4-28B7-4043-ACD0-7F1FB433858E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{423BF0E4-28B7-4043-ACD0-7F1FB433858E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FFE2052-38BB-4BE4-9CFB-32D7572A384C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FFE2052-38BB-4BE4-9CFB-32D7572A384C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FFE2052-38BB-4BE4-9CFB-32D7572A384C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FFE2052-38BB-4BE4-9CFB-32D7572A384C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

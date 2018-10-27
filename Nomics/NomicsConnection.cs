@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Nomics
 {
     public class NomicsConnection
     {
-        const string baseUrl = "https://api.nomics.com";
+        const string baseUrl = "https://api.nomics.com/";
 
         public async static Task<string> ApiGet(string function, string key)
         {
-            var response = await Get(string.Format("{0}{1}", baseUrl, function)).ConfigureAwait(false);
+            var span = TimeSpan.FromDays(1);
+            var now = DateTime.UtcNow;
+            var request = string.Format("{0}{1}?{2}\"&\"{3}\"&\"{4}", baseUrl, function, key, HttpUtility.UrlEncode((now - span).ToShortDateString()), HttpUtility.UrlEncode(now.ToShortDateString()));
+            var response = await Get(string.Format("{0}{1}?{2}\"&\"{3}\"&\"{4}", baseUrl, function, key, HttpUtility.UrlEncode((now - span).ToShortDateString()), HttpUtility.UrlEncode(now.ToShortDateString()))).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

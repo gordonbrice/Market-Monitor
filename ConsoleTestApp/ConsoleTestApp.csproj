@@ -98,6 +98,10 @@
       <Project>{7f2cbc08-5a48-4fe1-a577-cb4af7ee515f}</Project>
       <Name>CoinMarketCap</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CypherUtil\CypherUtil.csproj">
+      <Project>{2ffe2052-38bb-4be4-9cfb-32d7572a384c}</Project>
+      <Name>CypherUtil</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

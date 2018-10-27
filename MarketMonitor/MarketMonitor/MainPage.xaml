@@ -11,6 +11,7 @@
         </OnPlatform>
     </ContentPage.Padding>
     <StackLayout>
+        <Entry IsPassword="True" Placeholder="Password" PlaceholderColor="Gray" FontSize="Micro" ReturnCommand="{Binding LoginCommand}" ReturnType="Go" IsVisible="{Binding IsNotLoggedIn}" Text="{Binding Password}"/>
         <StackLayout Orientation="Horizontal">
             <Label Text="Total Market Cap:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro"/>
             <Label Text="{Binding TotalMarketCap}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
