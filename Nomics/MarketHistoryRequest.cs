@@ -2,11 +2,16 @@
 
 namespace Nomics
 {
-    public static class MarketCapHistoryRequest
+    public static class MarketHistoryRequest
     {
         public static async Task<string> GetMarketCapHistory(string apiKey)
         {
             return await NomicsConnection.ApiGet("v1/market-cap/history", apiKey);
+        }
+        
+        public static async Task<string> GetMarketVolumeHistory(string apiKey)
+        {
+            return await NomicsConnection.ApiGet("v1/volume/history", apiKey);
         }
     }
 }
