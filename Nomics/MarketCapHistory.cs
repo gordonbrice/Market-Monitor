@@ -1,12 +1,39 @@
-﻿using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
+using System.Globalization;
 
 namespace Nomics
 {
-    public static class MarketCapHistory
+    public partial class MarketCapHistory
     {
-        public static async Task<string> GetMarketCapHistory(string apiKey)
+        [JsonProperty("timestamp")]
+        public DateTimeOffset Timestamp { get; set; }
+
+        [JsonProperty("market_cap")]
+        public string MarketCap { get; set; }
+    }
+
+    public partial class MarketCapHistory
+    {
+        public static MarketCapHistory[] FromJson(string json) => JsonConvert.DeserializeObject<MarketCapHistory[]>(json, Nomics.Converter.Settings);
+    }
+
+    public static class Serialize
+    {
+        public static string ToJson(this MarketCapHistory[] self) => JsonConvert.SerializeObject(self, Nomics.Converter.Settings);
+    }
+
+    internal static class Converter
+    {
+        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
-            return await NomicsConnection.ApiGet("v1/market-cap/history", apiKey);
-        }
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+            DateParseHandling = DateParseHandling.None,
+            Converters =
+            {
+                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+            },
+        };
     }
 }

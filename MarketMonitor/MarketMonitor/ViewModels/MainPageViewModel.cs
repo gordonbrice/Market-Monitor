@@ -6,6 +6,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using MvvmHelpers;
 using Nomics;
 using System;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -89,6 +90,36 @@ namespace MarketMonitor.ViewModels
             }
         }
 
+        string nomicsTotalMarketCap;
+        public string NomicsTotalMarketCap
+        {
+            get { return nomicsTotalMarketCap; }
+            set
+            {
+                SetProperty(ref nomicsTotalMarketCap, value);
+            }
+        }
+
+        string nomicsTimeStamp;
+        public string NomicsTimeStamp
+        {
+            get { return nomicsTimeStamp; }
+            set
+            {
+                SetProperty(ref nomicsTimeStamp, value);
+            }
+        }
+
+        string nomicsTrend;
+        public string NomicsMarketCapTrend
+        {
+            get { return nomicsTrend; }
+            set
+            {
+                SetProperty(ref nomicsTrend, value);
+            }
+        }
+
         bool isNotLoggedIn;
         public bool IsNotLoggedIn
         {
@@ -148,13 +179,22 @@ namespace MarketMonitor.ViewModels
                 }
                 else
                 {
-                    SetPropertiesFromGlobalMetrics(GlobalMetrics.FromJson(resultCMC));
+                    SetPropertiesFromCMCGlobalMetrics(GlobalMetrics.FromJson(resultCMC));
                 }
             }
 
             if(!string.IsNullOrEmpty(apiKeyNomics))
             {
-                RawData = await MarketCapHistory.GetMarketCapHistory(apiKeyNomics);
+                var resultNomics = await MarketCapHistoryRequest.GetMarketCapHistory(apiKeyNomics);
+
+                if(resultNomics == "Unauthorized")
+                {
+                    RawData = resultNomics;
+                }
+                else
+                {
+                    SetPropertiesFromNomicsMarketCapHistory(MarketCapHistory.FromJson(resultNomics));
+                }
             }
 
             IsBusy = false;
@@ -194,13 +234,69 @@ namespace MarketMonitor.ViewModels
             }
         }
 
-        private void SetPropertiesFromGlobalMetrics(GlobalMetrics globalMetrics)
+        private void SetPropertiesFromCMCGlobalMetrics(GlobalMetrics globalMetrics)
         {
             TotalMarketCap = string.Format("{0:c}", globalMetrics.Data.Quote.Usd.TotalMarketCap);
             TotalVolume24H = string.Format("{0:n}", globalMetrics.Data.Quote.Usd.TotalVolume24H);
             TimeStamp = globalMetrics.Status.Timestamp.ToString();
             BtcDominance = string.Format("{0:n}%", globalMetrics.Data.BtcDominance);
             EthDominance = string.Format("{0:n}%", globalMetrics.Data.EthDominance);
+        }
+
+        private void SetPropertiesFromNomicsMarketCapHistory(Nomics.MarketCapHistory[] marketCapHistory)
+        {
+            ulong previousMarketCap = 0;
+            ulong newMarketCap = 0;
+            ulong upCount = 0;
+            ulong downCount = 0;
+
+            foreach(var marketCap in marketCapHistory)
+            {
+                if(previousMarketCap == 0)
+                {
+                    if(ulong.TryParse(marketCap.MarketCap.Trim(), out previousMarketCap))
+                    {
+                        NomicsTotalMarketCap = previousMarketCap.ToString("C", CultureInfo.CurrentCulture);
+                        NomicsTimeStamp = marketCap.Timestamp.ToString();
+                    }
+                }
+                else
+                {
+                    if(ulong.TryParse(marketCap.MarketCap.Trim(), out newMarketCap))
+                    {
+                        NomicsTotalMarketCap = newMarketCap.ToString("C", CultureInfo.CurrentCulture);
+                        NomicsTimeStamp = marketCap.Timestamp.ToString();
+                    }
+                }
+
+                if(previousMarketCap > 0 && newMarketCap > 0)
+                {
+                    if(previousMarketCap > newMarketCap)
+                    {
+                        downCount += previousMarketCap - newMarketCap;
+                    }
+                    else if(newMarketCap > previousMarketCap)
+                    {
+                        upCount += newMarketCap - previousMarketCap;
+                    }
+
+                    previousMarketCap = newMarketCap;
+                }
+
+                if (upCount > downCount)
+                {
+                    NomicsMarketCapTrend = "Up";
+                }
+                else if(upCount == downCount)
+                {
+                    NomicsMarketCapTrend = "Flat";
+                }
+                else
+                {
+                    NomicsMarketCapTrend = "Down";
+                }
+            }
+
         }
 
         private async Task<string> GetGlobalMetrics()
@@ -226,7 +322,7 @@ namespace MarketMonitor.ViewModels
             {
                 if(!string.IsNullOrEmpty(apiKeyNomics))
                 {
-                    RawData = await MarketCapHistory.GetMarketCapHistory(apiKeyNomics);
+                    RawData = await MarketCapHistoryRequest.GetMarketCapHistory(apiKeyNomics);
                 }
             }
             catch(Exception e)

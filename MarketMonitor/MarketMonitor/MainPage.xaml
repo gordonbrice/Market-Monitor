@@ -13,24 +13,36 @@
     <StackLayout>
         <Entry IsPassword="True" Placeholder="Password" PlaceholderColor="Gray" FontSize="Micro" ReturnCommand="{Binding LoginCommand}" ReturnType="Go" IsVisible="{Binding IsNotLoggedIn}" Text="{Binding Password}"/>
         <StackLayout Orientation="Horizontal">
-            <Label Text="Total Market Cap:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro"/>
+            <Label Text="CMC Total Market Cap:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro"/>
             <Label Text="{Binding TotalMarketCap}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
         </StackLayout>
         <StackLayout Orientation="Horizontal">
-            <Label Text="Total Volume (24H):" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="CMC Total Volume (24H):" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
             <Label Text="{Binding TotalVolume24H}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
         </StackLayout>
         <StackLayout Orientation="Horizontal">
-            <Label Text="BTC Dominance:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="CMC BTC Dominance:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
             <Label Text="{Binding BtcDominance}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
         </StackLayout>
         <StackLayout Orientation="Horizontal">
-            <Label Text="ETH Dominance:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="CMC ETH Dominance:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
             <Label Text="{Binding EthDominance}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
         </StackLayout>
         <StackLayout Orientation="Horizontal">
-            <Label Text="Time Stamp(GMT):" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="CMC Time Stamp(GMT):" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
             <Label Text="{Binding TimeStamp}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Nomics Total Market Cap:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro"/>
+            <Label Text="{Binding NomicsTotalMarketCap}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Nomics Time Stamp(GMT):" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="{Binding NomicsTimeStamp}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Market Cap Trend:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro"/>
+            <Label Text="{Binding NomicsMarketCapTrend}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
         </StackLayout>
 
         <Button Text="Refresh" Command="{Binding RefreshCommand}"/>
