@@ -7,7 +7,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Nomics
 {
-    public partial class MarketVolHistory
+    public partial class GlobalVolHistory
     {
         [JsonProperty("timestamp")]
         public DateTimeOffset Timestamp { get; set; }
@@ -17,9 +17,9 @@ namespace Nomics
         public long Volume { get; set; }
     }
 
-    public partial class MarketVolHistory
+    public partial class GlobalVolHistory
     {
-        public static MarketVolHistory[] FromJson(string json) => JsonConvert.DeserializeObject<MarketVolHistory[]>(json, Nomics.Converter.Settings);
+        public static GlobalVolHistory[] FromJson(string json) => JsonConvert.DeserializeObject<GlobalVolHistory[]>(json, Nomics.Converter.Settings);
     }
 
     internal class ParseStringConverter : JsonConverter

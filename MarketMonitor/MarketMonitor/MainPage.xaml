@@ -37,12 +37,24 @@
             <Label Text="{Binding NomicsTotalMarketCap}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
         </StackLayout>
         <StackLayout Orientation="Horizontal">
-            <Label Text="Nomics Time Stamp(GMT):" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
-            <Label Text="{Binding NomicsTimeStamp}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="Nomics MC Time Stamp(GMT):" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="{Binding NomicsMarketCapTimeStamp}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
         </StackLayout>
         <StackLayout Orientation="Horizontal">
             <Label Text="Market Cap Trend:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro"/>
             <Label Text="{Binding NomicsMarketCapTrend}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Nomics Global Vol:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro"/>
+            <Label Text="{Binding NomicsGlobalVol}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Nomics GV Time Stamp(GMT):" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+            <Label Text="{Binding NomicsGlobalVolTimeStamp}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Global Vol Trend:" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro"/>
+            <Label Text="{Binding NomicsGlobalVolTrend}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Micro" />
         </StackLayout>
 
         <Button Text="Refresh" Command="{Binding RefreshCommand}"/>

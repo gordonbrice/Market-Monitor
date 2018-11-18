@@ -7,6 +7,7 @@ using MvvmHelpers;
 using Nomics;
 using System;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -100,23 +101,33 @@ namespace MarketMonitor.ViewModels
             }
         }
 
-        string nomicsTotalMarketVol;
-        public string NomicsTotalMarketVol
+        string nomicsGlobalVol;
+        public string NomicsGlobalVol
         {
-            get { return nomicsTotalMarketVol; }
+            get { return nomicsGlobalVol; }
             set
             {
-                SetProperty(ref nomicsTotalMarketVol, value);
+                SetProperty(ref nomicsGlobalVol, value);
             }
         }
 
-        string nomicsTimeStamp;
-        public string NomicsTimeStamp
+        string nomicsMarketCapTimeStamp;
+        public string NomicsMarketCapTimeStamp
         {
-            get { return nomicsTimeStamp; }
+            get { return nomicsMarketCapTimeStamp; }
             set
             {
-                SetProperty(ref nomicsTimeStamp, value);
+                SetProperty(ref nomicsMarketCapTimeStamp, value);
+            }
+        }
+
+        string nomicsGlobalVolTimeStamp;
+        public string NomicsGlobalVolTimeStamp
+        {
+            get { return nomicsGlobalVolTimeStamp; }
+            set
+            {
+                SetProperty(ref nomicsGlobalVolTimeStamp, value);
             }
         }
 
@@ -130,13 +141,13 @@ namespace MarketMonitor.ViewModels
             }
         }
 
-        string nomicsMarketVolTrend;
-        public string NomicsMarketVolTrend
+        string nomicsGlobalVolTrend;
+        public string NomicsGlobalVolTrend
         {
-            get { return nomicsMarketVolTrend; }
+            get { return nomicsGlobalVolTrend; }
             set
             {
-                SetProperty(ref nomicsMarketVolTrend, value);
+                SetProperty(ref nomicsGlobalVolTrend, value);
             }
         }
 
@@ -189,42 +200,56 @@ namespace MarketMonitor.ViewModels
                 }
             }
 
+            string cmcMarketCap = null;
+
             if(!string.IsNullOrEmpty(apiKeyCMC))
             {
-                var resultCMC = await GlobalMetricsRequest.GetGlobalMetrics(apiKeyCMC);
+                cmcMarketCap = await GlobalMetricsRequest.GetGlobalMetrics(apiKeyCMC).ConfigureAwait(false);
+            }
 
-                if(resultCMC == "Unauthorized")
+            string nomicsMarketCap = null;
+            string nomicsGlobalVol = null;
+
+            if (!string.IsNullOrEmpty(apiKeyNomics))
+            {
+                nomicsMarketCap = await MarketHistoryRequest.GetMarketCapHistory(apiKeyNomics).ConfigureAwait(false);
+                nomicsGlobalVol = await MarketHistoryRequest.GetGlobalVolumeHistory(apiKeyNomics).ConfigureAwait(false);
+
+            }
+
+            if(!string.IsNullOrEmpty(cmcMarketCap))
+            {
+                if(cmcMarketCap == "Unauthorized")
                 {
-                    RawData = resultCMC;
+                    RawData = cmcMarketCap;
                 }
                 else
                 {
-                    SetPropertiesFromCMCGlobalMetrics(GlobalMetrics.FromJson(resultCMC));
+                    SetPropertiesFromCMCGlobalMetrics(GlobalMetrics.FromJson(cmcMarketCap));
                 }
             }
 
-            if(!string.IsNullOrEmpty(apiKeyNomics))
+            if(!string.IsNullOrEmpty(nomicsMarketCap))
             {
-                var resultNomics = await MarketHistoryRequest.GetMarketCapHistory(apiKeyNomics);
-
-                if(resultNomics == "Unauthorized")
+                if (nomicsMarketCap == "Unauthorized")
                 {
-                    RawData = resultNomics;
+                    RawData = nomicsMarketCap;
                 }
                 else
                 {
-                    SetPropertiesFromNomicsMarketCapHistory(MarketCapHistory.FromJson(resultNomics));
+                    SetPropertiesFromNomicsMarketCapHistory(MarketCapHistory.FromJson(nomicsMarketCap));
                 }
+            }
 
-                var resultVolNomics = await MarketHistoryRequest.GetMarketVolumeHistory(apiKeyNomics);
-
-                if (resultVolNomics == "Unauthorized")
+            if(!string.IsNullOrEmpty(nomicsGlobalVol))
+            {
+                if (nomicsGlobalVol == "Unauthorized")
                 {
-                    RawData = resultVolNomics;
+                    RawData = nomicsGlobalVol;
                 }
                 else
                 {
-                    SetPropertiesFromNomicsMarketVolHistory(MarketVolHistory.FromJson(resultVolNomics));
+                    SetPropertiesFromNomicsMarketVolHistory(GlobalVolHistory.FromJson(nomicsGlobalVol));
                 }
             }
 
@@ -288,7 +313,7 @@ namespace MarketMonitor.ViewModels
                     if(ulong.TryParse(marketCap.MarketCap.Trim(), out previousMarketCap))
                     {
                         NomicsTotalMarketCap = string.Format("{0:c}", previousMarketCap);
-                        NomicsTimeStamp = marketCap.Timestamp.ToString();
+                        NomicsMarketCapTimeStamp = marketCap.Timestamp.ToString();
                     }
                 }
                 else
@@ -296,7 +321,7 @@ namespace MarketMonitor.ViewModels
                     if(ulong.TryParse(marketCap.MarketCap.Trim(), out newMarketCap))
                     {
                         NomicsTotalMarketCap = string.Format("{0:c}", newMarketCap);
-                        NomicsTimeStamp = marketCap.Timestamp.ToString();
+                        NomicsMarketCapTimeStamp = marketCap.Timestamp.ToString();
                     }
                 }
 
@@ -327,12 +352,57 @@ namespace MarketMonitor.ViewModels
                     NomicsMarketCapTrend = "Down";
                 }
             }
-
         }
 
-        private void SetPropertiesFromNomicsMarketVolHistory(MarketVolHistory[] marketVolHistory)
+        private void SetPropertiesFromNomicsMarketVolHistory(GlobalVolHistory[] globalVolHistory)
         {
+            long previousGlobalVol = 0;
+            long newGlobalVol = 0;
+            long upCount = 0;
+            long downCount = 0;
 
+            foreach (var globalVol in globalVolHistory)
+            {
+                if (previousGlobalVol == 0)
+                {
+                    previousGlobalVol = globalVol.Volume;
+                    NomicsGlobalVol = string.Format("{0:c}", previousGlobalVol);
+                    NomicsGlobalVolTimeStamp = globalVol.Timestamp.ToString();
+                }
+                else
+                {
+                    newGlobalVol = globalVol.Volume;
+                    NomicsGlobalVol = string.Format("{0:c}", newGlobalVol);
+                    NomicsGlobalVolTimeStamp = globalVol.Timestamp.ToString();
+                }
+
+                if (previousGlobalVol > 0 && newGlobalVol > 0)
+                {
+                    if (previousGlobalVol > newGlobalVol)
+                    {
+                        downCount += previousGlobalVol - newGlobalVol;
+                    }
+                    else if (newGlobalVol > previousGlobalVol)
+                    {
+                        upCount += newGlobalVol - previousGlobalVol;
+                    }
+
+                    previousGlobalVol = newGlobalVol;
+                }
+
+                if (upCount > downCount)
+                {
+                    NomicsGlobalVolTrend = "Up";
+                }
+                else if (upCount == downCount)
+                {
+                    NomicsGlobalVolTrend = "Flat";
+                }
+                else
+                {
+                    NomicsGlobalVolTrend = "Down";
+                }
+            }
         }
 
         private async Task<string> GetGlobalMetrics()

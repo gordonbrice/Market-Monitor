@@ -9,7 +9,7 @@ namespace Nomics
             return await NomicsConnection.ApiGet("v1/market-cap/history", apiKey);
         }
         
-        public static async Task<string> GetMarketVolumeHistory(string apiKey)
+        public static async Task<string> GetGlobalVolumeHistory(string apiKey)
         {
             return await NomicsConnection.ApiGet("v1/volume/history", apiKey);
         }
