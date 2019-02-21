@@ -10,14 +10,18 @@ namespace ConsoleTestApp
         {
             var ethAddrs = new Dictionary<string, string>();
 
-            ethAddrs.Add();
+            ethAddrs.Add("0x771401d1a2a9BB5d5f6b2Fd5C870E0962e697358","Jaxx SALT Addr");
 
             IBlockchain ethBC = new EtheriumBlockchain();
-            var balTask = ethBC.GetBalance();
 
-            balTask.Wait();
+            foreach(var key in ethAddrs.Keys)
+            {
+                var balTask = ethBC.GetBalance(key);
 
-            Console.WriteLine($"Balance = ${balTask.Result}");
+                balTask.Wait();
+
+                Console.WriteLine($"Balance = ETH:{balTask.Result}");
+            }
             Console.ReadLine();
         }
     }
