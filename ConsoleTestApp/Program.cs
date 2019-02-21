@@ -1,14 +1,6 @@
-﻿using CoinMarketCap;
-using CypherUtil;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using BlockChain;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleTestApp
 {
@@ -16,13 +8,18 @@ namespace ConsoleTestApp
     {
         static void Main(string[] args)
         {
-            Console.ReadKey();
-        }
-    }
+            var ethAddrs = new Dictionary<string, string>();
 
-    public class ApiKeyEntity : TableEntity
-    {
-        public string ApiKey { get; set; }
+            ethAddrs.Add();
+
+            IBlockchain ethBC = new EtheriumBlockchain();
+            var balTask = ethBC.GetBalance();
+
+            balTask.Wait();
+
+            Console.WriteLine($"Balance = ${balTask.Result}");
+            Console.ReadLine();
+        }
     }
 
 }

@@ -64,5 +64,4 @@
         </StackLayout>
         <ActivityIndicator IsRunning="{Binding IsBusy}" VerticalOptions="Center"/>
     </StackLayout>
-
 </ContentPage>
