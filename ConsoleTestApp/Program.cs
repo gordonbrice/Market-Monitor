@@ -1,6 +1,8 @@
 ﻿using BlockChain;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace ConsoleTestApp
 {
@@ -8,20 +10,23 @@ namespace ConsoleTestApp
     {
         static void Main(string[] args)
         {
-            var ethAddrs = new Dictionary<string, string>();
-
-            ethAddrs.Add("0x771401d1a2a9BB5d5f6b2Fd5C870E0962e697358","Jaxx SALT Addr");
-
+            var addressStr = File.ReadAllText(@"c:\Apps\Test\db.txt").Trim();
+            var addresses = addressStr.Split('|');
             IBlockchain ethBC = new EtheriumBlockchain();
 
-            foreach(var key in ethAddrs.Keys)
+            foreach(var address in addresses)
             {
-                var balTask = ethBC.GetBalance(key);
+                if(!string.IsNullOrEmpty(address.Trim()))
+                {
+                    var addr = address.Split(',');
+                    var balTask = ethBC.GetBalance(addr[0]);
 
-                balTask.Wait();
+                    balTask.Wait();
 
-                Console.WriteLine($"Balance = ETH:{balTask.Result}");
+                    Console.WriteLine($"{addr[1]} Balance = ETH:{balTask.Result}");
+                }
             }
+
             Console.ReadLine();
         }
     }
