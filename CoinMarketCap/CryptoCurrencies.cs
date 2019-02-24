@@ -14,16 +14,10 @@ namespace CoinMarketCap
         public Status Status { get; set; }
 
         [JsonProperty("data")]
-        public Data Data { get; set; }
+        public Dictionary<string, Datum> Data { get; set; }
     }
 
-    public partial class Data
-    {
-        [JsonProperty("ETH")]
-        public Eth Eth { get; set; }
-    }
-
-    public partial class Eth
+    public partial class Datum
     {
         [JsonProperty("id")]
         public long Id { get; set; }
@@ -44,7 +38,7 @@ namespace CoinMarketCap
         public double TotalSupply { get; set; }
 
         [JsonProperty("max_supply")]
-        public object MaxSupply { get; set; }
+        public long? MaxSupply { get; set; }
 
         [JsonProperty("date_added")]
         public DateTimeOffset DateAdded { get; set; }
@@ -56,7 +50,7 @@ namespace CoinMarketCap
         public string[] Tags { get; set; }
 
         [JsonProperty("platform")]
-        public object Platform { get; set; }
+        public Platform Platform { get; set; }
 
         [JsonProperty("cmc_rank")]
         public long CmcRank { get; set; }
@@ -68,11 +62,29 @@ namespace CoinMarketCap
         public Quote Quote { get; set; }
     }
 
-    //public partial class Quote
-    //{
-    //    [JsonProperty("USD")]
-    //    public Usd Usd { get; set; }
-    //}
+    public partial class Platform
+    {
+        [JsonProperty("id")]
+        public long Id { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("symbol")]
+        public string Symbol { get; set; }
+
+        [JsonProperty("slug")]
+        public string Slug { get; set; }
+
+        [JsonProperty("token_address")]
+        public string TokenAddress { get; set; }
+    }
+
+    public partial class Quote
+    {
+        [JsonProperty("USD")]
+        public Usd Usd { get; set; }
+    }
 
     public partial class Usd
     {
@@ -94,48 +106,30 @@ namespace CoinMarketCap
         [JsonProperty("market_cap")]
         public double MarketCap { get; set; }
 
-        //[JsonProperty("last_updated")]
-        //public DateTimeOffset LastUpdated { get; set; }
+        [JsonProperty("last_updated")]
+        public DateTimeOffset LastUpdated { get; set; }
     }
 
-    //public partial class Status
-    //{
-    //    [JsonProperty("timestamp")]
-    //    public DateTimeOffset Timestamp { get; set; }
+    public partial class Status
+    {
+        [JsonProperty("timestamp")]
+        public DateTimeOffset Timestamp { get; set; }
 
-    //    [JsonProperty("error_code")]
-    //    public long ErrorCode { get; set; }
+        [JsonProperty("error_code")]
+        public long ErrorCode { get; set; }
 
-    //    [JsonProperty("error_message")]
-    //    public object ErrorMessage { get; set; }
+        [JsonProperty("error_message")]
+        public object ErrorMessage { get; set; }
 
-    //    [JsonProperty("elapsed")]
-    //    public long Elapsed { get; set; }
+        [JsonProperty("elapsed")]
+        public long Elapsed { get; set; }
 
-    //    [JsonProperty("credit_count")]
-    //    public long CreditCount { get; set; }
-    //}
+        [JsonProperty("credit_count")]
+        public long CreditCount { get; set; }
+    }
 
     public partial class CryptoCurrencies
     {
         public static CryptoCurrencies FromJson(string json) => JsonConvert.DeserializeObject<CryptoCurrencies>(json, CoinMarketCap.Converter.Settings);
     }
-
-    //public static class Serialize
-    //{
-    //    public static string ToJson(this CryptoCurrencies self) => JsonConvert.SerializeObject(self, CoinMarketCap.Converter.Settings);
-    //}
-
-    //internal static class Converter
-    //{
-    //    public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-    //    {
-    //        MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-    //        DateParseHandling = DateParseHandling.None,
-    //        Converters =
-    //        {
-    //            new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-    //        },
-    //    };
-    //}
 }

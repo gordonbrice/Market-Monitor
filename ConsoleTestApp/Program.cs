@@ -21,12 +21,32 @@ namespace ConsoleTestApp
 
             fetchKeysTask.Wait();
 
-            var quotesTask = CryptoCurrencysRequest.GetQuotes(keyStore.CoinMarketCapApiKey, "ETH");
+            var quotesTask = CryptoCurrencysRequest.GetQuotes(keyStore.CoinMarketCapApiKey, "BTC,ETH,EOS,USDT,BNB,ADA,MKR,USDC,TUSD,REP,PAX,DAI");
 
             quotesTask.Wait();
 
             var quote = quotesTask.Result;
             var cryptoQuote = CryptoCurrencies.FromJson(quote);
+            decimal ethUsd = 0.00M;
+
+            if (cryptoQuote.Data.ContainsKey("ETH"))
+            {
+                Datum data = null;
+
+                if (cryptoQuote.Data.TryGetValue("ETH", out data))
+                {
+                    ethUsd = (decimal)data.Quote.Usd.Price;
+                }
+            }
+
+            StringBuilder quotes = new StringBuilder();
+
+            foreach(var data in cryptoQuote.Data)
+            {
+                quotes.Append($"{data.Key} = ${data.Value.Quote.Usd.Price}\n");
+            }
+
+            Console.WriteLine(quotes);
 
             var addressStr = File.ReadAllText(@"c:\Apps\Test\eth.txt").Trim();
             var addresses = addressStr.Split('|');
@@ -40,8 +60,16 @@ namespace ConsoleTestApp
                     var balTask = ethBC.GetBalance(addr[0]);
 
                     balTask.Wait();
+                    if(cryptoQuote.Data.ContainsKey("ETH"))
+                    {
+                        Datum data = null;
 
-                    Console.WriteLine($"{addr[1]} Balance = ETH:{balTask.Result}, ${balTask.Result * (decimal)cryptoQuote.Data.Eth.Quote.Usd.Price}\n");
+                        if(cryptoQuote.Data.TryGetValue("ETH", out data))
+                        {
+                            Console.WriteLine($"{addr[1]} Balance = ETH:{balTask.Result}, ${balTask.Result * ethUsd}\n");
+                        }
+
+                    }
                 }
             }
 

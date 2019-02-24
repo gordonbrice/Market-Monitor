@@ -38,11 +38,11 @@ namespace CoinMarketCap
         public DateTimeOffset LastUpdated { get; set; }
     }
 
-    public partial class Quote
-    {
-        [JsonProperty("USD")]
-        public Usd Usd { get; set; }
-    }
+    //public partial class Quote
+    //{
+    //    [JsonProperty("USD")]
+    //    public Usd Usd { get; set; }
+    //}
 
     public partial class Usd
     {
@@ -52,27 +52,27 @@ namespace CoinMarketCap
         [JsonProperty("total_volume_24h")]
         public double TotalVolume24H { get; set; }
 
-        [JsonProperty("last_updated")]
-        public DateTimeOffset LastUpdated { get; set; }
+        //[JsonProperty("last_updated")]
+        //public DateTimeOffset LastUpdated { get; set; }
     }
 
-    public partial class Status
-    {
-        [JsonProperty("timestamp")]
-        public DateTimeOffset Timestamp { get; set; }
+    //public partial class Status
+    //{
+    //    [JsonProperty("timestamp")]
+    //    public DateTimeOffset Timestamp { get; set; }
 
-        [JsonProperty("error_code")]
-        public long ErrorCode { get; set; }
+    //    [JsonProperty("error_code")]
+    //    public long ErrorCode { get; set; }
 
-        [JsonProperty("error_message")]
-        public object ErrorMessage { get; set; }
+    //    [JsonProperty("error_message")]
+    //    public object ErrorMessage { get; set; }
 
-        [JsonProperty("elapsed")]
-        public long Elapsed { get; set; }
+    //    [JsonProperty("elapsed")]
+    //    public long Elapsed { get; set; }
 
-        [JsonProperty("credit_count")]
-        public long CreditCount { get; set; }
-    }
+    //    [JsonProperty("credit_count")]
+    //    public long CreditCount { get; set; }
+    //}
 
     public partial class GlobalMetrics
     {
