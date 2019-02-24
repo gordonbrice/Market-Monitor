@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CypherUtil", "CypherUtil\Cy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketMonitor.WPF", "MarketMonitor.WPF\MarketMonitor.WPF.csproj", "{92E9FDB3-A27A-414B-AEB5-CDA021001E16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockChain", "BlockChain\BlockChain.csproj", "{C589566C-E8AB-4E80-89B9-C274A72FC217}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlockChain", "BlockChain\BlockChain.csproj", "{C589566C-E8AB-4E80-89B9-C274A72FC217}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyStore", "KeyStore\KeyStore.csproj", "{E33F36C0-26DB-4EFF-BEDE-AE0BCC14C79A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{C589566C-E8AB-4E80-89B9-C274A72FC217}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C589566C-E8AB-4E80-89B9-C274A72FC217}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C589566C-E8AB-4E80-89B9-C274A72FC217}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E33F36C0-26DB-4EFF-BEDE-AE0BCC14C79A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E33F36C0-26DB-4EFF-BEDE-AE0BCC14C79A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E33F36C0-26DB-4EFF-BEDE-AE0BCC14C79A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E33F36C0-26DB-4EFF-BEDE-AE0BCC14C79A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

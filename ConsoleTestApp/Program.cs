@@ -1,4 +1,6 @@
 ﻿using BlockChain;
+using CoinMarketCap;
+using KeyStore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +12,23 @@ namespace ConsoleTestApp
     {
         static void Main(string[] args)
         {
-            var addressStr = File.ReadAllText(@"c:\Apps\Test\db.txt").Trim();
+            Console.WriteLine("Enter password:");
+
+            var password = Console.ReadLine();
+            var keyStore = new CloudStore();
+
+            var fetchKeysTask = keyStore.GetApiKeys(password);
+
+            fetchKeysTask.Wait();
+
+            var quotesTask = CryptoCurrencysRequest.GetQuotes(keyStore.CoinMarketCapApiKey, "ETH");
+
+            quotesTask.Wait();
+
+            var quote = quotesTask.Result;
+            var cryptoQuote = CryptoCurrencies.FromJson(quote);
+
+            var addressStr = File.ReadAllText(@"c:\Apps\Test\eth.txt").Trim();
             var addresses = addressStr.Split('|');
             IBlockchain ethBC = new EtheriumBlockchain();
 
@@ -23,7 +41,7 @@ namespace ConsoleTestApp
 
                     balTask.Wait();
 
-                    Console.WriteLine($"{addr[1]} Balance = ETH:{balTask.Result}");
+                    Console.WriteLine($"{addr[1]} Balance = ETH:{balTask.Result}, ${balTask.Result * (decimal)cryptoQuote.Data.Eth.Quote.Usd.Price}\n");
                 }
             }
 
