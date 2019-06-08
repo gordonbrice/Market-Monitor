@@ -22,7 +22,11 @@ namespace MarketMonitor.WPF
     {
         public MainWindow()
         {
+            var vm = new MainWindowViewModel();
+
             InitializeComponent();
+            this.DataContext = vm;
+
         }
     }
 }

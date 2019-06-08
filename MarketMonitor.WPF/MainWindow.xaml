@@ -5,8 +5,68 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MarketMonitor.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MarketMonitor" Height="450" Width="760">
+    <Window.Resources>
+        <Style x:Key="TextBlock" TargetType="{x:Type TextBlock}" BasedOn="{x:Null}">
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+    </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "200" />
+            <ColumnDefinition Width = "200" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0">Property</Label>
+        <Label Grid.Column="1" Grid.Row="0">Local</Label>
+        <Label Grid.Column="2" Grid.Row="0">Infura</Label>
         
+        <Label Grid.Column="0" Grid.Row="1">Status</Label>
+        <TextBlock Grid.Column="1" Grid.Row="1" Text = "{Binding Local.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="1" Text = "{Binding Infura.StatusStr, Mode = OneWay}"></TextBlock>
+
+        <Label Grid.Column="0" Grid.Row="2">Protocol Version</Label>
+        <TextBlock Grid.Column="1" Grid.Row="2" Text = "{Binding Local.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="2" Text = "{Binding Infura.ProtocolVersion, Mode = OneWay}"></TextBlock>
+
+        <Label Grid.Column="0" Grid.Row="3">Highest Block</Label>
+        <TextBlock Grid.Column="1" Grid.Row="3" Text = "{Binding Local.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="3" Text = "{Binding Infura.HighestBlock, Mode = OneWay}"></TextBlock>
+
+        <Label Grid.Column="0" Grid.Row="4">Current Block</Label>
+        <TextBlock Grid.Column="1" Grid.Row="4" Text = "{Binding Local.CurrentBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="4" Text = "{Binding Infura.CurrentBlock, Mode = OneWay}"></TextBlock>
+
+        <Label Grid.Column="0" Grid.Row="5">Syncing</Label>
+        <TextBlock Grid.Column="1" Grid.Row="5" Text = "{Binding Local.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="5" Text = "{Binding Infura.Syncing, Mode = OneWay}"></TextBlock>
+
+        <Button Grid.Column="0" Grid.Row="6">View Accounts</Button>
+        <Label Grid.Column="0" Grid.Row="7">Accounts</Label>
+        <ListBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="7" ItemsSource="{Binding Local.Accounts}" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TextBlock}" Text="{Binding Name}"></TextBlock>
+                        <TextBlock Style="{StaticResource TextBlock}" Text="{Binding Address}"></TextBlock>
+                        <TextBlock Style="{StaticResource TextBlock}" Text="{Binding Eth}"></TextBlock>
+                        <TextBlock Style="{StaticResource TextBlock}" Text="{Binding Usd}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
     </Grid>
 </Window>

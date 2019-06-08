@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketMonitor.Android", "MarketMonitor\MarketMonitor.Android\MarketMonitor.Android.csproj", "{0D39FF3B-A7E0-432B-915B-8C250FD332A9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketMonitor", "MarketMonitor\MarketMonitor\MarketMonitor.csproj", "{C7F72B9A-0356-4D80-9533-069AADDB1601}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoinMarketCap", "CoinMarketCap\CoinMarketCap.csproj", "{7F2CBC08-5A48-4FE1-A577-CB4AF7EE515F}"
@@ -33,18 +31,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NethereumTest", "NethereumT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeMonitor", "NodeMonitor\NodeMonitor.csproj", "{F6B29746-7F66-40E4-BC49-2B5106FDDF59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeServices", "NodeServices\NodeServices.csproj", "{050A99D4-5A26-4507-A3D2-3BF610DCF332}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeModels", "NodeModels\NodeModels.csproj", "{5F5486CA-80BF-4208-9921-CDF84ADC2D28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0D39FF3B-A7E0-432B-915B-8C250FD332A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D39FF3B-A7E0-432B-915B-8C250FD332A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D39FF3B-A7E0-432B-915B-8C250FD332A9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{0D39FF3B-A7E0-432B-915B-8C250FD332A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D39FF3B-A7E0-432B-915B-8C250FD332A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D39FF3B-A7E0-432B-915B-8C250FD332A9}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{C7F72B9A-0356-4D80-9533-069AADDB1601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C7F72B9A-0356-4D80-9533-069AADDB1601}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7F72B9A-0356-4D80-9533-069AADDB1601}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -101,6 +97,14 @@ Global
 		{F6B29746-7F66-40E4-BC49-2B5106FDDF59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6B29746-7F66-40E4-BC49-2B5106FDDF59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6B29746-7F66-40E4-BC49-2B5106FDDF59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{050A99D4-5A26-4507-A3D2-3BF610DCF332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{050A99D4-5A26-4507-A3D2-3BF610DCF332}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{050A99D4-5A26-4507-A3D2-3BF610DCF332}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{050A99D4-5A26-4507-A3D2-3BF610DCF332}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F5486CA-80BF-4208-9921-CDF84ADC2D28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F5486CA-80BF-4208-9921-CDF84ADC2D28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F5486CA-80BF-4208-9921-CDF84ADC2D28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F5486CA-80BF-4208-9921-CDF84ADC2D28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
