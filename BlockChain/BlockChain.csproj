@@ -5,10 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NBitcoin" Version="4.1.1.86" />
-    <PackageReference Include="Nethereum.Hex" Version="3.0.0" />
-    <PackageReference Include="Nethereum.Web3" Version="3.0.0" />
-    <PackageReference Include="QBitNinja.Client" Version="1.0.3.47" />
+    <PackageReference Include="NBitcoin" Version="4.1.2.35" />
+    <PackageReference Include="Nethereum.Hex" Version="3.3.0" />
+    <PackageReference Include="Nethereum.Web3" Version="3.3.0" />
+    <PackageReference Include="QBitNinja.Client" Version="1.0.3.49" />
   </ItemGroup>
 
 </Project>

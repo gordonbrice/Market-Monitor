@@ -1,4 +1,5 @@
-﻿using Nethereum.Hex.HexTypes;
+﻿using Nethereum.Contracts;
+using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
 using System;
@@ -12,6 +13,7 @@ namespace NodeServices
         Task<HexBigInteger> GetHighestBlock();
         Task<SyncingOutput> GetSyncing();
         Task<HexBigInteger> GetBalance(string address);
+        Contract GetContract(string contractAbi, string contractAddress);
     }
     public class EthereumNodeService : INodeService
     {
@@ -40,6 +42,11 @@ namespace NodeServices
         public async Task<HexBigInteger> GetBalance(string address)
         {
             return await web3.Eth.GetBalance.SendRequestAsync(address);
+        }
+
+        public Contract GetContract(string contractAbi, string contractAddress)
+        {
+            return web3.Eth.GetContract(contractAbi, contractAddress);
         }
 
     }

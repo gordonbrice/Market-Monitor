@@ -23,17 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrategiesAndIndicators", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptorDecryptor", "EncryptorDecryptor\EncryptorDecryptor.csproj", "{D0949230-147C-43E1-B21B-36FF7D9B8E64}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uniswap", "Uniswap\Uniswap.csproj", "{072BBD91-73D3-43D9-96E0-96853049D1A0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniswapTestApp", "UniswapTestApp\UniswapTestApp.csproj", "{483AC806-948F-4146-AD81-C2896D2521C3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NethereumTest", "NethereumTest\NethereumTest.csproj", "{2E658CFD-462B-449F-BF4D-09FBC334A4C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeMonitor", "NodeMonitor\NodeMonitor.csproj", "{F6B29746-7F66-40E4-BC49-2B5106FDDF59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodeServices", "NodeServices\NodeServices.csproj", "{050A99D4-5A26-4507-A3D2-3BF610DCF332}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeServices", "NodeServices\NodeServices.csproj", "{050A99D4-5A26-4507-A3D2-3BF610DCF332}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeModels", "NodeModels\NodeModels.csproj", "{5F5486CA-80BF-4208-9921-CDF84ADC2D28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodeModels", "NodeModels\NodeModels.csproj", "{5F5486CA-80BF-4208-9921-CDF84ADC2D28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,22 +75,10 @@ Global
 		{D0949230-147C-43E1-B21B-36FF7D9B8E64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0949230-147C-43E1-B21B-36FF7D9B8E64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0949230-147C-43E1-B21B-36FF7D9B8E64}.Release|Any CPU.Build.0 = Release|Any CPU
-		{072BBD91-73D3-43D9-96E0-96853049D1A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{072BBD91-73D3-43D9-96E0-96853049D1A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{072BBD91-73D3-43D9-96E0-96853049D1A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{072BBD91-73D3-43D9-96E0-96853049D1A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{483AC806-948F-4146-AD81-C2896D2521C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{483AC806-948F-4146-AD81-C2896D2521C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{483AC806-948F-4146-AD81-C2896D2521C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{483AC806-948F-4146-AD81-C2896D2521C3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E658CFD-462B-449F-BF4D-09FBC334A4C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E658CFD-462B-449F-BF4D-09FBC334A4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E658CFD-462B-449F-BF4D-09FBC334A4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E658CFD-462B-449F-BF4D-09FBC334A4C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6B29746-7F66-40E4-BC49-2B5106FDDF59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6B29746-7F66-40E4-BC49-2B5106FDDF59}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6B29746-7F66-40E4-BC49-2B5106FDDF59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6B29746-7F66-40E4-BC49-2B5106FDDF59}.Release|Any CPU.Build.0 = Release|Any CPU
 		{050A99D4-5A26-4507-A3D2-3BF610DCF332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{050A99D4-5A26-4507-A3D2-3BF610DCF332}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{050A99D4-5A26-4507-A3D2-3BF610DCF332}.Release|Any CPU.ActiveCfg = Release|Any CPU

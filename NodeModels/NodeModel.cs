@@ -117,6 +117,16 @@ namespace NodeModels
             }
         }
 
+        #region Uniswap Exchanges
+        string daiExchAddr = null;
+
+        #endregion
+
+        #region Token Contracts
+        string daiContractAddr = "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359";
+
+        #endregion
+
         ObservableCollection<AccountModel> accounts;
         public ObservableCollection<AccountModel> Accounts
         {
@@ -133,7 +143,7 @@ namespace NodeModels
         Timer fastQueryTimer;
         Timer slowQueryTimer;
 
-        public NodeModel(INodeService nodeService, bool getAcctData)
+        public NodeModel(INodeService nodeService, bool getAcctData = false, bool contractInteraction = false)
         {
             this.ethereumService = nodeService;
             Status = NodeStatus.Connected;
@@ -155,6 +165,22 @@ namespace NodeModels
                     }
                 }
             }
+
+            if(contractInteraction)
+            {
+                
+                var abi = File.ReadAllText(@"c:\Apps\Test\Contracts\Uniswap\FactoryABI.json").Trim();
+                var mainNetAddr = "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95";
+                var uniswapFactoryContract = this.ethereumService.GetContract(abi, mainNetAddr);
+                var getExchangeFunction = uniswapFactoryContract.GetFunction("getExchange");
+                var daiExchangeAwaiter = getExchangeFunction.CallAsync<string>(this.daiContractAddr).GetAwaiter();
+
+                daiExchangeAwaiter.OnCompleted(() =>
+                {
+                    this.daiExchAddr = daiExchangeAwaiter.GetResult();
+                });
+            }
+
 
             this.fastQueryTimer = new Timer((s) =>
             {

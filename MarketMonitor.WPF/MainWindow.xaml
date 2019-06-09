@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MarketMonitor.WPF"
         mc:Ignorable="d"
-        Title="MarketMonitor" Height="450" Width="760">
+        Title="MarketMonitor" Height="900" Width="1100">
     <Window.Resources>
         <Style x:Key="TextBlock" TargetType="{x:Type TextBlock}" BasedOn="{x:Null}">
             <Setter Property="Padding" Value="10"/>
@@ -20,13 +20,13 @@
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
-            <RowDefinition Height = "*" />
+            <RowDefinition Height = "Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width = "100" />
-            <ColumnDefinition Width = "200" />
-            <ColumnDefinition Width = "200" />
+            <ColumnDefinition Width = "500" />
+            <ColumnDefinition Width = "400" />
         </Grid.ColumnDefinitions>
 
         <Label Grid.Column="0" Grid.Row="0">Property</Label>
@@ -58,12 +58,21 @@
         <ListBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="7" ItemsSource="{Binding Local.Accounts}" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource TextBlock}" Text="{Binding Name}"></TextBlock>
-                        <TextBlock Style="{StaticResource TextBlock}" Text="{Binding Address}"></TextBlock>
-                        <TextBlock Style="{StaticResource TextBlock}" Text="{Binding Eth}"></TextBlock>
-                        <TextBlock Style="{StaticResource TextBlock}" Text="{Binding Usd}"></TextBlock>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height = "Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width = "200" />
+                            <ColumnDefinition Width = "300" />
+                            <ColumnDefinition Width = "200" />
+                            <ColumnDefinition Width = "50" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Style="{StaticResource TextBlock}" Text="{Binding Name}"></TextBlock>
+                        <TextBlock Grid.Column="1" Style="{StaticResource TextBlock}" Text="{Binding Address}"></TextBlock>
+                        <TextBlock Grid.Column="2" Style="{StaticResource TextBlock}" Text="{Binding Eth}"></TextBlock>
+                        <TextBlock Grid.Column="3" Style="{StaticResource TextBlock}" Text="{Binding Usd}"></TextBlock>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
