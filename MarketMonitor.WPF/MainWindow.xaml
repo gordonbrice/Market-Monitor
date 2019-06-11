@@ -21,6 +21,7 @@
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -77,5 +78,33 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
+        <Label Grid.Column="0" Grid.Row="8">Prices</Label>
+        <ListBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="8" ItemsSource="{Binding Local.Prices}" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height = "Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "200" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Style="{StaticResource TextBlock}" Text="{Binding Name}"></TextBlock>
+                        <TextBlock Grid.Column="1" Style="{StaticResource TextBlock}" Text="{Binding Market}"></TextBlock>
+                        <TextBlock Grid.Column="2" Style="{StaticResource TextBlock}" Text="{Binding Open}"></TextBlock>
+                        <TextBlock Grid.Column="3" Style="{StaticResource TextBlock}" Text="{Binding High}"></TextBlock>
+                        <TextBlock Grid.Column="4" Style="{StaticResource TextBlock}" Text="{Binding Low}"></TextBlock>
+                        <TextBlock Grid.Column="5" Style="{StaticResource TextBlock}" Text="{Binding Close}"></TextBlock>
+                        <TextBlock Grid.Column="6" Style="{StaticResource TextBlock}" Text="{Binding Time}"></TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,9 +23,11 @@ namespace MarketMonitor.WPF
     {
         public MainWindow()
         {
+            InitializeComponent();
+
             var vm = new MainWindowViewModel();
 
-            InitializeComponent();
+            System.Windows.Data.BindingOperations.EnableCollectionSynchronization(vm.Local.Prices, vm.Local.Prices);
             this.DataContext = vm;
 
         }
