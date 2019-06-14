@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Nethereum.ABI;
+using Nethereum.Hex.HexTypes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

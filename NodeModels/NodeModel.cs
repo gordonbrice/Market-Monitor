@@ -1,9 +1,6 @@
 ﻿using Nethereum.Contracts;
-using Nethereum.Hex.HexTypes;
-using Nethereum.Web3;
 using NodeServices;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
