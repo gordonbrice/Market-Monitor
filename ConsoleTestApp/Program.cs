@@ -1,8 +1,7 @@
 ﻿using BlockChain;
 using CoinMarketCap;
-using KeyStore;
+using KeyStoreFW;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
