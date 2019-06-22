@@ -1,6 +1,7 @@
 ﻿using Nethereum.Contracts;
 using NodeServices;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
@@ -119,6 +120,9 @@ namespace NodeModels
         #region Contracts
         Contract uniswapFactoryContract;
         Contract uniswapDaiExchContract;
+        Contract uniswapUsdcExchContract;
+        Contract uniswapCdaiExchContract;
+        Contract uniswapTusdExchContract;
         #endregion
 
         #region Addresses
@@ -128,13 +132,12 @@ namespace NodeModels
         #endregion
         #endregion
         #region Uniswap Exchanges
+        string uniswapFactoryABI;
+        string uniswapExchangeABI;
         string daiExchAddr = null;
-
-        #endregion
-
-        #region Token Contracts
-        string daiContractAddr = "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359";
-
+        string usdcExchAddr = null;
+        string cdaiExchAddr = null;
+        string tusdExchAddr = null;
         #endregion
 
         ObservableCollection<AccountModel> accounts;
@@ -163,6 +166,8 @@ namespace NodeModels
             }
         }
 
+        List<Erc20TokenModel> tokens;
+
         Timer fastQueryTimer;
         Timer slowQueryTimer;
         bool contractInteraction;
@@ -172,11 +177,11 @@ namespace NodeModels
             this.ethereumService = nodeService;
             Status = NodeStatus.Connected;
             this.accounts = new ObservableCollection<AccountModel>();
-            
             this.prices = new ObservableCollection<PriceModel>();
+            this.tokens = new List<Erc20TokenModel>();
             this.contractInteraction = contractInteraction;
 
-            if(getAcctData)
+            if (getAcctData)
             {
                 var addressStr = File.ReadAllText(@"c:\Apps\Test\eth.txt").Trim();
                 var addresses = addressStr.Split('|');
@@ -192,8 +197,6 @@ namespace NodeModels
                     }
                 }
             }
-
-
 
             this.fastQueryTimer = new Timer((s) =>
             {
@@ -232,7 +235,7 @@ namespace NodeModels
                     }
                 });
 
-                GetPrice();
+                GetUniswapPrices();
             }
             catch (Exception e)
             {
@@ -262,81 +265,214 @@ namespace NodeModels
             }
         }
 
-        private void GetEthDaiPrice()
+        private void GetPrice(string ethTokenPair)
         {
-            var getEthToTokenInputPriceFunction = this.uniswapDaiExchContract.GetFunction("getEthToTokenInputPrice");
+            Function getEthToTokenInputPriceFunction = null;
+
+            switch(ethTokenPair)
+            {
+                case "ETH-DAI":
+                    getEthToTokenInputPriceFunction = this.uniswapDaiExchContract.GetFunction("getEthToTokenInputPrice");
+                    break;
+
+                case "ETH-USDC":
+                    getEthToTokenInputPriceFunction = this.uniswapUsdcExchContract.GetFunction("getEthToTokenInputPrice");
+                    break;
+
+                case "ETH-TUSD":
+                    getEthToTokenInputPriceFunction = this.uniswapTusdExchContract.GetFunction("getEthToTokenInputPrice");
+                    break;
+
+                default:
+                    var price = new PriceModel
+                    {
+                        Name = ethTokenPair,
+                        Token = null,
+                        Market = "Unsupported",
+                        Open = 0,
+                        High = 0,
+                        Low = 0,
+                        Close = 0,
+                        Time = DateTime.UtcNow
+                    };
+
+                    lock(Prices)
+                    {
+                        if(Prices.Contains(price))
+                        {
+                            var oldPriceIdx = Prices.IndexOf(price);
+
+                            if (oldPriceIdx > -1)
+                            {
+                                Prices[oldPriceIdx].Time = DateTime.UtcNow;
+                            }
+                            else
+                            {
+                                Prices.Add(price);
+                            }
+                        }
+                        else
+                        {
+                            Prices.Add(price);
+                        }
+                    }
+                    return;
+            }
+
             var ethPriceAwaiter = getEthToTokenInputPriceFunction.CallAsync<UInt64>(1).GetAwaiter();
 
             ethPriceAwaiter.OnCompleted(() =>
             {
                 var ethPrice = ethPriceAwaiter.GetResult();
+                var baseTokenName = ethTokenPair.Split('-')[1];
+                Erc20TokenModel baseToken = new Erc20TokenModel(baseTokenName, this.ethereumService);
 
-                if (this.prices.Count == 0)
+                if(this.tokens.Contains(baseToken))
                 {
-                    var price = new PriceModel
-                    {
-                        Name = "ETH-DAI",
-                        Market = "Uniswap",
-                        Open = ethPrice,
-                        High = ethPrice,
-                        Low = ethPrice,
-                        Close = ethPrice,
-                        Time = DateTime.UtcNow
-                    };
-
-                    lock (Prices)
-                    {
-                        Prices.Add(price);
-                    }
+                    baseToken = this.tokens.Find(t => _ = t.Name == baseToken.Name);
                 }
                 else
                 {
-                    foreach (var price in Prices)
-                    {
-                        if (price.Name == "ETH-DAI")
-                        {
-                            lock (Prices)
-                            {
-                                price.High = ethPrice > price.High ? ethPrice : price.High;
-                                price.Low = ethPrice < price.Low ? ethPrice : price.Low;
-                                price.Close = ethPrice;
-                                price.Time = DateTime.UtcNow;
-                            }
-                        }
+                    baseToken.QueryProperties();
+                }
 
-                        break;
+                var price = new PriceModel
+                {
+                    Name = ethTokenPair,
+                    Token = baseToken,
+                    Market = "Uniswap",
+                    Open = ethPrice,
+                    High = ethPrice,
+                    Low = ethPrice,
+                    Close = ethPrice,
+                    Time = DateTime.UtcNow
+                };
+
+                lock (Prices)
+                {
+                    if (Prices.Contains(price))
+                    {
+                        var oldPriceIdx = Prices.IndexOf(price);
+
+                        if (oldPriceIdx > -1)
+                        {
+                            Prices[oldPriceIdx].High = ethPrice > Prices[oldPriceIdx].High ? ethPrice : Prices[oldPriceIdx].High;
+                            Prices[oldPriceIdx].Low = ethPrice < Prices[oldPriceIdx].Low ? ethPrice : Prices[oldPriceIdx].Low;
+                            Prices[oldPriceIdx].Close = ethPrice;
+                            Prices[oldPriceIdx].Time = DateTime.UtcNow;
+                        }
+                        else
+                        {
+                            Prices.Add(price);
+                        }
+                    }
+                    else
+                    {
+                        Prices.Add(price);
                     }
                 }
             });
         }
 
-        private void GetPrice()
+        private void GetUniswapPrices()
         {
             if (this.contractInteraction)
             {
-                if (this.uniswapDaiExchContract == null)
+                this.uniswapFactoryABI = string.IsNullOrEmpty(this.uniswapFactoryABI) ? File.ReadAllText(@"c:\Apps\Test\Contracts\Uniswap\FactoryABI.json").Trim() : this.uniswapFactoryABI;
+                this.uniswapExchangeABI = string.IsNullOrEmpty(this.uniswapExchangeABI) ? File.ReadAllText(@"c:\Apps\Test\Contracts\Uniswap\ExchangeABI.json").Trim() : this.uniswapExchangeABI;
+                var tokenPairs = new List<string>();
+
+                tokenPairs.Add("ETH-DAI");
+                //tokenPairs.Add("ETH-USDC");
+                //tokenPairs.Add("ETH-cDAI");
+                //tokenPairs.Add("ETH-TUSD");
+                //tokenPairs.Add("DAI-USDC");
+                //tokenPairs.Add("DAI-cDAI");
+
+                foreach(var tokenPair in tokenPairs)
                 {
-                    if (this.uniswapFactoryContract == null)
+                    switch(tokenPair)
                     {
-                        var factoryABI = File.ReadAllText(@"c:\Apps\Test\Contracts\Uniswap\FactoryABI.json").Trim();
-                        this.uniswapFactoryContract = this.ethereumService.GetContract(factoryABI, this.mainNetFactoryAddr);
+                        case "ETH-DAI":
+                            if (this.uniswapDaiExchContract == null)
+                            {
+                                if (this.uniswapFactoryContract == null)
+                                {
+                                    this.uniswapFactoryContract = this.ethereumService.GetContract(this.uniswapFactoryABI, this.mainNetFactoryAddr);
+                                }
+
+                                var getExchangeFunction = this.uniswapFactoryContract.GetFunction("getExchange");
+                                var daiExchangeAwaiter = getExchangeFunction.CallAsync<string>(Erc20TokenModel.DaiContractAddr).GetAwaiter();
+
+                                daiExchangeAwaiter.OnCompleted(() =>
+                                {
+                                    this.daiExchAddr = daiExchangeAwaiter.GetResult();
+                                    this.uniswapDaiExchContract = this.ethereumService.GetContract(this.uniswapExchangeABI, this.daiExchAddr);
+                                    GetPrice(tokenPair);
+                                });
+                            }
+                            else
+                            {
+                                GetPrice(tokenPair);
+                            }
+                            break;
+
+                        case "ETH-TUSD":
+                            if (this.uniswapTusdExchContract == null)
+                            {
+                                if (this.uniswapFactoryContract == null)
+                                {
+                                    this.uniswapFactoryContract = this.ethereumService.GetContract(this.uniswapFactoryABI, this.mainNetFactoryAddr);
+                                }
+
+                                var getExchangeFunction = this.uniswapFactoryContract.GetFunction("getExchange");
+                                var tusdExchangeAwaiter = getExchangeFunction.CallAsync<string>(Erc20TokenModel.TusdContractAddr).GetAwaiter();
+
+                                tusdExchangeAwaiter.OnCompleted(() =>
+                                {
+                                    this.tusdExchAddr = tusdExchangeAwaiter.GetResult();
+                                    this.uniswapTusdExchContract = this.ethereumService.GetContract(this.uniswapExchangeABI, this.tusdExchAddr);
+                                    GetPrice(tokenPair);
+                                });
+                            }
+                            else
+                            {
+                                GetPrice(tokenPair);
+                            }
+                            break;
+
+                        case "ETH-USDC":
+                            if (this.uniswapUsdcExchContract == null)
+                            {
+                                if (this.uniswapFactoryContract == null)
+                                {
+                                    this.uniswapFactoryContract = this.ethereumService.GetContract(this.uniswapFactoryABI, this.mainNetFactoryAddr);
+                                }
+
+                                var getExchangeFunction = this.uniswapFactoryContract.GetFunction("getExchange");
+                                var usdcExchangeAwaiter = getExchangeFunction.CallAsync<string>(Erc20TokenModel.UsdcContractAddr).GetAwaiter();
+
+                                usdcExchangeAwaiter.OnCompleted(() =>
+                                {
+                                    this.usdcExchAddr = usdcExchangeAwaiter.GetResult();
+                                    this.uniswapUsdcExchContract = this.ethereumService.GetContract(this.uniswapExchangeABI, this.usdcExchAddr);
+                                    GetPrice(tokenPair);
+                                });
+                            }
+                            else
+                            {
+                                GetPrice(tokenPair);
+                            }
+                            break;
+
+
+                        default:
+                            GetPrice(tokenPair);
+                            break;
                     }
-
-                    var getExchangeFunction = this.uniswapFactoryContract.GetFunction("getExchange");
-                    var daiExchangeAwaiter = getExchangeFunction.CallAsync<string>(this.daiContractAddr).GetAwaiter();
-
-                    daiExchangeAwaiter.OnCompleted(() =>
-                    {
-                        this.daiExchAddr = daiExchangeAwaiter.GetResult();
-                        var exchangeABI = File.ReadAllText(@"c:\Apps\Test\Contracts\Uniswap\ExchangeABI.json").Trim();
-                        this.uniswapDaiExchContract = this.ethereumService.GetContract(exchangeABI, this.daiExchAddr);
-                        GetEthDaiPrice();
-                    });
                 }
-                else
-                {
-                    GetEthDaiPrice();
-                }
+
+
             }
         }
     }

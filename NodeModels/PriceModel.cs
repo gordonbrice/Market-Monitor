@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NodeModels
 {
-    public class PriceModel : ViewModelBase
+    public class PriceModel : ViewModelBase, IEquatable<PriceModel>
     {
         string name;
         public string Name
@@ -19,6 +19,20 @@ namespace NodeModels
             {
                 this.name = value;
                 OnPropertyChanged("Name");
+            }
+        }
+
+        Erc20TokenModel token;
+        public Erc20TokenModel Token
+        {
+            get
+            {
+                return this.token;
+            }
+            set
+            {
+                this.token = value;
+                OnPropertyChanged("Token");
             }
         }
 
@@ -106,5 +120,9 @@ namespace NodeModels
             }
         }
 
+        public bool Equals(PriceModel other)
+        {
+            return Name == other.Name && Market == other.Market;
+        }
     }
 }
