@@ -17,7 +17,7 @@ namespace KeyStore
     {
         public string CoinMarketCapApiKey { get; private set; }
         public string NomicsApiKey { get; private set; }
-
+        public string InfuraMainnetKey { get; private set; }
         public async Task GetApiKeys(string password)
         {
             //mIWrBwmCu+/ZvZfwS2//R5YKYokBuIo7BRixpa1dpzY9EY6nV/7FMbR8aVC7D5okOU38a2QPYxLxK/Qsf6DqplVbU2irUtYEcBuxJt9wymu8KqiQLQIkd+lHUTxJxzmEGKnmI9JcVscWF5mkj9XANx5263PP7xh47d4NbDOSwn8Jud85ZZtvlWroemb9U2JI2uf/5I2hzhX7Op/shEVFDQbnM9YkJ3coIGRJm+cD9x2h7cDjYnyR1dNr1fJwB6Dx
@@ -50,6 +50,19 @@ namespace KeyStore
             {
                 NomicsApiKey = result.Results[0].ApiKey;
             }
+
+            query = new TableQuery<ApiKeyEntity>().Where(
+                TableQuery.CombineFilters(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Dev"), TableOperators.And
+                , TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, "103ed9f43eb647a0986e751faa8c5745")));
+
+            result = await table.ExecuteQuerySegmentedAsync<ApiKeyEntity>(query, new TableContinuationToken());
+
+            if (result.Results.Count > 0)
+            {
+                InfuraMainnetKey = result.Results[0].ApiKey;
+            }
+
+
         }
     }
 }

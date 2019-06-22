@@ -17,7 +17,7 @@ namespace ConsoleTestApp
             var password = Console.ReadLine();
             var keyStore = new CloudStore();
 
-            var fetchKeysTask = keyStore.GetApiKeys(password);
+            var fetchKeysTask = keyStore.GetApiKeys(password.Trim());
 
             fetchKeysTask.Wait();
 
