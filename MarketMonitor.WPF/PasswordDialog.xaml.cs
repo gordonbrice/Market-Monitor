@@ -30,7 +30,7 @@ namespace MarketMonitor.WPF
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            PasswordPwBox.Focus();
+            PasswordPwBox1.Focus();
         }
     }
 }

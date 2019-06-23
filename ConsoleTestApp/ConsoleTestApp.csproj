@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.8.5\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging.Core, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\packages\Common.Logging.Core.3.4.1\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
@@ -56,6 +59,12 @@
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=9.3.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Storage.9.3.3\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="NBitcoin, Version=4.1.2.36, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NBitcoin.4.1.2.36\lib\net461\NBitcoin.dll</HintPath>
+    </Reference>
+    <Reference Include="Nethereum.Portable, Version=1.0.7052.33844, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nethereum.Portable.3.3.1\lib\portable45-net45+win8+wpa81\Nethereum.Portable.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -151,9 +160,9 @@
       <Project>{7f2cbc08-5a48-4fe1-a577-cb4af7ee515f}</Project>
       <Name>CoinMarketCap</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KeyStoreFW\KeyStoreFW.csproj">
-      <Project>{5d4f465d-89bb-4352-97a8-41f0f393ba5a}</Project>
-      <Name>KeyStoreFW</Name>
+    <ProjectReference Include="..\KeyStore\KeyStore.csproj">
+      <Project>{e33f36c0-26db-4eff-bede-ae0bcc14c79a}</Project>
+      <Name>KeyStore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

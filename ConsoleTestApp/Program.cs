@@ -1,6 +1,6 @@
 ﻿using BlockChain;
 using CoinMarketCap;
-using KeyStoreFW;
+using KeyStore;
 using System;
 using System.IO;
 using System.Text;
@@ -11,12 +11,17 @@ namespace ConsoleTestApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter password:");
+            Console.WriteLine("Enter password1:");
 
-            var password = Console.ReadLine();
+            var password1 = Console.ReadLine();
+
+            Console.WriteLine("Enter password2:");
+
+            var password2 = Console.ReadLine();
+
             var keyStore = new CloudStore();
 
-            var fetchKeysTask = keyStore.GetApiKeys(password.Trim());
+            var fetchKeysTask = keyStore.GetApiKeys(password1.Trim(), password2.Trim());
 
             fetchKeysTask.Wait();
 
@@ -81,22 +86,22 @@ namespace ConsoleTestApp
             #endregion
 
             #region ETH
-            var addressStr = File.ReadAllText(@"c:\Apps\Test\eth.txt").Trim();
-            var addresses = addressStr.Split('|');
-            IBlockchain ethBC = new EtheriumBlockchain();
+            //var addressStr = File.ReadAllText(@"c:\Apps\Test\eth.txt").Trim();
+            //var addresses = addressStr.Split('|');
+            //IBlockchain ethBC = new EtheriumBlockchain();
 
-            foreach(var address in addresses)
-            {
-                if(!string.IsNullOrEmpty(address.Trim()))
-                {
-                    var addr = address.Split(',');
-                    var balTask = ethBC.GetBalance(addr[0]);
+            //foreach (var address in addresses)
+            //{
+            //    if (!string.IsNullOrEmpty(address.Trim()))
+            //    {
+            //        var addr = address.Split(',');
+            //        var balTask = ethBC.GetBalance(addr[0]);
 
-                    balTask.Wait();
+            //        balTask.Wait();
 
-                    Console.WriteLine($"{addr[1]} Balance = ETH:{balTask.Result}, ${balTask.Result * ethUsd}\n");
-                }
-            }
+            //        Console.WriteLine($"{addr[1]} Balance = ETH:{balTask.Result}, ${balTask.Result * ethUsd}\n");
+            //    }
+            //}
             #endregion
             Console.ReadLine();
         }

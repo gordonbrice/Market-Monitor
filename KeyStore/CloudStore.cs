@@ -18,11 +18,10 @@ namespace KeyStore
         public string CoinMarketCapApiKey { get; private set; }
         public string NomicsApiKey { get; private set; }
         public string InfuraMainnetKey { get; private set; }
-        public async Task GetApiKeys(string password)
+        public async Task GetApiKeys(string password1, string password2)
         {
-            //mIWrBwmCu+/ZvZfwS2//R5YKYokBuIo7BRixpa1dpzY9EY6nV/7FMbR8aVC7D5okOU38a2QPYxLxK/Qsf6DqplVbU2irUtYEcBuxJt9wymu8KqiQLQIkd+lHUTxJxzmEGKnmI9JcVscWF5mkj9XANx5263PP7xh47d4NbDOSwn8Jud85ZZtvlWroemb9U2JI2uf/5I2hzhX7Op/shEVFDQbnM9YkJ3coIGRJm+cD9x2h7cDjYnyR1dNr1fJwB6Dx
-            string decrypted = Symmetric.Decrypt<AesManaged>("mIWrBwmCu+/ZvZfwS2//R5YKYokBuIo7BRixpa1dpzY9EY6nV/7FMbR8aVC7D5okOU38a2QPYxLxK/Qsf6DqplVbU2irUtYEcBuxJt9wymu8KqiQLQIkd+lHUTxJxzmEGKnmI9JcVscWF5mkj9XANx5263PP7xh47d4NbDOSwn8Jud85ZZtvlWroemb9U2JI2uf/5I2hzhX7Op/shEVFDQbnM9YkJ3coIGRJm+cD9x2h7cDjYnyR1dNr1fJwB6Dx"
-                , password, "apikeystore");
+            var encrypted = "WYxUEO7vhst3aQfDjVGOn72Q+Eo+Or9Z10i9pf3Vc+4Jqs25GQvhD4L7Fplghtm5xtt/RUGvl2VYO/MaTbarHjj5f544sKjopWNu6PwxS67CiUUFxVlpQZx8ehvGrSCjDfUjJ2CPtFomDc9cy/8k33h1QOSX8Qp88m+z2AyxeUjA6YBIHNvFTbYukc3OOJlfYQMP6cSwQ43J9DK0CwwgsvJYBQkHyjoqHzI5d7OII20q462vLdBxEfGMc2zkCdLX";
+            var decrypted = Symmetric.Decrypt<AesManaged>(encrypted, password1, password2);
 
             var account = new CloudStorageAccount(
                         new StorageCredentials("apikeystore", decrypted), true);
@@ -61,8 +60,6 @@ namespace KeyStore
             {
                 InfuraMainnetKey = result.Results[0].ApiKey;
             }
-
-
         }
     }
 }

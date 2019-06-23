@@ -13,12 +13,15 @@ namespace MarketMonitor.WPF
             var passwordDlg = new PasswordDialog();
             if (passwordDlg.ShowDialog() == true)
             {
-                var password = passwordDlg.PasswordPwBox.Password;
-                var keyStoreAwaiter = KeyStore.GetApiKeys(password).GetAwaiter();
+                var password1 = passwordDlg.PasswordPwBox1.Password;
+                var password2 = passwordDlg.PasswordPwBox2.Password;
+                var keyStoreAwaiter = KeyStore.GetApiKeys(password1, password2).GetAwaiter();
 
                 keyStoreAwaiter.OnCompleted(() =>
                 {
-                    Infura = new NodeModel(new EthereumNodeService(new Web3($"https://mainnet.infura.io/v3/{KeyStore.InfuraMainnetKey}")), false);
+                    var apiUrl = $"https://mainnet.infura.io/v3/{KeyStore.InfuraMainnetKey}";
+
+                    Infura = new NodeModel(string.IsNullOrEmpty(KeyStore.InfuraMainnetKey) ? new EthereumNodeService(new Web3($"https://mainnet.infura.io")) : new EthereumNodeService(new Web3(apiUrl))) ;
                 });
             }
 
