@@ -9,6 +9,7 @@ namespace NodeServices
 {
     public interface INodeService
     {
+        string Name { get; }
         Task<string> GetProtocolVersion();
         Task<HexBigInteger> GetHighestBlock();
         Task<SyncingOutput> GetSyncing();
@@ -18,9 +19,16 @@ namespace NodeServices
     public class EthereumNodeService : INodeService
     {
         Web3 web3 = null;
-        public EthereumNodeService(Web3 web3)
+
+        string name;
+        public string Name { get; }
+
+        public string Uri { get; }
+
+        public EthereumNodeService(string name, string uri)
         {
-            this.web3 = web3;
+            this.name = string.Format("{0}-{1}", name, uri);
+            this.web3 = new Web3(uri);
         }
 
         public async Task<string> GetProtocolVersion()

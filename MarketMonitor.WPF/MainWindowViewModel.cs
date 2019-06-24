@@ -21,12 +21,12 @@ namespace MarketMonitor.WPF
                 {
                     var apiUrl = $"https://mainnet.infura.io/v3/{KeyStore.InfuraMainnetKey}";
 
-                    Infura = new NodeModel(string.IsNullOrEmpty(KeyStore.InfuraMainnetKey) ? new EthereumNodeService(new Web3($"https://mainnet.infura.io")) : new EthereumNodeService(new Web3(apiUrl))) ;
+                    Infura = new NodeModel(string.IsNullOrEmpty(KeyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io") : new EthereumNodeService("Infura", apiUrl));
                 });
             }
 
-            //Infura = new NodeModel(new EthereumNodeService(new Web3("https://mainnet.infura.io")));
-            Local = new NodeModel(new EthereumNodeService(new Web3("http://localhost:8545")), true, true);
+            Infura = new NodeModel(new EthereumNodeService("Infura", "https://mainnet.infura.io"));
+            Local = new NodeModel(new EthereumNodeService("Local", "http://localhost:8545"), true, true);
             //Local = new NodeModel(new EthereumNodeService(new Web3("http://localhost:8546")));
         }
 

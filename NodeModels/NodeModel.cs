@@ -20,6 +20,17 @@ namespace NodeModels
     {
         INodeService ethereumService;
 
+        string ethereumServiceName;
+        public string EthereumServiceName
+        {
+            get { return this.ethereumServiceName; }
+            set
+            {
+                this.ethereumServiceName = value;
+                OnPropertyChanged("EthereumServiceName");
+            }
+        }
+
         NodeStatus status = NodeStatus.Disconnected;
 
         public NodeStatus Status
@@ -175,6 +186,7 @@ namespace NodeModels
         public NodeModel(INodeService nodeService, bool getAcctData = false, bool contractInteraction = false)
         {
             this.ethereumService = nodeService;
+            EthereumServiceName = nodeService.Name;
             Status = NodeStatus.Connected;
             this.accounts = new ObservableCollection<AccountModel>();
             this.prices = new ObservableCollection<PriceModel>();
