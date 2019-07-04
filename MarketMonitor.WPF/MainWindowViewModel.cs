@@ -6,7 +6,7 @@ using NodeServices;
 
 namespace MarketMonitor.WPF
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : ViewModelBase
     {
         public MainWindowViewModel()
         {
@@ -19,19 +19,32 @@ namespace MarketMonitor.WPF
 
                 keyStoreAwaiter.OnCompleted(() =>
                 {
+                    var key = KeyStore.InfuraMainnetKey;
                     var apiUrl = $"https://mainnet.infura.io/v3/{KeyStore.InfuraMainnetKey}";
 
                     Infura = new NodeModel(string.IsNullOrEmpty(KeyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io") : new EthereumNodeService("Infura", apiUrl));
                 });
             }
 
-            Infura = new NodeModel(new EthereumNodeService("Infura", "https://mainnet.infura.io"));
+            //Infura = new NodeModel(new EthereumNodeService("Infura", "https://mainnet.infura.io"));
             Local = new NodeModel(new EthereumNodeService("Local", "http://localhost:8545"), true, true);
             //Local = new NodeModel(new EthereumNodeService(new Web3("http://localhost:8546")));
         }
 
         private CloudStore KeyStore = new CloudStore();
-        public NodeModel Infura { get; private set; }
+        NodeModel infura;
+        public NodeModel Infura
+        {
+            get
+            {
+                return this.infura;
+            }
+            private set
+            {
+                this.infura = value;
+                OnPropertyChanged("Infura");
+            }
+        }
         public NodeModel Local { get; private set; }
     }
 }

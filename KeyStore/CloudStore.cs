@@ -20,11 +20,10 @@ namespace KeyStore
         public string InfuraMainnetKey { get; private set; }
         public async Task GetApiKeys(string password1, string password2)
         {
-            var encrypted = "WYxUEO7vhst3aQfDjVGOn72Q+Eo+Or9Z10i9pf3Vc+4Jqs25GQvhD4L7Fplghtm5xtt/RUGvl2VYO/MaTbarHjj5f544sKjopWNu6PwxS67CiUUFxVlpQZx8ehvGrSCjDfUjJ2CPtFomDc9cy/8k33h1QOSX8Qp88m+z2AyxeUjA6YBIHNvFTbYukc3OOJlfYQMP6cSwQ43J9DK0CwwgsvJYBQkHyjoqHzI5d7OII20q462vLdBxEfGMc2zkCdLX";
+            //var encrypted = Symmetric.Encrypt<AesManaged>(decrypted, password1, password2);
+            var encrypted = "Ln9CeqVMYIxTb7Aj15bxf6elCWuzGT0ofThQr/lbWTJYEVjWyMSnzQCuUNWqfu1etRAjn2tbcjkDHi7Y4IA26Fw1+MGqqolTfkQhZpifNqZLxG3pxN9HxiBTdOB1t1cAeQmme2zWop/BYoROvgdYNSWloZTGrO4XIixRe/9ufOGUBXxovJKL97c/nDmTFSMA50g1KUOUUKZeBcwA0iFM38vbFxj1ryqFL8qHTznrY00xgkprXMTT/yNldhnpbmlz";
             var decrypted = Symmetric.Decrypt<AesManaged>(encrypted, password1, password2);
-
-            var account = new CloudStorageAccount(
-                        new StorageCredentials("apikeystore", decrypted), true);
+            var account = new CloudStorageAccount(new StorageCredentials("apikeystore", decrypted), true);
             var tableClient = account.CreateCloudTableClient();
             var table = tableClient.GetTableReference("ApiKeys");
 

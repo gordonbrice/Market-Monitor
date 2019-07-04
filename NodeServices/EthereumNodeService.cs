@@ -21,7 +21,13 @@ namespace NodeServices
         Web3 web3 = null;
 
         string name;
-        public string Name { get; }
+        public string Name
+        {
+            get
+            {
+                return this.name;
+            }
+        }
 
         public string Uri { get; }
 
