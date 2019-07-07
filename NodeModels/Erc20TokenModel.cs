@@ -1,7 +1,9 @@
-﻿using NodeServices;
+﻿using Nethereum.Hex.HexTypes;
+using NodeServices;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Text;
 
 namespace NodeModels
@@ -59,6 +61,19 @@ namespace NodeModels
             }
         }
 
+        BigInteger totalSupply;
+        public BigInteger TotalSupply
+        {
+            get
+            {
+                return this.totalSupply;
+            }
+            set
+            {
+                this.totalSupply = value;
+                OnPropertyChanged("TotalSupply");
+            }
+        }
         public Erc20TokenModel(string name, INodeService ethereumService)
         {
             this.ethereumService = ethereumService;
@@ -76,6 +91,7 @@ namespace NodeModels
                     var daiNameAwaiter = daiContract.GetFunction("name").CallAsync<string>().GetAwaiter();
                     var daiSymbolAwaiter = daiContract.GetFunction("symbol").CallAsync<string>().GetAwaiter();
                     var daiDecimalsAwaiter = daiContract.GetFunction("decimals").CallAsync<int>().GetAwaiter();
+                    var daiTotalSupplyAwaiter = daiContract.GetFunction("totalSupply").CallAsync<BigInteger>().GetAwaiter();
 
                     daiNameAwaiter.OnCompleted(() =>
                     {
@@ -91,28 +107,38 @@ namespace NodeModels
                     {
                         Decimals = daiDecimalsAwaiter.GetResult();
                     });
+
+                    daiTotalSupplyAwaiter.OnCompleted(() =>
+                    {
+                        TotalSupply = daiTotalSupplyAwaiter.GetResult();
+                    });
                     break;
 
                 case "tusd":
                     var tusdContractABI = File.ReadAllText(@"c:\Apps\Test\Contracts\ERC20Tokens\TUSD_ABI.json").Trim();
                     var tusdContract = this.ethereumService.GetContract(tusdContractABI, Erc20TokenModel.DaiContractAddr);
-                    var tusdNameAwaiter = tusdContract.GetFunction("name").CallAsync<string>().GetAwaiter();
-                    var tusdSymbolAwaiter = tusdContract.GetFunction("symbol").CallAsync<string>().GetAwaiter();
-                    var tusdDecimalsAwaiter = tusdContract.GetFunction("decimals").CallAsync<int>().GetAwaiter();
+                    //var tusdNameAwaiter = tusdContract.GetFunction("name").CallAsync<string>().GetAwaiter();
+                    //var tusdSymbolAwaiter = tusdContract.GetFunction("symbol").CallAsync<string>().GetAwaiter();
+                    //var tusdDecimalsAwaiter = tusdContract.GetFunction("decimals").CallAsync<int>().GetAwaiter();
+                    var tusdTotalSupplyAwaiter = tusdContract.GetFunction("totalSupply").CallAsync<ulong>().GetAwaiter();
 
-                    tusdNameAwaiter.OnCompleted(() =>
-                    {
-                        Name = tusdNameAwaiter.GetResult();
-                    });
+                    //tusdNameAwaiter.OnCompleted(() =>
+                    //{
+                    //    Name = tusdNameAwaiter.GetResult();
+                    //});
 
-                    tusdSymbolAwaiter.OnCompleted(() =>
-                    {
-                        Symbol = tusdNameAwaiter.GetResult();
-                    });
+                    //tusdSymbolAwaiter.OnCompleted(() =>
+                    //{
+                    //    Symbol = tusdNameAwaiter.GetResult();
+                    //});
 
-                    tusdDecimalsAwaiter.OnCompleted(() =>
+                    //tusdDecimalsAwaiter.OnCompleted(() =>
+                    //{
+                    //    Decimals = tusdDecimalsAwaiter.GetResult();
+                    //});
+                    tusdTotalSupplyAwaiter.OnCompleted(() =>
                     {
-                        Decimals = tusdDecimalsAwaiter.GetResult();
+                        TotalSupply = tusdTotalSupplyAwaiter.GetResult();
                     });
                     break;
 
