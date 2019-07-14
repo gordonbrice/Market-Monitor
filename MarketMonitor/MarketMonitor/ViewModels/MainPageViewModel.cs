@@ -176,6 +176,20 @@ namespace MarketMonitor.ViewModels
                 SetProperty(ref password, value);
             }
         }
+
+        string password2;
+        public string Password2
+        {
+            get
+            {
+                return password2;
+            }
+
+            set
+            {
+                SetProperty(ref password2, value);
+            }
+        }
         private async Task Login()
         {
             await Refresh();
@@ -188,14 +202,14 @@ namespace MarketMonitor.ViewModels
 
             if(string.IsNullOrEmpty(keyStore.CoinMarketCapApiKey) || string.IsNullOrEmpty(keyStore.NomicsApiKey))
             {
-                if(string.IsNullOrEmpty(Password))
+                if(string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Password2))
                 {
                     RawData = "Password not set.";
                 }
                 else
                 {
                     keyStore = new CloudStore();
-                    await keyStore.GetApiKeys(Password).ConfigureAwait(false);
+                    await keyStore.GetApiKeys(Password, Password2).ConfigureAwait(false);
                 }
             }
 

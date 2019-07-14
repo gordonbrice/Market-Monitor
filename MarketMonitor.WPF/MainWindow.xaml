@@ -22,6 +22,8 @@
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -106,5 +108,33 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <Label Grid.Column="0" Grid.Row="9">Tokens</Label>
+        <ListBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="9" ItemsSource="{Binding Local.Tokens}" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height = "Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "100" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Style="{StaticResource TextBlock}" Text="{Binding Name}"></TextBlock>
+                        <TextBlock Grid.Column="1" Style="{StaticResource TextBlock}" Text="{Binding FullName}"></TextBlock>
+                        <TextBlock Grid.Column="2" Style="{StaticResource TextBlock}" Text="{Binding Symbol}"></TextBlock>
+                        <TextBlock Grid.Column="3" Style="{StaticResource TextBlock}" Text="{Binding Price}"></TextBlock>
+                        <TextBlock Grid.Column="4" Style="{StaticResource TextBlock}" Text="{Binding Decimals}"></TextBlock>
+                        <TextBlock Grid.Column="5" Style="{StaticResource TextBlock}" Text="{Binding TotalSupply}"></TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label Grid.Column="0" Grid.Row="10" Content="{Binding Local.Tokens.Count}"></Label>
     </Grid>
 </Window>

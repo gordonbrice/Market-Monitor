@@ -177,7 +177,18 @@ namespace NodeModels
             }
         }
 
-        List<Erc20TokenModel> tokens;
+        ObservableCollection<Erc20TokenModel> tokens;
+        public ObservableCollection<Erc20TokenModel> Tokens
+        {
+            get
+            {
+                return this.tokens;
+            }
+            private set
+            {
+                this.tokens = value;
+            }
+        }
 
         Timer fastQueryTimer;
         Timer slowQueryTimer;
@@ -190,8 +201,13 @@ namespace NodeModels
             Status = NodeStatus.Connected;
             this.accounts = new ObservableCollection<AccountModel>();
             this.prices = new ObservableCollection<PriceModel>();
-            this.tokens = new List<Erc20TokenModel>();
+            this.tokens = new ObservableCollection<Erc20TokenModel>();
             this.contractInteraction = contractInteraction;
+
+            if(contractInteraction)
+            {
+                AddTokens();
+            }
 
             if (getAcctData)
             {
@@ -277,6 +293,33 @@ namespace NodeModels
             }
         }
 
+        private void AddTokens()
+        {
+            var dai = new Erc20TokenModel("DAI", this.ethereumService);
+
+            dai.QueryProperties();
+            Tokens.Add(dai);
+
+            var bnb = new Erc20TokenModel("BNB", this.ethereumService);
+
+            bnb.QueryProperties();
+            Tokens.Add(bnb);
+
+            var usdt = new Erc20TokenModel("USDT", this.ethereumService);
+
+            usdt.QueryProperties();
+            Tokens.Add(usdt);
+
+            var usdc = new Erc20TokenModel("USDC", this.ethereumService);
+
+            usdc.QueryProperties();
+            Tokens.Add(usdc);
+
+            var tusd = new Erc20TokenModel("TUSD", this.ethereumService);
+
+            tusd.QueryProperties();
+            Tokens.Add(tusd);
+        }
         private void GetPrice(string ethTokenPair)
         {
             Function getEthToTokenInputPriceFunction = null;
@@ -337,15 +380,22 @@ namespace NodeModels
             {
                 var ethPrice = ethPriceAwaiter.GetResult();
                 var baseTokenName = ethTokenPair.Split('-')[1];
-                Erc20TokenModel baseToken = new Erc20TokenModel(baseTokenName, this.ethereumService);
+                Erc20TokenModel baseToken = null;
 
-                if(this.tokens.Contains(baseToken))
+                foreach(var token in Tokens)
                 {
-                    baseToken = this.tokens.Find(t => _ = t.Name == baseToken.Name);
+                    if(token.Name == baseTokenName)
+                    {
+                        baseToken = token;
+                        break;
+                    }
                 }
-                else
+
+                if(baseToken == null)
                 {
+                    baseToken = new Erc20TokenModel(baseTokenName, this.ethereumService);
                     baseToken.QueryProperties();
+                    Tokens.Add(baseToken);
                 }
 
                 var price = new PriceModel
