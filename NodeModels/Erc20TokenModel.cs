@@ -17,6 +17,11 @@ namespace NodeModels
         public static string TusdContractAddr = "0xcb9a11afdc6bdb92e4a6235959455f28758b34ba";
         public static string BnbContractAddr = "0xB8c77482e45F1F44dE1745F52C74426C631bDD52";
         public static string UsdtContractAddr = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+        public static string LinkContractAddr = "0x514910771af9ca656af840dff83e8264ecf986ca";
+        public static string MkrContractAddr = "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2";
+        public static string HtContractAddr = "0x6f259637dcd74c767781e37bc6133cd6a68aa161";
+        public static string PaxContractAddr = "0x8e870d67f660d95d5be530380d0ec0bd388289e1";
+        public static string WbtcContractAddr = "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599";
         #endregion
 
         INodeService ethereumService;
@@ -109,6 +114,46 @@ namespace NodeModels
                     TotalSupply = await daiContract.GetFunction("totalSupply").CallAsync<BigInteger>();
                     break;
 
+                case "wbtc":
+                    var wbtcContractABI = File.ReadAllText(@"c:\Apps\Test\Contracts\ERC20Tokens\WBTC_ABI.json").Trim();
+                    var wbtcContract = this.ethereumService.GetContract(wbtcContractABI, Erc20TokenModel.WbtcContractAddr);
+
+                    FullName = await wbtcContract.GetFunction("name").CallAsync<string>();
+                    Symbol = await wbtcContract.GetFunction("symbol").CallAsync<string>();
+                    Decimals = await wbtcContract.GetFunction("decimals").CallAsync<int>();
+                    TotalSupply = await wbtcContract.GetFunction("totalSupply").CallAsync<BigInteger>();
+                    break;
+
+                case "link":
+                    var linkContractABI = File.ReadAllText(@"c:\Apps\Test\Contracts\ERC20Tokens\LINK_ABI.json").Trim();
+                    var linkContract = this.ethereumService.GetContract(linkContractABI, Erc20TokenModel.LinkContractAddr);
+
+                    FullName = await linkContract.GetFunction("name").CallAsync<string>();
+                    Symbol = await linkContract.GetFunction("symbol").CallAsync<string>();
+                    Decimals = await linkContract.GetFunction("decimals").CallAsync<int>();
+                    TotalSupply = await linkContract.GetFunction("totalSupply").CallAsync<BigInteger>();
+                    break;
+
+                case "mkr":
+                    var mkrContractABI = File.ReadAllText(@"c:\Apps\Test\Contracts\ERC20Tokens\MKR_ABI.json").Trim();
+                    var mkrContract = this.ethereumService.GetContract(mkrContractABI, Erc20TokenModel.MkrContractAddr);
+
+                    FullName = await mkrContract.GetFunction("name").CallAsync<string>();
+                    Symbol = await mkrContract.GetFunction("symbol").CallAsync<string>();
+                    Decimals = await mkrContract.GetFunction("decimals").CallAsync<int>();
+                    TotalSupply = await mkrContract.GetFunction("totalSupply").CallAsync<BigInteger>();
+                    break;
+
+                case "ht":
+                    var htContractABI = File.ReadAllText(@"c:\Apps\Test\Contracts\ERC20Tokens\HT_ABI.json").Trim();
+                    var htContract = this.ethereumService.GetContract(htContractABI, Erc20TokenModel.HtContractAddr);
+
+                    FullName = await htContract.GetFunction("name").CallAsync<string>();
+                    Symbol = await htContract.GetFunction("symbol").CallAsync<string>();
+                    Decimals = await htContract.GetFunction("decimals").CallAsync<int>();
+                    TotalSupply = await htContract.GetFunction("totalSupply").CallAsync<BigInteger>();
+                    break;
+
                 case "usdt":
                     var usdtContractABI = File.ReadAllText(@"c:\Apps\Test\Contracts\ERC20Tokens\USDT_ABI.json").Trim();
                     var usdtContract = this.ethereumService.GetContract(usdtContractABI, Erc20TokenModel.UsdtContractAddr);
@@ -127,6 +172,16 @@ namespace NodeModels
                     Symbol = await tusdContract.GetFunction("symbol").CallAsync<string>();
                     Decimals = await tusdContract.GetFunction("decimals").CallAsync<int>();
                     TotalSupply = await tusdContract.GetFunction("totalSupply").CallAsync<BigInteger>();
+                    break;
+
+                case "pax":
+                    var paxContractABI = File.ReadAllText(@"c:\Apps\Test\Contracts\ERC20Tokens\PAX_ABI.json").Trim();
+                    var paxContract = this.ethereumService.GetContract(paxContractABI, Erc20TokenModel.PaxContractAddr);
+
+                    //FullName = await paxContract.GetFunction("name").CallAsync<string>();
+                    //Symbol = await paxContract.GetFunction("symbol").CallAsync<string>();
+                    //Decimals = await paxContract.GetFunction("decimals").CallAsync<int>();
+                    //TotalSupply = await paxContract.GetFunction("totalSupply").CallAsync<BigInteger>();
                     break;
 
                 case "usdc":

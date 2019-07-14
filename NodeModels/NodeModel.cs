@@ -305,20 +305,45 @@ namespace NodeModels
             bnb.QueryProperties();
             Tokens.Add(bnb);
 
+            var wbtc = new Erc20TokenModel("WBTC", this.ethereumService);
+
+            wbtc.QueryProperties();
+            Tokens.Add(wbtc);
+
             var usdt = new Erc20TokenModel("USDT", this.ethereumService);
 
             usdt.QueryProperties();
             Tokens.Add(usdt);
 
-            var usdc = new Erc20TokenModel("USDC", this.ethereumService);
+            //var usdc = new Erc20TokenModel("USDC", this.ethereumService);
 
-            usdc.QueryProperties();
-            Tokens.Add(usdc);
+            //usdc.QueryProperties();
+            //Tokens.Add(usdc);
 
             var tusd = new Erc20TokenModel("TUSD", this.ethereumService);
 
             tusd.QueryProperties();
             Tokens.Add(tusd);
+
+            var link = new Erc20TokenModel("LINK", this.ethereumService);
+
+            link.QueryProperties();
+            Tokens.Add(link);
+
+            var mkr = new Erc20TokenModel("MKR", this.ethereumService);
+
+            mkr.QueryProperties();
+            Tokens.Add(mkr);
+
+            var ht = new Erc20TokenModel("HT", this.ethereumService);
+
+            ht.QueryProperties();
+            Tokens.Add(ht);
+
+            //var pax = new Erc20TokenModel("PAX", this.ethereumService);
+
+            //pax.QueryProperties();
+            //Tokens.Add(pax);
         }
         private void GetPrice(string ethTokenPair)
         {
