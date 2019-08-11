@@ -164,6 +164,10 @@
       <Project>{e33f36c0-26db-4eff-bede-ae0bcc14c79a}</Project>
       <Name>KeyStore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RESTApi\RESTApi.csproj">
+      <Project>{2b9d789e-af6f-490c-af52-d94238ed8c15}</Project>
+      <Name>RESTApi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

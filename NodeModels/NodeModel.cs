@@ -246,20 +246,28 @@ namespace NodeModels
 
                 syncingAwaiter.OnCompleted(() =>
                 {
-                    var result = syncingAwaiter.GetResult();
-                    IsSyncing = result.IsSyncing;
-                    HighestBlock = result.HighestBlock?.Value.ToString();
-                    StartingBlock = result.StartingBlock?.Value.ToString();
-                    CurrentBlock = result.CurrentBlock?.Value.ToString();
-
-                    if (string.IsNullOrEmpty(HighestBlock))
+                    try
                     {
-                        var highestBlockTaskAwaiter = this.ethereumService.GetHighestBlock().GetAwaiter();
+                        var result = syncingAwaiter.GetResult();
+                        IsSyncing = result.IsSyncing;
+                        HighestBlock = result.HighestBlock?.Value.ToString();
+                        StartingBlock = result.StartingBlock?.Value.ToString();
+                        CurrentBlock = result.CurrentBlock?.Value.ToString();
 
-                        highestBlockTaskAwaiter.OnCompleted(() =>
+                        if (string.IsNullOrEmpty(HighestBlock))
                         {
-                            HighestBlock = highestBlockTaskAwaiter.GetResult().Value.ToString();
-                        });
+                            var highestBlockTaskAwaiter = this.ethereumService.GetHighestBlock().GetAwaiter();
+
+                            highestBlockTaskAwaiter.OnCompleted(() =>
+                            {
+                                HighestBlock = highestBlockTaskAwaiter.GetResult().Value.ToString();
+                            });
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        Status = NodeStatus.Error;
+                        //Log(e);
                     }
                 });
 

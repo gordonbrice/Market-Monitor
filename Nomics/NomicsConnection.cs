@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RESTApi;
+using System;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -6,11 +7,21 @@ using System.Web;
 
 namespace Nomics
 {
-    public class NomicsConnection
+    public class NomicsConnection : IConnection
     {
         const string baseUrl = "https://api.nomics.com/";
+        HttpClient client = null;
 
-        public async static Task<string> ApiGet(string function, string key)
+        public NomicsConnection(HttpClient client)
+        {
+            if(client == null)
+            {
+                throw new NullReferenceException("Http client required.");
+            }
+
+            this.client = client;
+        }
+        public async Task<string> ApiGet(string function, string key)
         {
             var span = TimeSpan.FromDays(1);
             var now = DateTime.Now;
@@ -28,14 +39,11 @@ namespace Nomics
             return response.StatusCode.ToString();
         }
 
-        private async static Task<HttpResponseMessage> Get(string url)
+        private async Task<HttpResponseMessage> Get(string url)
         {
-            using (var client = new HttpClient())
-            {
-                client.Timeout = TimeSpan.FromSeconds(30);
+            this.client.Timeout = TimeSpan.FromSeconds(30);
 
-                return await client.GetAsync(url).ConfigureAwait(false);
-            }
+            return await this.client.GetAsync(url).ConfigureAwait(false);
         }
     }
 }

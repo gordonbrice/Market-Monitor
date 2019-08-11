@@ -3,14 +3,15 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace CoinMarketCap
+namespace WhaleAlert
 {
-    public class CMCConnection : IConnection
+    public class WhaleAlertConnection : IConnection
     {
-        const string baseUrl = "https://pro-api.coinmarketcap.com";
+        //https://api.whale-alert.io/v1
+        const string baseUrl = "https://api.whale-alert.io";
         HttpClient client = null;
 
-        public CMCConnection(HttpClient client)
+        public WhaleAlertConnection(HttpClient client)
         {
             if (client == null)
             {

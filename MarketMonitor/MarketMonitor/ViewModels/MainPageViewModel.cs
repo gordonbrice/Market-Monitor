@@ -7,6 +7,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using MvvmHelpers;
 using Nomics;
 using System;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,12 +17,18 @@ namespace MarketMonitor.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
+        HttpClient httpClient;
+        NomicsConnection nomicsConn;
+        CMCConnection cmcConn;
         public MainPageViewModel()
         {
             IsNotLoggedIn = true;
             Title = "Crypto Asset Monitor";
             RefreshCommand = new Command(async () => await Refresh(), () => IsNotBusy);
             LoginCommand = new Command(async () => await Login());
+            this.httpClient = new HttpClient();
+            this.nomicsConn = new NomicsConnection(this.httpClient);
+            this.cmcConn = new CMCConnection(this.httpClient);
         }
 
         public ICommand RefreshCommand { get; private set; }
@@ -217,7 +224,7 @@ namespace MarketMonitor.ViewModels
 
             if(!string.IsNullOrEmpty(keyStore.CoinMarketCapApiKey))
             {
-                cmcMarketCap = await GlobalMetricsRequest.GetGlobalMetrics(keyStore.CoinMarketCapApiKey).ConfigureAwait(false);
+                cmcMarketCap = await GlobalMetricsRequest.GetGlobalMetrics(this.cmcConn, keyStore.CoinMarketCapApiKey).ConfigureAwait(false);
             }
 
             string nomicsMarketCap = null;
@@ -225,8 +232,8 @@ namespace MarketMonitor.ViewModels
 
             if (!string.IsNullOrEmpty(keyStore.NomicsApiKey))
             {
-                nomicsMarketCap = await MarketHistoryRequest.GetMarketCapHistory(keyStore.NomicsApiKey).ConfigureAwait(false);
-                nomicsGlobalVol = await MarketHistoryRequest.GetGlobalVolumeHistory(keyStore.NomicsApiKey).ConfigureAwait(false);
+                nomicsMarketCap = await MarketHistoryRequest.GetMarketCapHistory(this.nomicsConn, keyStore.NomicsApiKey).ConfigureAwait(false);
+                nomicsGlobalVol = await MarketHistoryRequest.GetGlobalVolumeHistory(this.nomicsConn, keyStore.NomicsApiKey).ConfigureAwait(false);
 
             }
 
@@ -424,7 +431,7 @@ namespace MarketMonitor.ViewModels
             {
                 if(!string.IsNullOrEmpty(keyStore.CoinMarketCapApiKey))
                 {
-                    return await GlobalMetricsRequest.GetGlobalMetrics(keyStore.CoinMarketCapApiKey);
+                    return await GlobalMetricsRequest.GetGlobalMetrics(this.cmcConn, keyStore.CoinMarketCapApiKey);
                 }
             }
             catch (Exception e)
@@ -441,7 +448,7 @@ namespace MarketMonitor.ViewModels
             {
                 if(!string.IsNullOrEmpty(keyStore.NomicsApiKey))
                 {
-                    RawData = await MarketHistoryRequest.GetMarketCapHistory(keyStore.NomicsApiKey);
+                    RawData = await MarketHistoryRequest.GetMarketCapHistory(this.nomicsConn, keyStore.NomicsApiKey);
                 }
             }
             catch(Exception e)

@@ -1,17 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using RESTApi;
+using System.Threading.Tasks;
 
 namespace Nomics
 {
     public static class MarketHistoryRequest
     {
-        public static async Task<string> GetMarketCapHistory(string apiKey)
+        public static async Task<string> GetMarketCapHistory(IConnection nomicsConn, string apiKey)
         {
-            return await NomicsConnection.ApiGet("v1/market-cap/history", apiKey);
+            return await nomicsConn.ApiGet("v1/market-cap/history", apiKey);
         }
         
-        public static async Task<string> GetGlobalVolumeHistory(string apiKey)
+        public static async Task<string> GetGlobalVolumeHistory(IConnection nomicsConn, string apiKey)
         {
-            return await NomicsConnection.ApiGet("v1/volume/history", apiKey);
+            return await nomicsConn.ApiGet("v1/volume/history", apiKey);
         }
     }
 }

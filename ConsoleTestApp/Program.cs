@@ -25,7 +25,8 @@ namespace ConsoleTestApp
 
             fetchKeysTask.Wait();
 
-            var quotesTask = CryptoCurrencysRequest.GetQuotes(keyStore.CoinMarketCapApiKey, "BTC,ETH,EOS,USDT,BNB,ADA,MKR,USDC,TUSD,REP,PAX,DAI");
+            var cmcConn = new CMCConnection(new System.Net.Http.HttpClient());
+            var quotesTask = CryptoCurrencysRequest.GetQuotes(cmcConn, keyStore.CoinMarketCapApiKey, "BTC,ETH,EOS,USDT,BNB,ADA,MKR,USDC,TUSD,REP,PAX,DAI");
 
             quotesTask.Wait();
 
