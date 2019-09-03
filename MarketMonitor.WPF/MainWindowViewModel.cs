@@ -1,9 +1,6 @@
-﻿
-using KeyStore;
-using Nethereum.Web3;
+﻿using KeyStore;
 using NodeModels;
 using NodeServices;
-using System;
 
 namespace MarketMonitor.WPF
 {
