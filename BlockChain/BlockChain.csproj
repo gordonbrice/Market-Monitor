@@ -1,14 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NBitcoin" Version="4.1.2.36" />
-    <PackageReference Include="Nethereum.Hex" Version="3.3.0" />
-    <PackageReference Include="Nethereum.Web3" Version="3.3.0" />
-    <PackageReference Include="QBitNinja.Client" Version="1.0.3.49" />
+    <PackageReference Include="NBitcoin" Version="4.2.5" />
+    <PackageReference Include="Nethereum.Hex" Version="3.4.0" />
+    <PackageReference Include="Nethereum.Web3" Version="3.4.0" />
+    <PackageReference Include="QBitNinja.Client" Version="1.0.3.50" />
   </ItemGroup>
 
 </Project>
