@@ -1,4 +1,5 @@
-﻿using Nethereum.Hex.HexTypes;
+﻿using MVVMSupport;
+using Nethereum.Hex.HexTypes;
 using NodeServices;
 using System;
 using System.Collections.Generic;

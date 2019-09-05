@@ -63,8 +63,8 @@
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=9.3.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Storage.9.3.3\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="NBitcoin, Version=4.2.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NBitcoin.4.2.5\lib\net461\NBitcoin.dll</HintPath>
+    <Reference Include="NBitcoin, Version=4.2.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NBitcoin.4.2.6\lib\net461\NBitcoin.dll</HintPath>
     </Reference>
     <Reference Include="Nethereum.Portable, Version=1.0.7149.22376, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Nethereum.Portable.3.4.0\lib\portable45-net45+win8+wpa81\Nethereum.Portable.dll</HintPath>

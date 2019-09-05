@@ -1,4 +1,5 @@
-﻿using Nethereum.Web3;
+﻿using MVVMSupport;
+using Nethereum.Web3;
 using NodeServices;
 using System;
 using System.Collections.Generic;

@@ -35,6 +35,7 @@ namespace WhaleAlert
 
         private async Task<HttpResponseMessage> Get(string url, string apiKey)
         {
+            //X-WA-API-KEY
             var key = apiKey.Trim().Split('=');
 
             if (key.Length > 1)

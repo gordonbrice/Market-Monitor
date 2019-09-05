@@ -1,4 +1,5 @@
-﻿using Nethereum.Contracts;
+﻿using MVVMSupport;
+using Nethereum.Contracts;
 using NodeServices;
 using System;
 using System.Collections.Generic;

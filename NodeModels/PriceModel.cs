@@ -1,4 +1,5 @@
-﻿using Nethereum.ABI;
+﻿using MVVMSupport;
+using Nethereum.ABI;
 using Nethereum.Hex.HexTypes;
 using System;
 using System.Collections.Generic;

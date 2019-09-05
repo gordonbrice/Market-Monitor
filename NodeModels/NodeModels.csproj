@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MVVMSupport\MVVMSupport.csproj" />
     <ProjectReference Include="..\NodeServices\NodeServices.csproj" />
   </ItemGroup>
 

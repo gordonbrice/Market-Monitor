@@ -136,6 +136,10 @@
       <Project>{E33F36C0-26DB-4EFF-BEDE-AE0BCC14C79A}</Project>
       <Name>KeyStore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MVVMSupport\MVVMSupport.csproj">
+      <Project>{B16448B8-366A-48DD-A6E8-84C75F170AE6}</Project>
+      <Name>MVVMSupport</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NodeModels\NodeModels.csproj">
       <Project>{5f5486ca-80bf-4208-9921-cdf84adc2d28}</Project>
       <Name>NodeModels</Name>
@@ -143,6 +147,10 @@
     <ProjectReference Include="..\NodeServices\NodeServices.csproj">
       <Project>{050A99D4-5A26-4507-A3D2-3BF610DCF332}</Project>
       <Name>NodeServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WhaleAlert\WhaleAlert.csproj">
+      <Project>{d7fabb32-6f79-47f6-9c88-e285c6d17cd3}</Project>
+      <Name>WhaleAlert</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
