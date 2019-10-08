@@ -112,11 +112,26 @@ namespace NodeModels
             {
                 this.isSyncing = value;
                 OnPropertyChanged("IsSyncing");
+                OnPropertyChanged("SyncVisibility");
                 Status = this.IsSyncing ? NodeStatus.Synching : NodeStatus.Working;
                 Syncing = this.isSyncing ? "Yes" : "No";
             }
         }
 
+        public string SyncVisibility
+        {
+            get
+            {
+                if (this.IsSyncing)
+                {
+                    return "Visible";
+                }
+                else
+                {
+                    return "Collapsed";
+                }
+            }
+        }
         string syncing;
         public string Syncing
         {

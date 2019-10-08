@@ -31,30 +31,35 @@
 
         <Label Grid.Column="0" Grid.Row="0">Property</Label>
         <Label Grid.Column="1" Grid.Row="0" Content="{Binding Local.EthereumServiceName}"></Label>
-        <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Infura.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="0" Style="{StaticResource TextBlock}" Text="{Binding Infura.EthereumServiceName}"></TextBlock>
         
         <Label Grid.Column="0" Grid.Row="1">Status</Label>
-        <TextBlock Grid.Column="1" Grid.Row="1" Text = "{Binding Local.StatusStr, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="2" Grid.Row="1" Text = "{Binding Infura.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Local.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.StatusStr, Mode = OneWay}"></TextBlock>
 
         <Label Grid.Column="0" Grid.Row="2">Protocol Version</Label>
-        <TextBlock Grid.Column="1" Grid.Row="2" Text = "{Binding Local.ProtocolVersion, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="2" Grid.Row="2" Text = "{Binding Infura.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="2" Style="{StaticResource TextBlock}" Text = "{Binding Local.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource TextBlock}" Text = "{Binding Infura.ProtocolVersion, Mode = OneWay}"></TextBlock>
 
         <Label Grid.Column="0" Grid.Row="3">Highest Block</Label>
-        <TextBlock Grid.Column="1" Grid.Row="3" Text = "{Binding Local.HighestBlock, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="2" Grid.Row="3" Text = "{Binding Infura.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding Local.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding Infura.HighestBlock, Mode = OneWay}"></TextBlock>
 
-        <Label Grid.Column="0" Grid.Row="4">Current Block</Label>
-        <TextBlock Grid.Column="1" Grid.Row="4" Text = "{Binding Local.CurrentBlock, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="2" Grid.Row="4" Text = "{Binding Infura.CurrentBlock, Mode = OneWay}"></TextBlock>
+        <Label Grid.Column="0" Grid.Row="4" Visibility="{Binding Local.SyncVisibility}">Current Block</Label>
+        <TextBlock Grid.Column="1" Grid.Row="4" Style="{StaticResource TextBlock}" Text = "{Binding Local.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="4" Style="{StaticResource TextBlock}" Text = "{Binding Infura.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
 
         <Label Grid.Column="0" Grid.Row="5">Syncing</Label>
-        <TextBlock Grid.Column="1" Grid.Row="5" Text = "{Binding Local.Syncing, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="2" Grid.Row="5" Text = "{Binding Infura.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="5" Style="{StaticResource TextBlock}" Text = "{Binding Local.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="5" Style="{StaticResource TextBlock}" Text = "{Binding Infura.Syncing, Mode = OneWay}"></TextBlock>
 
         <TabControl Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7">
-            <TabItem Header="Alerts"></TabItem>
+            <TabItem Header="Alerts">
+                <StackPanel Orientation="Horizontal">
+                    <Label>Whale Alert Status:</Label>
+                    <TextBlock Style="{StaticResource TextBlock}" Text="{Binding WhaleAlert.StatusResult, Mode = OneWay}"></TextBlock>
+                </StackPanel>
+            </TabItem>
             <TabItem Header="Balances">
                 <ListBox ItemsSource="{Binding Local.Accounts}" >
                     <ListBox.ItemTemplate>

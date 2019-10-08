@@ -27,6 +27,20 @@ namespace WhaleAlert
             }
         }
 
+        string _statusResult;
+        public string StatusResult
+        {
+            get
+            {
+                return _statusResult;
+            }
+
+            set
+            {
+                _statusResult = value;
+                OnPropertyChanged("StatusResult");
+            }
+        }
         public WhaleAlertModel(HttpClient client, string apiKey)
         {
             _conn = new WhaleAlertConnection(client);
@@ -36,7 +50,7 @@ namespace WhaleAlert
 
             statusAwaiter.OnCompleted(() =>
             {
-
+                StatusResult = Status.Result;
             });
         }
 
