@@ -9,9 +9,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MarketMonitor.Blazor.Data;
+using MarketMonitor.BlazorSrv.Data;
+using System.Net.Http;
 
-namespace MarketMonitor.Blazor
+namespace MarketMonitor.BlazorSrv
 {
     public class Startup
     {
@@ -29,6 +30,8 @@ namespace MarketMonitor.Blazor
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<HttpClient>();
+            services.AddSingleton<KeyStore.CloudStore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

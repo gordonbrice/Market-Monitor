@@ -1,6 +1,5 @@
 ﻿@page "/"
 @inject KeyStore.CloudStore keyStore
-@inject HttpClient httpClient
 
 <h1>Login</h1>
 
@@ -26,10 +25,6 @@
     async Task GetApiKeys()
     {
         await keyStore.GetApiKeys(auth.Password1, auth.Password2);
-
-        var whaleAlert = new WhaleAlert.WhaleAlertModel(httpClient, keyStore.WhaleAlertKey);
-
-
     }
 
     public class Authentication

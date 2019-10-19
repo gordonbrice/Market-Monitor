@@ -1,6 +1,6 @@
 using System;
 
-namespace MarketMonitor.Blazor.Data
+namespace MarketMonitor.BlazorSrv.Data
 {
     public class WeatherForecast
     {

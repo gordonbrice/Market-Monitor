@@ -45,16 +45,9 @@ namespace WhaleAlert
         {
             _conn = new WhaleAlertConnection(client);
             _apiKey = apiKey;
-
-            var statusAwaiter = GetStatus().GetAwaiter();
-
-            statusAwaiter.OnCompleted(() =>
-            {
-                StatusResult = Status.Result;
-            });
         }
 
-        private async Task GetStatus()
+        public async Task GetStatus()
         {
             Status = Status.FromJson(await _conn.ApiGet("/v1/status", _apiKey));
         }

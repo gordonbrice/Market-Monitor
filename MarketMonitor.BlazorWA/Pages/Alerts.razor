@@ -1,6 +1,16 @@
 ﻿@page "/alerts"
+@inject HttpClient httpClient
+@inject KeyStore.CloudStore keyStore
+
 <h3>Alerts</h3>
 
 @code {
+
+    void GetAlerts()
+    {
+        var whaleAlert = new WhaleAlert.WhaleAlertModel(httpClient, keyStore.WhaleAlertKey);
+
+    }
+
 
 }
