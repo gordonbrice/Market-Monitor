@@ -1,35 +1,53 @@
 ﻿@page "/"
 @inject KeyStore.CloudStore keyStore
+@inject NavigationManager navigationManager
 
-<h1>Login</h1>
 
-<EditForm Model="@auth" OnValidSubmit="GetApiKeys">
-    <div class="form-field">
-        <lable>Password 1:</lable>
-        <div>
-            <InputText @bind-Value="@auth.Password1" />
+@if (isNotLoggedIn)
+{
+    <h1>Login</h1>
+
+    <EditForm Model="@auth">
+        <div class="form-field">
+            <lable>Password 1:</lable>
+            <div>
+                <InputText type="password" @bind-Value="@auth.Password1" />
+            </div>
+
+            <lable>Password 2:</lable>
+            <div>
+                <InputText type="password" @bind-Value="@auth.Password2" />
+            </div>
         </div>
-
-        <lable>Password 2:</lable>
-        <div>
-            <InputText @bind-Value="@auth.Password2" />
-        </div>
-    </div>
-</EditForm>
-
-<button class="btn btn-primary" @onclick="GetApiKeys">Submit</button>
+        <button class="btn btn-primary" @onclick="GetApiKeys">Submit</button>
+    </EditForm>
+}
+else
+{
+    <h1>Logged In</h1>
+}
 
 @code{
     Authentication auth = new Authentication();
+    bool isNotLoggedIn = false;
+
+    protected override void OnInitialized()
+    {
+        isNotLoggedIn = string.IsNullOrEmpty(keyStore.WhaleAlertKey);
+    }
 
     async Task GetApiKeys()
     {
         await keyStore.GetApiKeys(auth.Password1, auth.Password2);
+        navigationManager.NavigateTo("alerts");
     }
 
     public class Authentication
     {
+        [Required]
         public string Password1 { get; set; }
+
+        [Required]
         public string Password2 { get; set; }
     }
 }
