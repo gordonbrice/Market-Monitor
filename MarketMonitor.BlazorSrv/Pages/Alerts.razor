@@ -2,27 +2,47 @@
 @inject HttpClient httpClient
 @inject KeyStore.CloudStore keyStore
 
-<h3>Alerts</h3>
+<h3>Whale Alerts</h3>
 
 @if (WhaleAlert != null && WhaleAlert.Status != null)
 {
     <p>Status: @WhaleAlert.Status.Result</p>
+    <p>Number of Blockchains monitored: @WhaleAlert.Status.BlockchainCount</p>
+    @if (WhaleAlert.Status.BlockchainCount > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Symbol</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var blockchain in WhaleAlert.Status.Blockchains)
+                {
+                    foreach (var symbol in blockchain.Symbols)
+                    {
+                        <tr>
+                            <td>@blockchain.Name</td>
+                            <td>@symbol</td>
+                            <td>@blockchain.Status</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
 }
 
 @code {
 
     WhaleAlertModel WhaleAlert;
 
+
     protected override async Task OnInitializedAsync()
     {
         WhaleAlert = new WhaleAlert.WhaleAlertModel(httpClient, keyStore.WhaleAlertKey);
-        await GetAlerts();
-    }
-
-    async Task GetAlerts()
-    {
         await WhaleAlert.GetStatus();
     }
-
-
 }

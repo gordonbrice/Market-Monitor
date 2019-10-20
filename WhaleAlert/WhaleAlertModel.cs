@@ -11,7 +11,7 @@ namespace WhaleAlert
     {
         WhaleAlertConnection _conn = null;
         string _apiKey = null;
-
+        
         Status _status;
         public Status Status
         {
@@ -27,20 +27,6 @@ namespace WhaleAlert
             }
         }
 
-        string _statusResult;
-        public string StatusResult
-        {
-            get
-            {
-                return _statusResult;
-            }
-
-            set
-            {
-                _statusResult = value;
-                OnPropertyChanged("StatusResult");
-            }
-        }
         public WhaleAlertModel(HttpClient client, string apiKey)
         {
             _conn = new WhaleAlertConnection(client);
