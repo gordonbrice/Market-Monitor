@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MarketMonitor.BlazorSrv.Data;
 using System.Net.Http;
+using GridMvc;
 
 namespace MarketMonitor.BlazorSrv
 {
@@ -32,6 +33,8 @@ namespace MarketMonitor.BlazorSrv
             services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<HttpClient>();
             services.AddSingleton<KeyStore.CloudStore>();
+            services.AddSingleton<AlertService.BlockchainAlertService>();
+            services.AddGridMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

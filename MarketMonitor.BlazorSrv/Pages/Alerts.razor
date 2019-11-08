@@ -1,15 +1,22 @@
 ﻿@page "/alerts"
-@inject HttpClient httpClient
-@inject KeyStore.CloudStore keyStore
+@*@inject HttpClient httpClient
+@inject KeyStore.CloudStore keyStore*@
+@inject AlertService.BlockchainAlertService blockchainAlertService
+
+@using GridBlazor
+@using GridShared
+@using GridShared.Utility
+@using Microsoft.Extensions.Primitives
 
 <h3>Whale Alerts</h3>
 
-@if (WhaleAlert != null && WhaleAlert.Status != null)
+@if (blockchainAlertService.Status != null)
 {
-    <p>Status: @WhaleAlert.Status.Result</p>
-    <p>Number of Blockchains monitored: @WhaleAlert.Status.BlockchainCount</p>
-    @if (WhaleAlert.Status.BlockchainCount > 0)
-    {
+    <p>Status: @blockchainAlertService.Status</p>
+    <p>Number of Blockchains monitored: @blockchainAlertService.Count</p>
+    <GridComponent T="AlertService.CryptoAsset" Grid="@_grid"></GridComponent>
+    @*@if (WhaleAlert.Status.BlockchainCount > 0)
+            {
         <table class="table">
             <thead>
                 <tr>
@@ -20,29 +27,62 @@
             </thead>
             <tbody>
                 @foreach (var blockchain in WhaleAlert.Status.Blockchains)
-                {
-                    foreach (var symbol in blockchain.Symbols)
-                    {
-                        <tr>
-                            <td>@blockchain.Name</td>
-                            <td>@symbol</td>
-                            <td>@blockchain.Status</td>
-                        </tr>
-                    }
-                }
+                        {
+                            foreach (var symbol in blockchain.Symbols)
+                            {
+                <tr>
+                    <td>@blockchain.Name</td>
+                    <td>@symbol</td>
+                    <td>@blockchain.Status</td>
+                </tr>
+                            }
+                        }
             </tbody>
         </table>
-    }
+            }*@
 }
 
 @code {
 
-    WhaleAlertModel WhaleAlert;
-
+    private CGrid<CryptoAsset> _grid;
+    private Task _task;
 
     protected override async Task OnInitializedAsync()
     {
-        WhaleAlert = new WhaleAlert.WhaleAlertModel(httpClient, keyStore.WhaleAlertKey);
-        await WhaleAlert.GetStatus();
+        //WhaleAlert = new WhaleAlert.WhaleAlertModel(httpClient, keyStore.WhaleAlertKey);
+        //await WhaleAlert.GetStatus();
+        //Assets = new List<CryptoAsset>();
+
+        //if (WhaleAlert.Status.BlockchainCount > 0)
+        //{
+        //    foreach (var blockchain in WhaleAlert.Status.Blockchains)
+        //    {
+        //        foreach (var symbol in blockchain.Symbols)
+        //        {
+        //            Assets.Add(new CryptoAsset(blockchain.Name, symbol, blockchain.Status.ToString()));
+        //        }
+        //    }
+        //}
+
+        Action<IGridColumnCollection<CryptoAsset>> columns = c =>
+        {
+            c.Add(o => o.BlockChainName);
+            c.Add(o => o.Symbol);
+            c.Add(o => o.Status);
+        };
+
+        var query = new QueryDictionary<StringValues>();
+
+        query.Add("grid-page", "2");
+        //var rows =
+        //var client = new GridClient<CryptoAsset>(q => blockchainAlertService.GetCryptoAssetGridRows(columns, q), query, false, "ordersGrid", columns)
+        //    _grid = client.Grid;
+
+        //// Set new items to grid
+        //_task = client.UpdateGrid();
+        await _task;
     }
+
+
+
 }
