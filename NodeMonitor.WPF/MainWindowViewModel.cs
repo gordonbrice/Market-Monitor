@@ -2,10 +2,9 @@
 using MVVMSupport;
 using NodeModels;
 using NodeServices;
-using System.Net.Http;
-using WhaleAlert;
+using Utilities;
 
-namespace MarketMonitor.WPF
+namespace NodeMonitor.WPF
 {
     public class MainWindowViewModel : ViewModelBase
     {
@@ -23,16 +22,14 @@ namespace MarketMonitor.WPF
                 OnPropertyChanged("Infura");
             }
         }
-        public NodeModel Local { get; private set; }
-        public WhaleAlertModel WhaleAlert { get; private set; }
 
         public MainWindowViewModel()
         {
             var passwordDlg = new PasswordDialog();
             if (passwordDlg.ShowDialog() == true)
             {
-                var password1 = passwordDlg.PasswordPwBox1.Password;
-                var password2 = passwordDlg.PasswordPwBox2.Password;
+                var password1 = passwordDlg.Password1;
+                var password2 = passwordDlg.Password2;
                 var keyStoreAwaiter = KeyStore.GetApiKeys(password1, password2).GetAwaiter();
 
                 keyStoreAwaiter.OnCompleted(() =>
@@ -41,10 +38,6 @@ namespace MarketMonitor.WPF
                     var apiUrl = $"https://mainnet.infura.io/v3/{KeyStore.InfuraMainnetKey}";
 
                     Infura = new NodeModel(string.IsNullOrEmpty(KeyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io") : new EthereumNodeService("Infura", apiUrl));
-
-                    var client = new HttpClient();
-
-                    WhaleAlert = new WhaleAlertModel(client, KeyStore.WhaleAlertKey);
 
                 });
             }

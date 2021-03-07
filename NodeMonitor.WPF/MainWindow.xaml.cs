@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MarketMonitor.WPF
+namespace NodeMonitor.WPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,15 +23,7 @@ namespace MarketMonitor.WPF
         public MainWindow()
         {
             InitializeComponent();
-
-            var vm = new MainWindowViewModel();
-
-            if(vm.Local != null)
-            {
-                System.Windows.Data.BindingOperations.EnableCollectionSynchronization(vm.Local.Prices, vm.Local.Prices);
-            }
-            this.DataContext = vm;
-
+            this.DataContext = new MainWindowViewModel();
         }
     }
 }

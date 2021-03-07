@@ -1,17 +1,30 @@
 ﻿using System;
 using System.Windows;
 
-namespace MarketMonitor.WPF
+namespace Utilities
 {
-    /// <summary>
-    /// Interaction logic for PasswordDialog.xaml
-    /// </summary>
     public partial class PasswordDialog : Window
     {
-       public PasswordDialog()
+        public string Password1
+        {
+            get
+            {
+                return PasswordPwBox1.Password;
+            }
+        }
+        public string Password2
+        {
+            get
+            {
+                return PasswordPwBox2.Password;
+            }
+        }
+
+        public PasswordDialog()
         {
             InitializeComponent();
         }
+
         private void btnDialogOk_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;

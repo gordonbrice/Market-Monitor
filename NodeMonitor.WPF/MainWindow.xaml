@@ -1,0 +1,48 @@
+﻿<Window x:Class="NodeMonitor.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NodeMonitor.WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="TextBlock" TargetType="{x:Type TextBlock}" BasedOn="{x:Null}">
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "100" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0">Node</Label>
+        <Label Grid.Column="1" Grid.Row="0">Status</Label>
+        <Label Grid.Column="2" Grid.Row="0">Protocol Version</Label>
+        <Label Grid.Column="3" Grid.Row="0">Highest Block</Label>
+        <Label Grid.Column="4" Grid.Row="0">Current Block</Label>
+        <Label Grid.Column="5" Grid.Row="0">Syncing</Label>
+        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource TextBlock}" Text="{Binding Infura.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="5" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.Syncing, Mode = OneWay}"></TextBlock>
+    </Grid>
+</Window>
