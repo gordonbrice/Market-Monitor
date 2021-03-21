@@ -35,7 +35,7 @@ namespace MarketMonitor.ViewModels
         public ICommand LoginCommand { get; private set; }
 
         string name;
-        CloudStore keyStore;
+        MongoAtlasStore keyStore;
 
         public string RawData
         {
@@ -215,8 +215,9 @@ namespace MarketMonitor.ViewModels
                 }
                 else
                 {
-                    keyStore = new CloudStore();
-                    await keyStore.GetApiKeys(Password, Password2).ConfigureAwait(false);
+                    keyStore = new MongoAtlasStore();
+                    keyStore.LogIn(Password, Password2);
+                    keyStore.GetApiKeys();
                 }
             }
 

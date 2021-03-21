@@ -44,22 +44,29 @@ namespace MongoDBTestApp
 
                 if(store.LogIn(password1, password2))
                 {
-                    Console.WriteLine("Key name:");
-
-                    var name = Console.ReadLine();
-
-                    Console.WriteLine("Key value:");
-
-                    var key = Console.ReadLine();
-
-                    if(!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(key))
+                    bool addNewKey = true;
+                    
+                    while(addNewKey)
                     {
-                        store.StoreApiKey(name, key);
-                        Console.WriteLine("Key inserted sucessfully.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid key.");
+                        Console.WriteLine("Key name:");
+
+                        var name = Console.ReadLine();
+
+                        Console.WriteLine("Key value:");
+
+                        var key = Console.ReadLine();
+
+                        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(key))
+                        {
+                            store.StoreApiKey(name, key);
+                            Console.WriteLine("Key inserted sucessfully. Add another key(y/n)?");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid key. Add another key(y/n)?");
+                        }
+
+                        addNewKey = Console.ReadLine().ToLower() == "y";
                     }
                 }
                 else

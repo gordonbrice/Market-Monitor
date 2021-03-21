@@ -17,11 +17,11 @@ namespace AlertService
     {
         WhaleAlertModel _whaleAlert;
         HttpClient _httpClient;
-        CloudStore _keyStore;
+        MongoAtlasStore _keyStore;
 
         public string Status { get; set; }
         public long Count { get; set; }
-        public BlockchainAlertService(HttpClient httpClient, CloudStore keyStore)
+        public BlockchainAlertService(HttpClient httpClient, MongoAtlasStore keyStore)
         {
             _httpClient = httpClient;
             _keyStore = keyStore;

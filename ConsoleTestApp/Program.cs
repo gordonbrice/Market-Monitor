@@ -19,11 +19,10 @@ namespace ConsoleTestApp
 
             var password2 = Console.ReadLine();
 
-            var keyStore = new CloudStore();
+            var keyStore = new MongoAtlasStore();
 
-            var fetchKeysTask = keyStore.GetApiKeys(password1.Trim(), password2.Trim());
-
-            fetchKeysTask.Wait();
+            keyStore.LogIn(password1.Trim(), password2.Trim());
+            keyStore.GetApiKeys();
 
             var cmcConn = new CMCConnection(new System.Net.Http.HttpClient());
             var quotesTask = CryptoCurrencysRequest.GetQuotes(cmcConn, keyStore.CoinMarketCapApiKey, "BTC,ETH,EOS,USDT,BNB,ADA,MKR,USDC,TUSD,REP,PAX,DAI");

@@ -32,7 +32,7 @@ namespace MarketMonitor.BlazorSrv
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<HttpClient>();
-            services.AddSingleton<KeyStore.CloudStore>();
+            services.AddSingleton<KeyStore.MongoAtlasStore>();
             services.AddSingleton<AlertService.BlockchainAlertService>();
             services.AddGridMvc();
         }

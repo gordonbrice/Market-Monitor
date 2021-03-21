@@ -1,5 +1,5 @@
 ﻿@page "/"
-@inject KeyStore.CloudStore keyStore
+@inject KeyStore.MongoAtlasStore keyStore
 @inject NavigationManager navigationManager
 
 
@@ -38,7 +38,8 @@ else
 
     async Task GetApiKeys()
     {
-        await keyStore.GetApiKeys(auth.Password1, auth.Password2);
+        keyStore.LogIn(auth.Password1, auth.Password2);
+        keyStore.GetApiKeys();
         navigationManager.NavigateTo("alerts");
     }
 

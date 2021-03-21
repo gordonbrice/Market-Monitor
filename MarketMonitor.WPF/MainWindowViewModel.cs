@@ -9,7 +9,7 @@ namespace MarketMonitor.WPF
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private CloudStore KeyStore = new CloudStore();
+        private MongoAtlasStore KeyStore = new MongoAtlasStore();
         NodeModel infura;
         public NodeModel Infura
         {
@@ -33,20 +33,18 @@ namespace MarketMonitor.WPF
             {
                 var password1 = passwordDlg.PasswordPwBox1.Password;
                 var password2 = passwordDlg.PasswordPwBox2.Password;
-                var keyStoreAwaiter = KeyStore.GetApiKeys(password1, password2).GetAwaiter();
 
-                keyStoreAwaiter.OnCompleted(() =>
-                {
-                    var key = KeyStore.InfuraMainnetKey;
-                    var apiUrl = $"https://mainnet.infura.io/v3/{KeyStore.InfuraMainnetKey}";
+                KeyStore.LogIn(password1, password2);
+                KeyStore.GetApiKeys();
 
-                    Infura = new NodeModel(string.IsNullOrEmpty(KeyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io") : new EthereumNodeService("Infura", apiUrl));
+                var apiUrl = KeyStore.InfuraMainnetKey;
 
-                    var client = new HttpClient();
+                Infura = new NodeModel(string.IsNullOrEmpty(KeyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io") : new EthereumNodeService("Infura", apiUrl));
 
-                    WhaleAlert = new WhaleAlertModel(client, KeyStore.WhaleAlertKey);
+                var client = new HttpClient();
 
-                });
+                WhaleAlert = new WhaleAlertModel(client, KeyStore.WhaleAlertKey);
+
             }
 
             //Infura = new NodeModel(new EthereumNodeService("Infura", "https://mainnet.infura.io"));
