@@ -33,7 +33,7 @@ namespace NodeServices
 
         public EthereumNodeService(string name, string uri)
         {
-            this.name = string.Format("{0}-{1}", name, uri);
+            this.name = name;
             this.web3 = new Web3(uri);
         }
 

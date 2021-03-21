@@ -2,14 +2,17 @@
 using MVVMSupport;
 using NodeModels;
 using NodeServices;
+using System.Configuration;
 using Utilities;
 
 namespace NodeMonitor.WPF
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private CloudStore KeyStore = new CloudStore();
+        MongoAtlasStore keyStore = new MongoAtlasStore();
         NodeModel infura;
+        NodeModel alchemy;
+        NodeModel chainstack;
         public NodeModel Infura
         {
             get
@@ -22,24 +25,53 @@ namespace NodeMonitor.WPF
                 OnPropertyChanged("Infura");
             }
         }
+        public NodeModel Alchemy
+        {
+            get
+            {
+                return this.alchemy;
+            }
+            private set
+            {
+                this.alchemy = value;
+                OnPropertyChanged("Alchemy");
+            }
+        }
+        public NodeModel Chainstack
+        {
+            get
+            {
+                return this.chainstack;
+            }
+            private set
+            {
+                this.chainstack = value;
+                OnPropertyChanged("Chainstack");
+            }
+        }
 
         public MainWindowViewModel()
         {
+       
             var passwordDlg = new PasswordDialog();
             if (passwordDlg.ShowDialog() == true)
             {
                 var password1 = passwordDlg.Password1;
                 var password2 = passwordDlg.Password2;
-                var keyStoreAwaiter = KeyStore.GetApiKeys(password1, password2).GetAwaiter();
 
-                keyStoreAwaiter.OnCompleted(() =>
+                keyStore.LogIn(password1, password2);
+                keyStore.GetApiKeys();
+                Infura = new NodeModel(string.IsNullOrEmpty(keyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io") : new EthereumNodeService("Infura", keyStore.InfuraMainnetKey));
+
+                if(!string.IsNullOrEmpty(keyStore.AlchemyMainnetKey))
                 {
-                    var key = KeyStore.InfuraMainnetKey;
-                    var apiUrl = $"https://mainnet.infura.io/v3/{KeyStore.InfuraMainnetKey}";
+                    Alchemy = new NodeModel(new EthereumNodeService("Alchemy", keyStore.AlchemyMainnetKey));
+                }
 
-                    Infura = new NodeModel(string.IsNullOrEmpty(KeyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io") : new EthereumNodeService("Infura", apiUrl));
-
-                });
+                if (!string.IsNullOrEmpty(keyStore.ChainstackEth1Node1Key))
+                {
+                    //Chainstack = new NodeModel(new EthereumNodeService("Chainstack", keyStore.ChainstackEth1Node1Key));
+                }
             }
 
             //Infura = new NodeModel(new EthereumNodeService("Infura", "https://mainnet.infura.io"));
