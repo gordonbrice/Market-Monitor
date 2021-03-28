@@ -18,10 +18,12 @@ namespace KeyStore
         public string AlchemyMainnetKey { get; private set; }
         public string ChainstackEth1Node1Key{get; private set; }
         public string WhaleAlertKey { get; private set; }
+        public string GetBlockKey { get; private set; }
+
         public void GetApiKeys()
         {
             var collection = new MongoClient(this.connectionStr).GetDatabase("key-store").GetCollection<ApiKey>("api-keys");
-            var keys = collection.Find(k => k.Name == "Infura" || k.Name == "Alchemy" || k.Name == "Chainstack-ETH-Node-1").ToList();
+            var keys = collection.Find(k => k.Name == "Infura" || k.Name == "Alchemy" || k.Name == "Chainstack-ETH-Node-1" || k.Name == "GetBlock").ToList();
 
             foreach (var apiKey in keys)
             {
@@ -33,6 +35,10 @@ namespace KeyStore
 
                     case "Alchemy":
                         AlchemyMainnetKey = apiKey.Value;
+                        break;
+
+                    case "GetBlock":
+                        GetBlockKey = apiKey.Value;
                         break;
 
                     case "Chainstack-ETH-Node-1":

@@ -3,24 +3,17 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace NodeServices
 {
-    public interface INodeService
-    {
-        string Name { get; }
-        Task<string> GetProtocolVersion();
-        Task<HexBigInteger> GetHighestBlock();
-        Task<SyncingOutput> GetSyncing();
-        Task<HexBigInteger> GetBalance(string address);
-        Contract GetContract(string contractAbi, string contractAddress);
-    }
     public class EthereumNodeService : INodeService
     {
         Web3 web3 = null;
-
         string name;
+        protected string uri = null;
+
         public string Name
         {
             get
@@ -29,26 +22,31 @@ namespace NodeServices
             }
         }
 
-        public string Uri { get; }
+        //public string Uri { get; }
 
         public EthereumNodeService(string name, string uri)
         {
             this.name = name;
+            this.uri = uri;
             this.web3 = new Web3(uri);
         }
 
-        public async Task<string> GetProtocolVersion()
+        public virtual async Task<string> GetProtocolVersion()
         {
-            return await web3.Eth.ProtocolVersion.SendRequestAsync();
-
+                return await web3.Eth.ProtocolVersion.SendRequestAsync();
         }
 
-        public async Task<HexBigInteger> GetHighestBlock()
+        public virtual async Task<HexBigInteger> GetChainId()
+        {
+            return await web3.Eth.ChainId.SendRequestAsync();
+        }
+
+        public virtual async Task<HexBigInteger> GetHighestBlock()
         {
             return await web3.Eth.Blocks.GetBlockNumber.SendRequestAsync();
         }
 
-        public async Task<SyncingOutput> GetSyncing()
+        public virtual async Task<SyncingOutput> GetSyncing()
         {
             return await web3.Eth.Syncing.SendRequestAsync();
         }

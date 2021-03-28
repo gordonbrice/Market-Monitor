@@ -71,6 +71,17 @@ namespace NodeModels
             }
         }
 
+        string chainId;
+        public string ChainId
+        {
+            get { return this.chainId;  }
+            set
+            {
+                this.chainId = value;
+                OnPropertyChanged("ChainId");
+            }
+        }
+
         string highestBlock;
         public string HighestBlock
         {
@@ -101,6 +112,17 @@ namespace NodeModels
             {
                 this.currentBlock = value;
                 OnPropertyChanged("CurrentBlock");
+            }
+        }
+
+        double averageResponseTime;
+        public double AverageResponseTime
+        {
+            get { return this.averageResponseTime; }
+            set
+            {
+                this.averageResponseTime = value;
+                OnPropertyChanged("AverageResponseTime");
             }
         }
 
@@ -166,7 +188,7 @@ namespace NodeModels
         string cdaiExchAddr = null;
         string tusdExchAddr = null;
         #endregion
-
+        #region Financial
         ObservableCollection<AccountModel> accounts;
         public ObservableCollection<AccountModel> Accounts
         {
@@ -205,6 +227,7 @@ namespace NodeModels
                 this.tokens = value;
             }
         }
+        #endregion
 
         Timer fastQueryTimer;
         Timer slowQueryTimer;
@@ -242,6 +265,8 @@ namespace NodeModels
                 }
             }
 
+            AverageResponseTime = 0.0;
+
             this.fastQueryTimer = new Timer((s) =>
             {
                 FastQueryNode();
@@ -258,10 +283,22 @@ namespace NodeModels
         {
             try
             {
+                var beginTime = DateTime.Now;
                 var syncingAwaiter = this.ethereumService.GetSyncing().GetAwaiter();
 
                 syncingAwaiter.OnCompleted(() =>
                 {
+                    var responseTime = (DateTime.Now - beginTime).TotalSeconds;
+
+                    if(AverageResponseTime == 0.0)
+                    {
+                        AverageResponseTime = responseTime;
+                    }
+                    else
+                    {
+                        AverageResponseTime = (AverageResponseTime + responseTime) / 2;
+                    }
+
                     try
                     {
                         var result = syncingAwaiter.GetResult();
@@ -272,11 +309,23 @@ namespace NodeModels
 
                         if (string.IsNullOrEmpty(HighestBlock))
                         {
+                            beginTime = DateTime.Now;
+
                             var highestBlockTaskAwaiter = this.ethereumService.GetHighestBlock().GetAwaiter();
 
                             highestBlockTaskAwaiter.OnCompleted(() =>
                             {
-                                HighestBlock = highestBlockTaskAwaiter.GetResult().Value.ToString();
+                                responseTime = (DateTime.Now - beginTime).TotalSeconds;
+                                AverageResponseTime = (AverageResponseTime + responseTime) / 2;
+
+                                try
+                                {
+                                    HighestBlock = highestBlockTaskAwaiter.GetResult().Value.ToString();
+                                }
+                                catch(Exception x)
+                                {
+                                    var msg = x.Message;
+                                }
                             });
                         }
                     }
@@ -304,6 +353,13 @@ namespace NodeModels
                 protocolVerTaskAwaiter.OnCompleted(() =>
                 {
                     ProtocolVersion = protocolVerTaskAwaiter.GetResult();
+                });
+
+                var chainIdAwaiter = this.ethereumService.GetChainId().GetAwaiter();
+
+                chainIdAwaiter.OnCompleted(() =>
+                {
+                    ChainId = chainIdAwaiter.GetResult().Value.ToString();
                 });
 
                 foreach(var account in Accounts)

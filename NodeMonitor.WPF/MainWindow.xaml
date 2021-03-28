@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NodeMonitor.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="1000">
     <Window.Resources>
         <Style x:Key="TextBlock" TargetType="{x:Type TextBlock}" BasedOn="{x:Null}">
             <Setter Property="Padding" Value="10"/>
@@ -13,6 +13,7 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
@@ -30,6 +31,8 @@
             <ColumnDefinition Width = "100" />
             <ColumnDefinition Width = "100" />
             <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "150" />
         </Grid.ColumnDefinitions>
 
         <Label Grid.Column="0" Grid.Row="0">Node</Label>
@@ -38,23 +41,79 @@
         <Label Grid.Column="3" Grid.Row="0">Highest Block</Label>
         <Label Grid.Column="4" Grid.Row="0">Current Block</Label>
         <Label Grid.Column="5" Grid.Row="0">Syncing</Label>
+        <Label Grid.Column="6" Grid.Row="0">Chain Id</Label>
+        <Label Grid.Column="7" Grid.Row="0">Response Time</Label>
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource TextBlock}" Text="{Binding Infura.EthereumServiceName}"></TextBlock>
         <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.StatusStr, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.ProtocolVersion, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="3" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.HighestBlock, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="4" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
         <TextBlock Grid.Column="5" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.ChainId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.AverageResponseTime, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource TextBlock}" Text="{Binding Alchemy.EthereumServiceName}"></TextBlock>
         <TextBlock Grid.Column="1" Grid.Row="2" Style="{StaticResource TextBlock}" Text = "{Binding Alchemy.StatusStr, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource TextBlock}" Text = "{Binding Alchemy.ProtocolVersion, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="3" Grid.Row="2" Style="{StaticResource TextBlock}" Text = "{Binding Alchemy.HighestBlock, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="4" Grid.Row="2" Style="{StaticResource TextBlock}" Text = "{Binding Alchemy.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
         <TextBlock Grid.Column="5" Grid.Row="2" Style="{StaticResource TextBlock}" Text = "{Binding Alchemy.Syncing, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource TextBlock}" Text="{Binding Chainstack.EthereumServiceName}"></TextBlock>
-        <TextBlock Grid.Column="1" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.StatusStr, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.ProtocolVersion, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="3" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.HighestBlock, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="4" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
-        <TextBlock Grid.Column="5" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="2" Style="{StaticResource TextBlock}" Text = "{Binding Alchemy.ChainId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="2" Style="{StaticResource TextBlock}" Text = "{Binding Alchemy.AverageResponseTime, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource TextBlock}" Text="{Binding GetBlock.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding GetBlock.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding GetBlock.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding GetBlock.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding GetBlock.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="5" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding GetBlock.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding GetBlock.ChainId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="3" Style="{StaticResource TextBlock}" Text = "{Binding GetBlock.AverageResponseTime, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource TextBlock}" Text="{Binding MyCrypto.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="4" Style="{StaticResource TextBlock}" Text = "{Binding MyCrypto.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="4" Style="{StaticResource TextBlock}" Text = "{Binding MyCrypto.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="4" Style="{StaticResource TextBlock}" Text = "{Binding MyCrypto.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="4" Style="{StaticResource TextBlock}" Text = "{Binding MyCrypto.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="5" Grid.Row="4" Style="{StaticResource TextBlock}" Text = "{Binding MyCrypto.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="4" Style="{StaticResource TextBlock}" Text = "{Binding MyCrypto.ChainId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="4" Style="{StaticResource TextBlock}" Text = "{Binding MyCrypto.AverageResponseTime, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="5" Style="{StaticResource TextBlock}" Text="{Binding PocketNetwork.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="5" Style="{StaticResource TextBlock}" Text = "{Binding PocketNetwork.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="5" Style="{StaticResource TextBlock}" Text = "{Binding PocketNetwork.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="5" Style="{StaticResource TextBlock}" Text = "{Binding PocketNetwork.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="5" Style="{StaticResource TextBlock}" Text = "{Binding PocketNetwork.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="5" Grid.Row="5" Style="{StaticResource TextBlock}" Text = "{Binding PocketNetwork.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="5" Style="{StaticResource TextBlock}" Text = "{Binding PocketNetwork.ChainId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="5" Style="{StaticResource TextBlock}" Text = "{Binding PocketNetwork.AverageResponseTime, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="6" Style="{StaticResource TextBlock}" Text="{Binding CloudFlare.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="6" Style="{StaticResource TextBlock}" Text = "{Binding CloudFlare.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="6" Style="{StaticResource TextBlock}" Text = "{Binding CloudFlare.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="6" Style="{StaticResource TextBlock}" Text = "{Binding CloudFlare.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="6" Style="{StaticResource TextBlock}" Text = "{Binding CloudFlare.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="5" Grid.Row="6" Style="{StaticResource TextBlock}" Text = "{Binding CloudFlare.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="6" Style="{StaticResource TextBlock}" Text = "{Binding CloudFlare.ChainId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="6" Style="{StaticResource TextBlock}" Text = "{Binding CloudFlare.AverageResponseTime, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="7" Style="{StaticResource TextBlock}" Text="{Binding MyEtherWallet.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="7" Style="{StaticResource TextBlock}" Text = "{Binding MyEtherWallet.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="7" Style="{StaticResource TextBlock}" Text = "{Binding MyEtherWallet.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="7" Style="{StaticResource TextBlock}" Text = "{Binding MyEtherWallet.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="7" Style="{StaticResource TextBlock}" Text = "{Binding MyEtherWallet.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="5" Grid.Row="7" Style="{StaticResource TextBlock}" Text = "{Binding MyEtherWallet.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="7" Style="{StaticResource TextBlock}" Text = "{Binding MyEtherWallet.ChainId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="7" Style="{StaticResource TextBlock}" Text = "{Binding MyEtherWallet.AverageResponseTime, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="8" Style="{StaticResource TextBlock}" Text="{Binding Chainstack.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="5" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.ChaiId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.AverageResponseTime, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="9" Style="{StaticResource TextBlock}" Text="{Binding Avado.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding Avado.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding Avado.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding Avado.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding Avado.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="5" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding Avado.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding Avado.ChaiId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding Avado.AverageResponseTime, Mode = OneWay}"></TextBlock>
     </Grid>
 </Window>
