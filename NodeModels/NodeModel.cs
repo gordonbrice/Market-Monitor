@@ -32,8 +32,29 @@ namespace NodeModels
             }
         }
 
-        NodeStatus status = NodeStatus.Disconnected;
+        int fastQueryInterval;
+        public int FastQueryInterval
+        {
+            get { return this.fastQueryInterval; }
+            private set
+            {
+                this.fastQueryInterval = value;
+                OnPropertyChanged("FastQueryInterval");
+            }
+        }
 
+        int slowQueryInterval;
+        public int SlowQueryInterval
+        {
+            get { return this.slowQueryInterval; }
+            set
+            {
+                this.slowQueryInterval = value;
+                OnPropertyChanged("SlowQueryInterval");
+            }
+        }
+
+        NodeStatus status = NodeStatus.Disconnected;
         public NodeStatus Status
         {
             get { return status; }
@@ -233,9 +254,11 @@ namespace NodeModels
         Timer slowQueryTimer;
         bool contractInteraction;
 
-        public NodeModel(INodeService nodeService, bool getAcctData = false, bool contractInteraction = false)
+        public NodeModel(INodeService nodeService, bool getAcctData = false, bool contractInteraction = false, int fastQueryInt = 5, int slowQueryInt = 60)
         {
             this.ethereumService = nodeService;
+            FastQueryInterval = fastQueryInt;
+            SlowQueryInterval = slowQueryInt;
             EthereumServiceName = nodeService.Name;
             Status = NodeStatus.Connected;
             this.accounts = new ObservableCollection<AccountModel>();
@@ -270,12 +293,12 @@ namespace NodeModels
             this.fastQueryTimer = new Timer((s) =>
             {
                 FastQueryNode();
-            }, null, new TimeSpan(0, 0, 0), new TimeSpan(0, 0, 5));
+            }, null, new TimeSpan(0, 0, 0), new TimeSpan(0, 0, FastQueryInterval));
 
             this.slowQueryTimer = new Timer((s) =>
             {
                 SlowQueryNode();
-            }, null, new TimeSpan(0, 0, 0), new TimeSpan(0, 0, 60));
+            }, null, new TimeSpan(0, 0, 0), new TimeSpan(0, 0, SlowQueryInterval));
 
         }
 

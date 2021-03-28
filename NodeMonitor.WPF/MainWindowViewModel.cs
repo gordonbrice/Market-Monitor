@@ -19,6 +19,7 @@ namespace NodeMonitor.WPF
         NodeModel cloudFlare;
         NodeModel myEtherWallet;
         NodeModel avado;
+        NodeModel quickNode;
 
         public NodeModel Infura
         {
@@ -30,6 +31,18 @@ namespace NodeMonitor.WPF
             {
                 this.infura = value;
                 OnPropertyChanged("Infura");
+            }
+        }
+        public NodeModel QuickNode
+        {
+            get
+            {
+                return this.quickNode;
+            }
+            private set
+            {
+                this.quickNode = value;
+                OnPropertyChanged("QuickNode");
             }
         }
         public NodeModel Alchemy
@@ -140,27 +153,31 @@ namespace NodeMonitor.WPF
 
                 keyStore.LogIn(password1, password2);
                 keyStore.GetApiKeys();
-                Infura = new NodeModel(string.IsNullOrEmpty(keyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io") : new EthereumNodeService("Infura", keyStore.InfuraMainnetKey));
+
+                var fastQueryInterval = 15;
+                var slowQueryInterval = 3600;
+
+                Infura = new NodeModel(string.IsNullOrEmpty(keyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io") : new EthereumNodeService("Infura", keyStore.InfuraMainnetKey), false, false, fastQueryInterval, slowQueryInterval);
 
                 if(!string.IsNullOrEmpty(keyStore.AlchemyMainnetKey))
                 {
-                    Alchemy = new NodeModel(new EthereumNodeService("Alchemy", keyStore.AlchemyMainnetKey));
+                    Alchemy = new NodeModel(new EthereumNodeService("Alchemy", keyStore.AlchemyMainnetKey), false, false, fastQueryInterval, slowQueryInterval);
                 }
 
                 if(!string.IsNullOrEmpty(keyStore.GetBlockKey))
                 {
-                    GetBlock = new NodeModel(new EthereumNodeService("GetBlock", keyStore.GetBlockKey));
+                    GetBlock = new NodeModel(new EthereumNodeService("GetBlock", keyStore.GetBlockKey), false, false, fastQueryInterval, slowQueryInterval);
                 }
 
-                MyCrypto = new NodeModel(new EthereumNodeService("MyCrypto", "https://api.mycryptoapi.com/eth"));
-                //PocketNetwork = new NodeModel(new EthereumNodeService("PocketNetwork", "https://eth-mainnet.gateway.pokt.network/v1/5f3453978e354ab992c4da79"));
-                CloudFlare = new NodeModel(new EthereumNodeService("CloudFlare", "https://cloudflare-eth.com/"));
-                //Avado = new NodeModel(new EthereumNodeService("Avado", "https://mainnet.eth.cloud.ava.do/"));
-                //MyEtherWallet = new NodeModel(new EthereumNodeService("MyEtherWallet", "https://nodes.mewapi.io/rpc/eth"));
-
+                MyCrypto = new NodeModel(new EthereumNodeService("MyCrypto", "https://api.mycryptoapi.com/eth"), false, false, fastQueryInterval, slowQueryInterval);
+                //PocketNetwork = new NodeModel(new EthereumNodeService("PocketNetwork", "https://eth-mainnet.gateway.pokt.network/v1/5f3453978e354ab992c4da79"), false, false, fastQueryInterval, slowQueryInterval);
+                CloudFlare = new NodeModel(new EthereumNodeService("CloudFlare", "https://cloudflare-eth.com/"), false, false, fastQueryInterval, slowQueryInterval);
+                //Avado = new NodeModel(new EthereumNodeService("Avado", "https://mainnet.eth.cloud.ava.do/"), false, false, fastQueryInterval, slowQueryInterval);
+                //MyEtherWallet = new NodeModel(new EthereumNodeService("MyEtherWallet", "https://nodes.mewapi.io/rpc/eth"), false, false, fastQueryInterval, slowQueryInterval);
+                QuickNode = new NodeModel(new EthereumNodeService("QuickNode", keyStore.QuickNode), false, false, fastQueryInterval, slowQueryInterval);
                 //if (!string.IsNullOrEmpty(keyStore.ChainstackEth1Node1Key))
                 //{
-                //    Chainstack = new NodeModel(new EthereumNodeService("Chainstack", keyStore.ChainstackEth1Node1Key));
+                //    Chainstack = new NodeModel(new EthereumNodeService("Chainstack", keyStore.ChainstackEth1Node1Key), false, false, fastQueryInterval, slowQueryInterval);
                 //}
             }
 
