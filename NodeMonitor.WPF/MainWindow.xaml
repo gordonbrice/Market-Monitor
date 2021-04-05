@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NodeMonitor.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1000">
+        Title="MainWindow" Height="500" Width="2000">
     <Window.Resources>
         <Style x:Key="TextBlock" TargetType="{x:Type TextBlock}" BasedOn="{x:Null}">
             <Setter Property="Padding" Value="10"/>
@@ -22,19 +22,26 @@
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
             <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width = "100" />
             <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "75" />
             <ColumnDefinition Width = "100" />
             <ColumnDefinition Width = "100" />
-            <ColumnDefinition Width = "100" />
-            <ColumnDefinition Width = "100" />
-            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "50" />
+            <ColumnDefinition Width = "50" />
             <ColumnDefinition Width = "150" />
             <ColumnDefinition Width = "50" />
             <ColumnDefinition Width = "50" />
+            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "100" />
         </Grid.ColumnDefinitions>
 
         <Label Grid.Column="0" Grid.Row="0">Node</Label>
@@ -47,6 +54,10 @@
         <Label Grid.Column="7" Grid.Row="0">Response Time</Label>
         <Label Grid.Column="8" Grid.Row="0">FQI</Label>
         <Label Grid.Column="9" Grid.Row="0">SQI</Label>
+        <Label Grid.Column="10" Grid.Row="0">Total Errors</Label>
+        <Label Grid.Column="11" Grid.Row="0">Last Week</Label>
+        <Label Grid.Column="12" Grid.Row="0">Last 24h</Label>
+        <Label Grid.Column="13" Grid.Row="0">Last Hour</Label>
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource TextBlock}" Text="{Binding Infura.EthereumServiceName}"></TextBlock>
         <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.StatusStr, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding Infura.ProtocolVersion, Mode = OneWay}"></TextBlock>
@@ -123,7 +134,7 @@
         <TextBlock Grid.Column="3" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.HighestBlock, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="4" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
         <TextBlock Grid.Column="5" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.Syncing, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="6" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.ChaiId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.ChainId, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="7" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.AverageResponseTime, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="8" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.FastQueryInterval, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="9" Grid.Row="8" Style="{StaticResource TextBlock}" Text = "{Binding Chainstack.SlowQueryInterval, Mode = OneWay}"></TextBlock>
@@ -133,9 +144,29 @@
         <TextBlock Grid.Column="3" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding QuickNode.HighestBlock, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="4" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding QuickNode.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
         <TextBlock Grid.Column="5" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding QuickNode.Syncing, Mode = OneWay}"></TextBlock>
-        <TextBlock Grid.Column="6" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding QuickNode.ChaiId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding QuickNode.ChainId, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="7" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding QuickNode.AverageResponseTime, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="8" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding QuickNode.FastQueryInterval, Mode = OneWay}"></TextBlock>
         <TextBlock Grid.Column="9" Grid.Row="9" Style="{StaticResource TextBlock}" Text = "{Binding QuickNode.SlowQueryInterval, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="10" Style="{StaticResource TextBlock}" Text="{Binding AnyBlock.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="10" Style="{StaticResource TextBlock}" Text = "{Binding AnyBlock.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="10" Style="{StaticResource TextBlock}" Text = "{Binding AnyBlock.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="10" Style="{StaticResource TextBlock}" Text = "{Binding AnyBlock.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="10" Style="{StaticResource TextBlock}" Text = "{Binding AnyBlock.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="5" Grid.Row="10" Style="{StaticResource TextBlock}" Text = "{Binding AnyBlock.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="10" Style="{StaticResource TextBlock}" Text = "{Binding AnyBlock.ChainId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="10" Style="{StaticResource TextBlock}" Text = "{Binding AnyBlock.AverageResponseTime, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="8" Grid.Row="10" Style="{StaticResource TextBlock}" Text = "{Binding AnyBlock.FastQueryInterval, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="9" Grid.Row="10" Style="{StaticResource TextBlock}" Text = "{Binding AnyBlock.SlowQueryInterval, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="11" Style="{StaticResource TextBlock}" Text="{Binding Avado.EthereumServiceName}"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="11" Style="{StaticResource TextBlock}" Text = "{Binding Avado.StatusStr, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="11" Style="{StaticResource TextBlock}" Text = "{Binding Avado.ProtocolVersion, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="11" Style="{StaticResource TextBlock}" Text = "{Binding Avado.HighestBlock, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="11" Style="{StaticResource TextBlock}" Text = "{Binding Avado.CurrentBlock, Mode = OneWay}" Visibility="{Binding Local.SyncVisibility}"></TextBlock>
+        <TextBlock Grid.Column="5" Grid.Row="11" Style="{StaticResource TextBlock}" Text = "{Binding Avado.Syncing, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="6" Grid.Row="11" Style="{StaticResource TextBlock}" Text = "{Binding Avado.ChainId, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="7" Grid.Row="11" Style="{StaticResource TextBlock}" Text = "{Binding Avado.AverageResponseTime, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="8" Grid.Row="11" Style="{StaticResource TextBlock}" Text = "{Binding Avado.FastQueryInterval, Mode = OneWay}"></TextBlock>
+        <TextBlock Grid.Column="9" Grid.Row="11" Style="{StaticResource TextBlock}" Text = "{Binding Avado.SlowQueryInterval, Mode = OneWay}"></TextBlock>
     </Grid>
 </Window>

@@ -11,6 +11,7 @@ namespace NodeModels
 {
     public enum NodeStatus
     {
+        NotDefined,
         Disconnected,
         Connected,
         Synching,
@@ -20,6 +21,52 @@ namespace NodeModels
     public class NodeModel : ViewModelBase
     {
         INodeService ethereumService;
+
+        public event EventHandler<NodeErrorEventArgs> Error;
+
+        int totalErrors;
+        public int TotalErrors
+        {
+            get { return this.totalErrors; }
+            set
+            {
+                this.totalErrors = value;
+                OnPropertyChanged("TotalErrors");
+            }
+        }
+
+        int errorsLastWeek;
+        public int ErrorsLastWeek
+        {
+            get { return this.errorsLastWeek; }
+            set
+            {
+                this.errorsLastWeek = value;
+                OnPropertyChanged("ErrorsLastWeek");
+            }
+        }
+
+        int errorsLast24Hours;
+        public int ErrorsLast24Hours
+        {
+            get { return this.errorsLast24Hours; }
+            set
+            {
+                this.errorsLast24Hours = value;
+                OnPropertyChanged("ErrorsLast24Hours");
+            }
+        }
+
+        int errorsLastHour;
+        public int ErrorsLastHour
+        {
+            get { return this.errorsLastHour; }
+            set
+            {
+                this.errorsLastHour = value;
+                OnPropertyChanged("ErrorsLastHour");
+            }
+        }
 
         string ethereumServiceName;
         public string EthereumServiceName
@@ -54,15 +101,28 @@ namespace NodeModels
             }
         }
 
-        NodeStatus status = NodeStatus.Disconnected;
+        NodeStatus previousStatus = NodeStatus.NotDefined;
+
+        NodeStatus status = NodeStatus.NotDefined;
         public NodeStatus Status
         {
             get { return status; }
             set
             {
+                if(this.status == NodeStatus.NotDefined || this.status == NodeStatus.Connected)
+                {
+                    this.previousStatus = value;
+                }
+
                 this.status = value;
                 OnPropertyChanged("Status");
                 StatusStr = this.status.ToString();
+
+                if(this.status != this.previousStatus)
+                {
+                    OnError(EthereumServiceName, this.statusStr);
+                    this.previousStatus = this.status;
+                }
             }
         }
 
@@ -78,6 +138,21 @@ namespace NodeModels
             {
                 this.statusStr = value;
                 OnPropertyChanged("StatusStr");
+            }
+        }
+
+        string statusDetail;
+        public string StatusDetail
+        {
+            get
+            {
+                return this.statusDetail;
+            }
+
+            private set
+            {
+                this.statusDetail = value;
+                OnPropertyChanged("StatusDetail");
             }
         }
 
@@ -347,7 +422,9 @@ namespace NodeModels
                                 }
                                 catch(Exception x)
                                 {
-                                    var msg = x.Message;
+                                    Status = NodeStatus.Error;
+                                    StatusDetail = x.Message;
+                                    OnError(this.EthereumServiceName, x.Message);
                                 }
                             });
                         }
@@ -355,7 +432,8 @@ namespace NodeModels
                     catch(Exception e)
                     {
                         Status = NodeStatus.Error;
-                        //Log(e);
+                        StatusDetail = e.Message;
+                        OnError(this.EthereumServiceName, e.Message);
                     }
                 });
 
@@ -375,14 +453,30 @@ namespace NodeModels
 
                 protocolVerTaskAwaiter.OnCompleted(() =>
                 {
-                    ProtocolVersion = protocolVerTaskAwaiter.GetResult();
+                    try
+                    {
+                        ProtocolVersion = protocolVerTaskAwaiter.GetResult();
+                    }
+                    catch(Exception)
+                    {
+                        ProtocolVersion = "N/A";
+                    }
                 });
 
                 var chainIdAwaiter = this.ethereumService.GetChainId().GetAwaiter();
 
                 chainIdAwaiter.OnCompleted(() =>
                 {
-                    ChainId = chainIdAwaiter.GetResult().Value.ToString();
+                    try
+                    {
+                        ChainId = chainIdAwaiter.GetResult().Value.ToString();
+                    }
+                    catch(Exception x)
+                    {
+                        Status = NodeStatus.Error;
+                        StatusDetail = x.Message;
+                        OnError(this.EthereumServiceName, x.Message);
+                    }
                 });
 
                 foreach(var account in Accounts)
@@ -392,10 +486,23 @@ namespace NodeModels
             }
             catch (Exception e)
             {
-                StatusStr = e.Message;
+                Status = NodeStatus.Error;
+                StatusDetail = e.Message;
+                OnError(this.EthereumServiceName, e.Message);
             }
         }
 
+        private void OnError(string name, string message)
+        {
+            if(Error != null)
+            {
+                Error(this, new NodeErrorEventArgs
+                {
+                    Name = name,
+                    Message = message
+                });
+            }
+        }
         private void AddTokens()
         {
             var dai = new Erc20TokenModel("DAI", this.ethereumService);

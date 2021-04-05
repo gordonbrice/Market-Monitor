@@ -20,6 +20,7 @@ namespace KeyStore
         public string WhaleAlertKey { get; private set; }
         public string GetBlockKey { get; private set; }
         public string QuickNode { get; private set; }
+        public string AnyBlockMainnetKey { get; private set; }
 
         public void GetApiKeys()
         {
@@ -62,6 +63,10 @@ namespace KeyStore
                         WhaleAlertKey = apiKey.Value;
                         break;
 
+                    case "AnyBlock":
+                        AnyBlockMainnetKey = apiKey.Value;
+                        break;
+
                     default:
                         Console.WriteLine($"Unused Key: {apiKey.Name}");
                         break;
@@ -83,6 +88,20 @@ namespace KeyStore
             collection.InsertOne(apiKey);
             
         }
+        public async Task Log(string nodeName, string message)
+        {
+            var collection = new MongoClient(connectionStr).GetDatabase("log-store").GetCollection<NodeLog>("node-logs");
+            var count = collection.CountDocuments(new BsonDocument());
+            var nodeLog = new NodeLog
+            {
+                Id = count + 1,
+                Name = nodeName,
+                Message = message,
+                TimeStamp = DateTime.Now
+            };
+
+            await collection.InsertOneAsync(nodeLog);
+        }
         public bool LogIn(string password1, string password2)
         {
             //var encrypted = Symmetric.Encrypt<AesManaged>(decrypted, password1, password2);
@@ -96,6 +115,30 @@ namespace KeyStore
             }
 
             return true;
+        }
+        public int GetTotalErrorCountFor(string name)
+        {
+            var collection = new MongoClient(this.connectionStr).GetDatabase("log-store").GetCollection<NodeLog>("node-logs");
+
+            return collection.Find(e => e.Name == name && e.Message != "Working").ToList().Count;
+        }
+        public int GetLastWeekErrorCountFor(string name)
+        {
+            var collection = new MongoClient(this.connectionStr).GetDatabase("log-store").GetCollection<NodeLog>("node-logs");
+
+            return collection.Find(e => e.Name == name && e.Message != "Working" && DateTime.Now - e.TimeStamp < TimeSpan.FromDays(7)).ToList().Count;
+        }
+        public int GetLast24HourErrorCountFor(string name)
+        {
+            var collection = new MongoClient(this.connectionStr).GetDatabase("log-store").GetCollection<NodeLog>("node-logs");
+
+            return collection.Find(e => e.Name == name && e.Message != "Working" && DateTime.Now - e.TimeStamp < TimeSpan.FromHours(24)).ToList().Count;
+        }
+        public int GetLastHourErrorCountFor(string name)
+        {
+            var collection = new MongoClient(this.connectionStr).GetDatabase("log-store").GetCollection<NodeLog>("node-logs");
+
+            return collection.Find(e => e.Name == name && e.Message != "Working" && DateTime.Now - e.TimeStamp < TimeSpan.FromHours(1)).ToList().Count;
         }
     }
 }
