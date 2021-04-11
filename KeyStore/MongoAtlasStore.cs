@@ -21,6 +21,7 @@ namespace KeyStore
         public string GetBlockKey { get; private set; }
         public string QuickNode { get; private set; }
         public string AnyBlockMainnetKey { get; private set; }
+        public string ArchiveNodeKey { get; private set; }
 
         public void GetApiKeys()
         {
@@ -65,6 +66,10 @@ namespace KeyStore
 
                     case "AnyBlock":
                         AnyBlockMainnetKey = apiKey.Value;
+                        break;
+
+                    case "ArchiveNode":
+                        ArchiveNodeKey = apiKey.Value;
                         break;
 
                     default:
