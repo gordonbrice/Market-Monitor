@@ -53,8 +53,8 @@
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=9.3.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Storage.9.3.3\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="Nethereum.Portable, Version=1.0.7149.22376, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nethereum.Portable.3.4.0\lib\portable45-net45+win8+wpa81\Nethereum.Portable.dll</HintPath>
+    <Reference Include="Nethereum.Portable, Version=1.0.7348.26609, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nethereum.Portable.3.7.0\lib\portable45-net45+win8+wpa81\Nethereum.Portable.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>

@@ -1,14 +1,9 @@
 ﻿using CoinMarketCap;
-using CypherUtil;
 using KeyStore;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
-using Microsoft.WindowsAzure.Storage.Table;
 using MvvmHelpers;
 using Nomics;
 using System;
 using System.Net.Http;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;

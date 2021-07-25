@@ -2,10 +2,9 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace KeyStore
 {
@@ -22,16 +21,25 @@ namespace KeyStore
         public string QuickNode { get; private set; }
         public string AnyBlockMainnetKey { get; private set; }
         public string ArchiveNodeKey { get; private set; }
-
+        public string GethKey { get; private set; }
+        public Dictionary<string,string> KeyCollection { get; private set; }
         public void GetApiKeys()
         {
             var collection = new MongoClient(this.connectionStr).GetDatabase("key-store").GetCollection<ApiKey>("api-keys");
             var keys = collection.Find(k => k.Id > 0).ToList();
 
+            KeyCollection = new Dictionary<string, string>();
+
             foreach (var apiKey in keys)
             {
+                KeyCollection.Add(apiKey.Name, apiKey.Value);
+
                 switch (apiKey.Name)
                 {
+                    case "Geth":
+                        GethKey = apiKey.Value;
+                        break;
+
                     case "Infura":
                         InfuraMainnetKey = apiKey.Value;
                         break;

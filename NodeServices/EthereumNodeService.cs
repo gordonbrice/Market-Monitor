@@ -2,6 +2,7 @@
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace NodeServices
@@ -10,6 +11,7 @@ namespace NodeServices
     {
         Web3 web3 = null;
         string name;
+        HttpClient httpClient = null;
         protected string uri = null;
 
         public string Name
@@ -22,15 +24,17 @@ namespace NodeServices
 
         //public string Uri { get; }
 
-        public EthereumNodeService(string name, string uri)
+        public EthereumNodeService(string name, string uri/*, HttpClient httpClient*/)
         {
             this.name = name;
             this.uri = uri;
+            //this.httpClient = httpClient;
             this.web3 = new Web3(uri);
         }
 
         public virtual async Task<string> GetProtocolVersion()
         {
+            
                 return await web3.Eth.ProtocolVersion.SendRequestAsync();
         }
 

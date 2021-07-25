@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NodeMonitor.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="2000">
+        Title="MainWindow" Height="750" Width="1500">
     <Window.Resources>
         <Style x:Key="TextBlock" TargetType="{x:Type TextBlock}" BasedOn="{x:Null}">
             <Setter Property="Padding" Value="10"/>
