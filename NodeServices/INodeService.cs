@@ -1,10 +1,7 @@
-﻿using Nethereum.Hex.HexTypes;
-using System;
-using System.Collections.Generic;
-using Nethereum.Contracts;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Nethereum.Contracts;
+using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
+using System.Threading.Tasks;
 
 namespace NodeServices
 {
@@ -17,5 +14,7 @@ namespace NodeServices
         Task<SyncingOutput> GetSyncing();
         Task<HexBigInteger> GetBalance(string address);
         Contract GetContract(string contractAbi, string contractAddress);
+        Task<string> GetClientVersion();
+
     }
 }

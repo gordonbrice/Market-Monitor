@@ -2,11 +2,24 @@
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace NodeServices
 {
+    public class ClientInfo
+    {
+        public int? id { get; set; }
+        public string jsonrpc { get; set; }
+        public string result { get; set; }
+    }
+
     public class EthereumNodeService : INodeService
     {
         Web3 web3 = null;
@@ -24,18 +37,59 @@ namespace NodeServices
 
         //public string Uri { get; }
 
-        public EthereumNodeService(string name, string uri/*, HttpClient httpClient*/)
+        public EthereumNodeService(string name, string uri, HttpClient httpClient)
         {
             this.name = name;
             this.uri = uri;
-            //this.httpClient = httpClient;
+            this.httpClient = httpClient;
             this.web3 = new Web3(uri);
         }
 
         public virtual async Task<string> GetProtocolVersion()
         {
-            
-                return await web3.Eth.ProtocolVersion.SendRequestAsync();
+            return await web3.Eth.ProtocolVersion.SendRequestAsync();
+        }
+
+        public virtual async Task<string> GetClientVersion()
+        {
+            var arr = new JArray();
+            var paramData = new object[] { "id", 67 };
+
+            arr.Add(paramData);
+            var payload = "{\"jsonrpc\":\"2.0\",\"method\":\"web3_clientVersion\",\"params\":[],\"id\":67}";
+            var stringContent = new StringContent(payload, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync(this.uri, stringContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+
+                if(!string.IsNullOrEmpty(json))
+                {
+                    if (json.Contains("Parse Error"))
+                    {
+                        return "Parse Error";
+                    }
+                    else if (json.Contains("ID is not set"))
+                    {
+                        return "ID is not set";
+                    }
+                    else if (json.Contains("Relay attempts exhausted"))
+                    {
+                        return "Relay attempts exhausted";
+                    }
+                    else
+                    {
+                        var res = JsonConvert.DeserializeObject<ClientInfo>(json);
+
+                        return res.result;
+                    }
+                }
+
+                return "None";
+            }
+
+            return "Error";
         }
 
         public virtual async Task<HexBigInteger> GetChainId()

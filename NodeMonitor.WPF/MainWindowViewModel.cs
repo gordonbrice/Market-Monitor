@@ -3,6 +3,7 @@ using MVVMSupport;
 using NodeModels;
 using NodeServices;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using Utilities;
 
 namespace NodeMonitor.WPF
@@ -35,11 +36,13 @@ namespace NodeMonitor.WPF
                 
                 if(store.GetApiKeys())
                 {
+                    var httpClient = new HttpClient();
+
                     foreach(var key in store.KeyCollection)
                     {
                         if(key.Value.Type == (int)KeyType.EthNode && !string.IsNullOrEmpty(key.Value.Value))
                         {
-                            var node = new NodeModel(new EthereumNodeService(key.Value.DisplayName, key.Value.Value), false, false, key.Value.FastQueryInterval, key.Value.SlowQueryInterval);
+                            var node = new NodeModel(new EthereumNodeService(key.Value.DisplayName, key.Value.Value, httpClient), false, false, key.Value.FastQueryInterval, key.Value.SlowQueryInterval);
 
                             node.Error += Node_Error;
                             Nodes.Add(node);

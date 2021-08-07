@@ -11,6 +11,8 @@ namespace MarketMonitor.WPF
     {
         private MongoAtlasStore KeyStore = new MongoAtlasStore();
         NodeModel infura;
+        HttpClient httpClient = null;
+
         public NodeModel Infura
         {
             get
@@ -39,7 +41,8 @@ namespace MarketMonitor.WPF
 
                 var apiUrl = KeyStore.InfuraMainnetKey;
 
-                Infura = new NodeModel(string.IsNullOrEmpty(KeyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io") : new EthereumNodeService("Infura", apiUrl));
+                httpClient = new HttpClient();
+                Infura = new NodeModel(string.IsNullOrEmpty(KeyStore.InfuraMainnetKey) ? new EthereumNodeService("Infura", $"https://mainnet.infura.io", httpClient) : new EthereumNodeService("Infura", apiUrl, httpClient));
 
                 var client = new HttpClient();
 

@@ -32,6 +32,7 @@
             <ColumnDefinition Width = "100" />
             <ColumnDefinition Width = "100" />
             <ColumnDefinition Width = "100" />
+            <ColumnDefinition Width = "300" />
         </Grid.ColumnDefinitions>
 
         <Label Grid.Column="0" Grid.Row="0">Node</Label>
@@ -48,7 +49,8 @@
         <Label Grid.Column="11" Grid.Row="0">Last Week</Label>
         <Label Grid.Column="12" Grid.Row="0">Last 24h</Label>
         <Label Grid.Column="13" Grid.Row="0">Last Hour</Label>
-        <ListBox Grid.Column="0" Grid.ColumnSpan="14" Grid.Row="1" ItemsSource="{Binding Nodes}">
+        <Label Grid.Column="14" Grid.Row="0">Client Version</Label>
+        <ListBox Grid.Column="0" Grid.ColumnSpan="15" Grid.Row="1" ItemsSource="{Binding Nodes}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -66,10 +68,11 @@
                             <ColumnDefinition Width = "150" />
                             <ColumnDefinition Width = "50" />
                             <ColumnDefinition Width = "50" />
+                            <ColumnDefinition Width = "300" />
                             <ColumnDefinition Width = "100" />
                             <ColumnDefinition Width = "100" />
                             <ColumnDefinition Width = "100" />
-                            <ColumnDefinition Width = "100" />
+                            <ColumnDefinition Width = "300" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource TextBlock}" Text="{Binding EthereumServiceName}"></TextBlock>
                         <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding StatusStr, Mode = OneWay}"></TextBlock>
@@ -81,6 +84,7 @@
                         <TextBlock Grid.Column="7" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding AverageResponseTime, Mode = OneWay}"></TextBlock>
                         <TextBlock Grid.Column="8" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding FastQueryInterval, Mode = OneWay}"></TextBlock>
                         <TextBlock Grid.Column="9" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding SlowQueryInterval, Mode = OneWay}"></TextBlock>
+                        <TextBlock Grid.Column="10" Grid.Row="1" Style="{StaticResource TextBlock}" Text = "{Binding ClientVersion, Mode = OneWay}"></TextBlock>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

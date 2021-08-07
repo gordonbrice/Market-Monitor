@@ -167,6 +167,17 @@ namespace NodeModels
             }
         }
 
+        string clientVersion;
+        public string ClientVersion
+        {
+            get { return this.clientVersion; }
+            set
+            {
+                this.clientVersion = value;
+                OnPropertyChanged("ClientVersion");
+            }
+        }
+
         string chainId;
         public string ChainId
         {
@@ -460,6 +471,22 @@ namespace NodeModels
                     catch(Exception)
                     {
                         ProtocolVersion = "N/A";
+                    }
+                });
+
+                var clientVersionAwaiter = this.ethereumService.GetClientVersion().GetAwaiter();
+
+                clientVersionAwaiter.OnCompleted(() =>
+                {
+                    try
+                    {
+                        ClientVersion = clientVersionAwaiter.GetResult();
+                    }
+                    catch (Exception cvx)
+                    {
+                        Status = NodeStatus.Error;
+                        StatusDetail = cvx.Message;
+                        OnError(this.EthereumServiceName, cvx.Message);
                     }
                 });
 
