@@ -23,6 +23,7 @@ namespace NodeModels
         INodeService ethereumService;
 
         public event EventHandler<NodeErrorEventArgs> Error;
+        public event EventHandler<SlowQuertEventArgs> SlowQueryComplete;
 
         int totalErrors;
         public int TotalErrors
@@ -384,11 +385,19 @@ namespace NodeModels
             this.slowQueryTimer = new Timer((s) =>
             {
                 SlowQueryNode();
+                OnSlowQueryComplete();
             }, null, new TimeSpan(0, 0, 0), new TimeSpan(0, 0, SlowQueryInterval));
 
         }
 
-        public void FastQueryNode()
+        private void OnSlowQueryComplete()
+        {
+            if(SlowQueryComplete != null)
+            {
+                SlowQueryComplete(this, new SlowQuertEventArgs());
+            }
+        }
+        private void FastQueryNode()
         {
             try
             {

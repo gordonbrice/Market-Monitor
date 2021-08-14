@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace KeyStore
 {
@@ -35,6 +36,7 @@ namespace KeyStore
     public class MSSQLServerStore
     {
         string connectionStr = null;
+        DateTime rollupDoneDate = DateTime.MinValue;
         public Dictionary<string, KeyProperties> KeyCollection { get; private set; }
 
         public bool GetApiKeys()
@@ -82,6 +84,41 @@ namespace KeyStore
             }
 
             return true;
+        }
+
+        public async Task Log(string name, string message)
+        {
+            using (var conn = new SqlConnection(connectionStr))
+            {
+                var command = new SqlCommand($"insert Log (Name,Message,TimeStamp) values('{name}','{message}',GETDATE())", conn);
+
+                command.Connection.Open();
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task RollupLogs()
+        {
+            if(rollupDoneDate == DateTime.MinValue || rollupDoneDate.DayOfYear < DateTime.Now.DayOfYear || rollupDoneDate.Year < DateTime.Now.Year)
+            {
+                using (var conn = new SqlConnection(connectionStr))
+                {
+
+                    var command = new SqlCommand("exec RollupLogs", conn);
+
+                    command.Connection.Open();
+
+                    var reader = await command.ExecuteReaderAsync();
+
+                    while (reader.Read())
+                    {
+                        if (reader["RollupDate"] == DBNull.Value)
+                        {
+                            rollupDoneDate = DateTime.Now;
+                        }
+                    }
+                }
+            }
         }
     }
 }

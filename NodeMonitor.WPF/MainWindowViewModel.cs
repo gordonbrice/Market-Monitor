@@ -2,6 +2,8 @@
 using MVVMSupport;
 using NodeModels;
 using NodeServices;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using Utilities;
@@ -12,6 +14,7 @@ namespace NodeMonitor.WPF
     {
         MSSQLServerStore store = new MSSQLServerStore();
         ObservableCollection<NodeModel> nodes;
+        List<Tuple<string, string>> unloggedErrors = new List<Tuple<string, string>>();
 
         public ObservableCollection<NodeModel> Nodes
         {
@@ -21,6 +24,7 @@ namespace NodeMonitor.WPF
                 this.nodes = value;
             }
         }
+
         public MainWindowViewModel()
         {
             Nodes = new ObservableCollection<NodeModel>();
@@ -45,6 +49,7 @@ namespace NodeMonitor.WPF
                             var node = new NodeModel(new EthereumNodeService(key.Value.DisplayName, key.Value.Value, httpClient), false, false, key.Value.FastQueryInterval, key.Value.SlowQueryInterval);
 
                             node.Error += Node_Error;
+                            node.SlowQueryComplete += Node_SlowQueryComplete;
                             Nodes.Add(node);
                         }
                     }
@@ -53,11 +58,29 @@ namespace NodeMonitor.WPF
             }
         }
 
+        private void Node_SlowQueryComplete(object sender, SlowQuertEventArgs e)
+        {
+            this.store.RollupLogs().Wait();
+        }
+
         private void Node_Error(object sender, NodeErrorEventArgs e)
         {
-            //this.store.Log(e.Name, e.Message).Wait();
+            try
+            {
+                this.store.Log(e.Name, e.Message).Wait();
 
-            
+                if(unloggedErrors.Count > 0)
+                {
+                    this.store.Log(unloggedErrors[0].Item1, unloggedErrors[0].Item2).Wait();
+
+                    unloggedErrors.RemoveAt(0);
+                }
+            }
+            catch(Exception x)
+            {
+                unloggedErrors.Add(new Tuple<string,string>(e.Name, e.Message));
+                unloggedErrors.Add(new Tuple<string, string>("DataStore", x.Message));
+            }
         }
     }
 }
