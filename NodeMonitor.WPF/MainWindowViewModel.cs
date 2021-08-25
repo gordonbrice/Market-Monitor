@@ -71,7 +71,10 @@ namespace NodeMonitor.WPF
 
                 if(unloggedErrors.Count > 0)
                 {
-                    this.store.Log(unloggedErrors[0].Item1, unloggedErrors[0].Item2).Wait();
+                    if(unloggedErrors[0].Item1 != null && unloggedErrors[0].Item2 != null)
+                    {
+                        this.store.Log(unloggedErrors[0].Item1, unloggedErrors[0].Item2).Wait();
+                    }
 
                     unloggedErrors.RemoveAt(0);
                 }

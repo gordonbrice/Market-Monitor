@@ -43,7 +43,7 @@ namespace KeyStore
         {
             using (var conn = new SqlConnection(connectionStr))
             {
-                var command = new SqlCommand("select [Key], Value, KeyType, d.DisplayName, d.DisplayOrder, d.FastQueryInterval, d.SlowQueryInterval, d.QueryIntervalMultiplier from KeyStore k join DisplayProperties d on d.KeyId = k.Id", conn);
+                var command = new SqlCommand("select [Key], Value, KeyType, Disabled, d.DisplayName, d.DisplayOrder, d.FastQueryInterval, d.SlowQueryInterval, d.QueryIntervalMultiplier from KeyStore k join DisplayProperties d on d.KeyId = k.Id", conn);
 
                 command.Connection.Open();
                 KeyCollection = new Dictionary<string, KeyProperties>();
@@ -52,9 +52,11 @@ namespace KeyStore
 
                 while (reader.Read())
                 {
-                    KeyCollection.Add(reader["Key"].ToString(), new KeyProperties(reader["Value"].ToString(), Convert.ToInt32(reader["KeyType"]), reader["DisplayName"].ToString()
-                        , Convert.ToInt32(reader["DisplayOrder"]), Convert.ToInt32(reader["FastQueryInterval"]), Convert.ToInt32(reader["SlowQueryInterval"]), Convert.ToInt32(reader["QueryIntervalMultiplier"])));
-
+                    if(Convert.ToInt16(reader["Disabled"]) == 0)
+                    {
+                        KeyCollection.Add(reader["Key"].ToString(), new KeyProperties(reader["Value"].ToString(), Convert.ToInt32(reader["KeyType"]), reader["DisplayName"].ToString()
+                            , Convert.ToInt32(reader["DisplayOrder"]), Convert.ToInt32(reader["FastQueryInterval"]), Convert.ToInt32(reader["SlowQueryInterval"]), Convert.ToInt32(reader["QueryIntervalMultiplier"])));
+                    }
                 }
             }
 
