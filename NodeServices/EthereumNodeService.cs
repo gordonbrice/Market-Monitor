@@ -27,6 +27,8 @@ namespace NodeServices
         HttpClient httpClient = null;
         protected string uri = null;
 
+        public event EventHandler<EthNodeServiceErrorEventArgs> Error;
+
         public string Name
         {
             get
@@ -104,7 +106,16 @@ namespace NodeServices
 
         public virtual async Task<SyncingOutput> GetSyncing()
         {
-            return await web3.Eth.Syncing.SendRequestAsync();
+            try
+            {
+                return await web3.Eth.Syncing.SendRequestAsync();
+            }
+            catch(Exception e)
+            {
+                OnError(this.name, e.Message);
+            }
+
+            return null;
         }
 
         public async Task<HexBigInteger> GetBalance(string address)
@@ -115,6 +126,18 @@ namespace NodeServices
         public Contract GetContract(string contractAbi, string contractAddress)
         {
             return web3.Eth.GetContract(contractAbi, contractAddress);
+        }
+
+        private void OnError(string name, string message)
+        {
+            if (Error != null)
+            {
+                Error(this, new EthNodeServiceErrorEventArgs
+                {
+                    Name = name,
+                    Message = message
+                });
+            }
         }
 
     }

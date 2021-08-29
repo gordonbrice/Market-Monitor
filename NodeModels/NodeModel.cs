@@ -420,33 +420,41 @@ namespace NodeModels
                     try
                     {
                         var result = syncingAwaiter.GetResult();
-                        IsSyncing = result.IsSyncing;
-                        HighestBlock = result.HighestBlock?.Value.ToString();
-                        StartingBlock = result.StartingBlock?.Value.ToString();
-                        CurrentBlock = result.CurrentBlock?.Value.ToString();
 
-                        if (string.IsNullOrEmpty(HighestBlock))
+                        if(result != null)
                         {
-                            beginTime = DateTime.Now;
+                            IsSyncing = result.IsSyncing;
+                            HighestBlock = result.HighestBlock?.Value.ToString();
+                            StartingBlock = result.StartingBlock?.Value.ToString();
+                            CurrentBlock = result.CurrentBlock?.Value.ToString();
 
-                            var highestBlockTaskAwaiter = this.ethereumService.GetHighestBlock().GetAwaiter();
-
-                            highestBlockTaskAwaiter.OnCompleted(() =>
+                            if (string.IsNullOrEmpty(HighestBlock))
                             {
-                                responseTime = (DateTime.Now - beginTime).TotalSeconds;
-                                AverageResponseTime = (AverageResponseTime + responseTime) / 2;
+                                beginTime = DateTime.Now;
 
-                                try
+                                var highestBlockTaskAwaiter = this.ethereumService.GetHighestBlock().GetAwaiter();
+
+                                highestBlockTaskAwaiter.OnCompleted(() =>
                                 {
-                                    HighestBlock = highestBlockTaskAwaiter.GetResult().Value.ToString();
-                                }
-                                catch(Exception x)
-                                {
-                                    Status = NodeStatus.Error;
-                                    StatusDetail = x.Message;
-                                    OnError(this.EthereumServiceName, x.Message);
-                                }
-                            });
+                                    responseTime = (DateTime.Now - beginTime).TotalSeconds;
+                                    AverageResponseTime = (AverageResponseTime + responseTime) / 2;
+
+                                    try
+                                    {
+                                        HighestBlock = highestBlockTaskAwaiter.GetResult().Value.ToString();
+                                    }
+                                    catch (Exception x)
+                                    {
+                                        Status = NodeStatus.Error;
+                                        StatusDetail = x.Message;
+                                        OnError(this.EthereumServiceName, x.Message);
+                                    }
+                                });
+                            }
+                        }
+                        else
+                        {
+                            Status = NodeStatus.Error;
                         }
                     }
                     catch(Exception e)

@@ -46,7 +46,11 @@ namespace NodeMonitor.WPF
                     {
                         if(key.Value.Type == (int)KeyType.EthNode && !string.IsNullOrEmpty(key.Value.Value))
                         {
-                            var node = new NodeModel(new EthereumNodeService(key.Value.DisplayName, key.Value.Value, httpClient), false, false, key.Value.FastQueryInterval, key.Value.SlowQueryInterval);
+                            var svc = new EthereumNodeService(key.Value.DisplayName, key.Value.Value, httpClient);
+
+                            svc.Error += Svc_Error;
+
+                            var node = new NodeModel(svc, false, false, key.Value.FastQueryInterval, key.Value.SlowQueryInterval);
 
                             node.Error += Node_Error;
                             node.SlowQueryComplete += Node_SlowQueryComplete;
@@ -56,6 +60,17 @@ namespace NodeMonitor.WPF
                 }
 
             }
+        }
+
+        private void Svc_Error(object sender, EthNodeServiceErrorEventArgs e)
+        {
+            var ex = new NodeErrorEventArgs
+            {
+                Name = e.Name,
+                Message = e.Message
+            };
+
+            Node_Error(sender, ex);
         }
 
         private void Node_SlowQueryComplete(object sender, SlowQuertEventArgs e)
