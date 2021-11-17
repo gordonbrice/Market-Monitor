@@ -43,8 +43,8 @@ namespace KeyStore
         {
             using (var conn = new SqlConnection(connectionStr))
             {
-                var command = new SqlCommand("select [Key], Value, KeyType, Disabled, d.DisplayName, d.DisplayOrder, d.FastQueryInterval, d.SlowQueryInterval, d.QueryIntervalMultiplier from KeyStore k join DisplayProperties d on d.KeyId = k.Id", conn);
-
+                var command = new SqlCommand("select [Key], Value, KeyType, Disabled, d.DisplayName, d.DisplayOrder, d.FastQueryInterval, d.SlowQueryInterval, d.QueryIntervalMultiplier from KeyStore k join DisplayProperties d on d.KeyId = k.Id where Disabled = 0 order by d.DisplayOrder", conn);
+                
                 command.Connection.Open();
                 KeyCollection = new Dictionary<string, KeyProperties>();
 
