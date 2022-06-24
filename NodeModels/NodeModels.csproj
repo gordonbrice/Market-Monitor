@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nethereum.Portable" Version="3.7.0" />
+    <PackageReference Include="Nethereum.Portable" Version="4.0.5" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,17 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <UserSecretsId>4e05d14d-06db-4c78-ab99-d32a04d381e8</UserSecretsId>
     <StartupObject>NodeMonitor.WPF.App</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
-    <PackageReference Include="MongoDB.Bson" Version="2.13.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.13.0" />
-    <PackageReference Include="MongoDB.Driver.Core" Version="2.13.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
