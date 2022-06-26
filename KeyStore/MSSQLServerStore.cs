@@ -41,6 +41,8 @@ namespace KeyStore
 
         public bool GetApiKeys()
         {
+           connectionStr = $"{connectionStr}TrustServerCertificate=True;"; //TODO remove when root cert is fixed on the sql server
+
             using (var conn = new SqlConnection(connectionStr))
             {
                 var command = new SqlCommand("select [Key], Value, KeyType, Disabled, d.DisplayName, d.DisplayOrder, d.FastQueryInterval, d.SlowQueryInterval, d.QueryIntervalMultiplier from KeyStore k join DisplayProperties d on d.KeyId = k.Id where Disabled = 0 order by d.DisplayOrder", conn);
@@ -75,8 +77,11 @@ namespace KeyStore
         }
         public bool LogIn(string password1, string password2)
         {
+
             //var encrypted = Symmetric.Encrypt<AesManaged>(decrypted, password1, password2);
-            var encrypted = "4Y390/+dcY9jvQUrfSwKdncyF/Ue0yOgfBH9/wPmfhFNJ7SJqV42Gl+Ykz4xlyR6JbYAaLPNbG2M8HJ1fCaF2XsRMthdI7UfazyngX5/Ax/TOGBRzWoMfhBWTK4VJF7Xb3mtLNu3ODU3//XNyJhmhZE/kpGgtIBUndyJUZT9dfpfA1HhoCwJVZsqu0kphtVgtw8UjXopg1URcybCG/wflg==";
+            var encrypted = "4Y390/+dcY9jvQUrfSwKdncyF/Ue0yOgfBH9/wPmfhFNJ7SJqV42Gl+Ykz4xlyR6JbYAaLPNbG2M8HJ1fCaF2XsRMthdI7UfazyngX5/Ax/TOGBRzWoMfhBWTK4VJF7Xb3mtLNu3ODU3//XNyJhmhZE/kpGgtIBUndyJUZT9dfpfA1HhoCwJVZsqu0kphtVgtw8UjXopg1URcybCG/wflg=="; //75.119.129.107
+            //var encrypted = "4Y390/+dcY9jvQUrfSwKdlbqeBoGMTfB/oXJQrEAnPAwueDqbR8ljB4ZTgyUwMuWQM0VEnRkJamWlScWaYcVKWLML1MS61/2t00/sPgVOHPtoAZbN8GYb0LFWDmDkwSD2F5Y8WQb4BWcdBvISQQSSKMcImUrk2uXmPOpjb0MuX1elY3bY8I8EHcmKCc6KI4+Z53Ee4v8lhCcxhGcyoHGwWOnLdpEHDQwSYV5JTDNz8k="; //www.gordonbrice.me
+            //var encrypted = "4Y390/+dcY9jvQUrfSwKdpL/xvaUa7IhF9fDPs3Bkfgiy+PcDgnD4lY2q/WMYdPqOlj1lHapKo3Nm92NnSTN3g8kez/01/+7VDuommJs/4qc6m+qBCy8DFwSiVwkdH0otcXxD5va3QdldqSGZoKJ681upBrsNhyfwsJbN3nAwgT94QvHuGIJTeDyvlhn8QdEaxFmRp708mqrO/2osuRQDQ=="; //gordonbrice.me
 
             connectionStr = Symmetric.Decrypt<AesManaged>(encrypted, password1, password2);
 

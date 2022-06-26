@@ -1,4 +1,5 @@
-﻿using KeyStore;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using KeyStore;
 using MVVMSupport;
 using NodeModels;
 using NodeServices;
@@ -10,7 +11,7 @@ using Utilities;
 
 namespace NodeMonitor.WPF
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ObservableObject
     {
         MSSQLServerStore store = new MSSQLServerStore();
         ObservableCollection<NodeModel> nodes;
