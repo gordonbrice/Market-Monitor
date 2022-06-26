@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace NodeModels2
 {
-    public class Erc20TokenModel : ObservableObject
+    public partial class Erc20TokenModel : ObservableObject
     {
         #region Mainnet Token Contract Addresses
         public static string DaiContractAddr = "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359";
@@ -22,74 +22,21 @@ namespace NodeModels2
 
         INodeService ethereumService;
 
+        [ObservableProperty]
         string name;
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
-                OnPropertyChanged("Name");
-            }
-        }
 
+        [ObservableProperty]
         string fullName;
-        public string FullName
-        {
-            get
-            {
-                return this.fullName;
-            }
-            set
-            {
-                this.fullName = value;
-                OnPropertyChanged("FullName");
-            }
-        }
+
+        [ObservableProperty]
         string symbol;
-        public string Symbol
-        {
-            get
-            {
-                return this.symbol;
-            }
-            set
-            {
-                this.symbol = value;
-                OnPropertyChanged("Symbol");
-            }
-        }
 
+        [ObservableProperty]
         int decimals;
-        public int Decimals
-        {
-            get
-            {
-                return this.decimals;
-            }
-            set
-            {
-                this.decimals = value;
-                OnPropertyChanged("Decimals");
-            }
-        }
 
+        [ObservableProperty]
         BigInteger totalSupply;
-        public BigInteger TotalSupply
-        {
-            get
-            {
-                return this.totalSupply;
-            }
-            set
-            {
-                this.totalSupply = value;
-                OnPropertyChanged("TotalSupply");
-            }
-        }
+
         public Erc20TokenModel(string name, INodeService ethereumService)
         {
             this.ethereumService = ethereumService;

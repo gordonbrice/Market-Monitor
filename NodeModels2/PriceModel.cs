@@ -2,119 +2,31 @@
 
 namespace NodeModels2
 {
-    public class PriceModel : ObservableObject, IEquatable<PriceModel>
+    public partial class PriceModel : ObservableObject, IEquatable<PriceModel>
     {
+        [ObservableProperty]
         string name;
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
-                OnPropertyChanged("Name");
-            }
-        }
 
+        [ObservableProperty]
         Erc20TokenModel token;
-        public Erc20TokenModel Token
-        {
-            get
-            {
-                return this.token;
-            }
-            set
-            {
-                this.token = value;
-                OnPropertyChanged("Token");
-            }
-        }
 
+        [ObservableProperty]
         string market;
-        public string Market
-        {
-            get
-            {
-                return this.market;
-            }
-            set
-            {
-                this.market = value;
-                OnPropertyChanged("Market");
-            }
-        }
 
+        [ObservableProperty]
         UInt64 open;
-        public UInt64 Open
-        {
-            get
-            {
-                return this.open;
-            }
-            set
-            {
-                this.open = value;
-                OnPropertyChanged("Open");
-            }
-        }
 
+        [ObservableProperty]
         UInt64 high;
-        public UInt64 High
-        {
-            get
-            {
-                return this.high;
-            }
-            set
-            {
-                this.high = value;
-                OnPropertyChanged("High");
-            }
-        }
 
+        [ObservableProperty]
         UInt64 low;
-        public UInt64 Low
-        {
-            get
-            {
-                return this.low;
-            }
-            set
-            {
-                this.low = value;
-                OnPropertyChanged("Low");
-            }
-        }
 
+        [ObservableProperty]
         UInt64 close;
-        public UInt64 Close
-        {
-            get
-            {
-                return this.close;
-            }
-            set
-            {
-                this.close = value;
-                OnPropertyChanged("Close");
-            }
-        }
 
+        [ObservableProperty]
         DateTime time;
-        public DateTime Time
-        {
-            get
-            {
-                return this.time;
-            }
-            set
-            {
-                this.time = value;
-                OnPropertyChanged("Time");
-            }
-        }
 
         public bool Equals(PriceModel other)
         {

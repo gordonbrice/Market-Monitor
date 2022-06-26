@@ -4,62 +4,19 @@ using NodeServices;
 
 namespace NodeModels2
 {
-    public class AccountModel : ObservableObject
+    public partial class AccountModel : ObservableObject
     {
+        [ObservableProperty]
         string name;
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
-                OnPropertyChanged("Name");
-            }
-        }
+
+        [ObservableProperty]
         string address;
-        public string Address
-        {
-            get
-            {
-                return this.address;
-            }
-            set
-            {
-                this.address = value;
-                OnPropertyChanged("Address");
-            }
-        }
 
+        [ObservableProperty]
         decimal eth;
-        public decimal Eth
-        {
-            get
-            {
-                return this.eth;
-            }
-            set
-            {
-                this.eth = value;
-                OnPropertyChanged("Eth");
-            }
-        }
 
+        [ObservableProperty]
         decimal usd;
-        public decimal Usd
-        {
-            get
-            {
-                return this.usd;
-            }
-            set
-            {
-                this.usd = value;
-                OnPropertyChanged("Usd");
-            }
-        }
 
         INodeService node;
         public AccountModel(INodeService node, string name, string address)

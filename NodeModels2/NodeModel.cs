@@ -21,83 +21,28 @@ namespace NodeModels2
         public event EventHandler<NodeErrorEventArgs> Error;
         public event EventHandler<SlowQuertEventArgs> SlowQueryComplete;
 
+        [ObservableProperty]
         int totalErrors;
-        public int TotalErrors
-        {
-            get { return this.totalErrors; }
-            set
-            {
-                this.totalErrors = value;
-                OnPropertyChanged("TotalErrors");
-            }
-        }
 
+        [ObservableProperty]
         int errorsLastWeek;
-        public int ErrorsLastWeek
-        {
-            get { return this.errorsLastWeek; }
-            set
-            {
-                this.errorsLastWeek = value;
-                OnPropertyChanged("ErrorsLastWeek");
-            }
-        }
 
+        [ObservableProperty]
         int errorsLast24Hours;
-        public int ErrorsLast24Hours
-        {
-            get { return this.errorsLast24Hours; }
-            set
-            {
-                this.errorsLast24Hours = value;
-                OnPropertyChanged("ErrorsLast24Hours");
-            }
-        }
 
+        [ObservableProperty]
         int errorsLastHour;
-        public int ErrorsLastHour
-        {
-            get { return this.errorsLastHour; }
-            set
-            {
-                this.errorsLastHour = value;
-                OnPropertyChanged("ErrorsLastHour");
-            }
-        }
 
+        [ObservableProperty]
         string ethereumServiceName;
-        public string EthereumServiceName
-        {
-            get { return this.ethereumServiceName; }
-            set
-            {
-                this.ethereumServiceName = value;
-                OnPropertyChanged("EthereumServiceName");
-            }
-        }
 
+        [ObservableProperty]
         int fastQueryInterval;
-        public int FastQueryInterval
-        {
-            get { return this.fastQueryInterval; }
-            private set
-            {
-                this.fastQueryInterval = value;
-                OnPropertyChanged("FastQueryInterval");
-            }
-        }
 
+        [ObservableProperty]
         int slowQueryInterval;
-        public int SlowQueryInterval
-        {
-            get { return this.slowQueryInterval; }
-            set
-            {
-                this.slowQueryInterval = value;
-                OnPropertyChanged("SlowQueryInterval");
-            }
-        }
 
+        [ObservableProperty]
         NodeStatus previousStatus = NodeStatus.NotDefined;
 
         NodeStatus status = NodeStatus.NotDefined;
@@ -123,113 +68,32 @@ namespace NodeModels2
             }
         }
 
+        [ObservableProperty]
         string statusStr;
-        public string StatusStr
-        {
-            get
-            {
-                return this.statusStr;
-            }
 
-            private set
-            {
-                this.statusStr = value;
-                OnPropertyChanged("StatusStr");
-            }
-        }
-
+        [ObservableProperty]
         string statusDetail;
-        public string StatusDetail
-        {
-            get
-            {
-                return this.statusDetail;
-            }
 
-            private set
-            {
-                this.statusDetail = value;
-                OnPropertyChanged("StatusDetail");
-            }
-        }
-
+        [ObservableProperty]
         string protocolVersion;
-        public string ProtocolVersion
-        {
-            get { return this.protocolVersion; }
-            set
-            {
-                this.protocolVersion = value;
-                OnPropertyChanged("ProtocolVersion");
-            }
-        }
 
-        //[ObservableProperty]
+        [ObservableProperty]
         string clientVersion;
-        public string ClientVersion
-        {
-            get { return this.clientVersion; }
-            set
-            {
-                this.clientVersion = value;
-                OnPropertyChanged("ClientVersion");
-            }
-        }
 
+        [ObservableProperty]
         string chainId;
-        public string ChainId
-        {
-            get { return this.chainId;  }
-            set
-            {
-                this.chainId = value;
-                OnPropertyChanged("ChainId");
-            }
-        }
 
+        [ObservableProperty]
         string highestBlock;
-        public string HighestBlock
-        {
-            get { return this.highestBlock; }
-            set
-            {
-                this.highestBlock = value;
-                OnPropertyChanged("HighestBlock");
-            }
-        }
 
+        [ObservableProperty]
         string startingBlock;
-        public string StartingBlock
-        {
-            get { return this.startingBlock; }
-            set
-            {
-                this.startingBlock = value;
-                OnPropertyChanged("StartingBlock");
-            }
-        }
 
+        [ObservableProperty]
         string currentBlock;
-        public string CurrentBlock
-        {
-            get { return this.currentBlock; }
-            set
-            {
-                this.currentBlock = value;
-                OnPropertyChanged("CurrentBlock");
-            }
-        }
 
+        [ObservableProperty]
         double averageResponseTime;
-        public double AverageResponseTime
-        {
-            get { return this.averageResponseTime; }
-            set
-            {
-                this.averageResponseTime = value;
-                OnPropertyChanged("AverageResponseTime");
-            }
-        }
 
         bool isSyncing;
         public bool IsSyncing
@@ -259,16 +123,9 @@ namespace NodeModels2
                 }
             }
         }
+
+        [ObservableProperty]
         string syncing;
-        public string Syncing
-        {
-            get { return this.syncing ; }
-            set
-            {
-                this.syncing = value;
-                OnPropertyChanged("Syncing");
-            }
-        }
 
         #region Uniswap
         #region Contracts
@@ -294,44 +151,15 @@ namespace NodeModels2
         string tusdExchAddr = null;
         #endregion
         #region Financial
+
+        [ObservableProperty]
         ObservableCollection<AccountModel> accounts;
-        public ObservableCollection<AccountModel> Accounts
-        {
-            get
-            {
-                return this.accounts;
-            }
-            private set
-            {
-                this.accounts = value;
-            }
-        }
 
+        [ObservableProperty]
         ObservableCollection<PriceModel> prices;
-        public ObservableCollection<PriceModel> Prices
-        {
-            get
-            {
-                return this.prices;
-            }
-            private set
-            {
-                this.prices = value;
-            }
-        }
 
+        [ObservableProperty]
         ObservableCollection<Erc20TokenModel> tokens;
-        public ObservableCollection<Erc20TokenModel> Tokens
-        {
-            get
-            {
-                return this.tokens;
-            }
-            private set
-            {
-                this.tokens = value;
-            }
-        }
         #endregion
 
         Timer fastQueryTimer;
