@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="NodeMonitor.MAUI.MainPage">
+             x:Class="NodeMonitor.MAUI.MainPage" Loaded="ContentPage_Loaded"
+             xmlns:viewmodel="clr-namespace:NodeMonitor.MAUI"
+             x:DataType="viewmodel:MainPageViewModel"
+             xmlns:NodeModels="clr-namespace:NodeModels2;assembly=NodeModels2">
 			 
     <ScrollView>
         <VerticalStackLayout 
@@ -9,24 +12,35 @@
             Padding="30,0" 
             VerticalOptions="Center">
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
-                
-            <Label 
-                Text="Hello, World!"
+            <CollectionView 
+                ItemsSource="{Binding Nodes}"
                 SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
-            
-            <Label 
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="NodeModels:NodeModel">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="75"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Padding="5" Grid.Column="0"  Text="{Binding EthereumServiceName}"/>
+                            <Label Grid.Column="1"  Text="{Binding Status}"/>
+                            <Label Grid.Column="2"  Text="{Binding HighestBlock}"/>
+                            <Label Grid.Column="3"  Text="{Binding CurrentBlock}"/>
+                            <Label Grid.Column="4"  Text="{Binding Syncing}"/>
+                            <Label Grid.Column="5"  Text="{Binding ProtocolVersion}"/>
+                            <Label Grid.Column="6"  Text="{Binding ChainId}"/>
+                            <Label Grid.Column="7"  Text="{Binding ClientVersion}"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
             <Button 
                 x:Name="CounterBtn"

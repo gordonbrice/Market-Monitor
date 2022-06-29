@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using KeyStore;
 using NodeModels2;
+using NodeServices;
 using System.Collections.ObjectModel;
 
 namespace NodeMonitor.MAUI
 {
-    internal partial class MainPageViewModel : ObservableObject
+    public partial class MainPageViewModel : ObservableObject
     {
         MSSQLServerStore store = new MSSQLServerStore();
 
@@ -16,37 +17,45 @@ namespace NodeMonitor.MAUI
         public MainPageViewModel()
         {
             Nodes = new ObservableCollection<NodeModel>();
+        }
 
-            //var passwordDlg = new PasswordDialog();
+        public void Login(string password1, string password2)
+        {
+            store.LogIn(password1, password2);
 
-            //if (passwordDlg.ShowDialog() == true)
-            //{
-            //    var password1 = passwordDlg.Password1;
-            //    var password2 = passwordDlg.Password2;
+            if (store.GetApiKeys())
+            {
+                var httpClient = new HttpClient();
 
-            //    store.LogIn(password1, password2);
+                foreach (var key in store.KeyCollection)
+                {
+                    if (key.Value.Type == (int)KeyType.EthNode && !string.IsNullOrEmpty(key.Value.Value))
+                    {
+                        var svc = new EthereumNodeService(key.Value.DisplayName, key.Value.Value, httpClient);
 
-            //    if (store.GetApiKeys())
-            //    {
-            //        var httpClient = new HttpClient();
+                        svc.Error += Svc_Error;
 
-            //        foreach (var key in store.KeyCollection)
-            //        {
-            //            if (key.Value.Type == (int)KeyType.EthNode && !string.IsNullOrEmpty(key.Value.Value))
-            //            {
-            //                var svc = new EthereumNodeService(key.Value.DisplayName, key.Value.Value, httpClient);
+                        var node = new NodeModel(svc, false, false, key.Value.FastQueryInterval, key.Value.SlowQueryInterval);
 
-            //                svc.Error += Svc_Error;
+                        node.Error += Node_Error;
+                        node.SlowQueryComplete += Node_SlowQueryComplete;
+                        Nodes.Add(node);
+                    }
+                }
+            }
+        }
 
-            //                var node = new NodeModel(svc, false, false, key.Value.FastQueryInterval, key.Value.SlowQueryInterval);
+        private void Svc_Error<EventArgs>(object sender, EventArgs e)
+        {
 
-            //                node.Error += Node_Error;
-            //                node.SlowQueryComplete += Node_SlowQueryComplete;
-            //                Nodes.Add(node);
-            //            }
-            //        }
-            //    }
-            //}
+        }
+        private void Node_Error<EventArgs>(object sender, EventArgs e)
+        {
+
+        }
+        private void Node_SlowQueryComplete<EventArgs>(object sender, EventArgs e)
+        {
+
         }
     }
 }
