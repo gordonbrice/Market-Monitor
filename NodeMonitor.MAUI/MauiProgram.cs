@@ -1,4 +1,5 @@
-﻿using NodeMonitor.MAUI.ViewModels;
+﻿using NodeMonitor.MAUI.Models;
+using NodeMonitor.MAUI.ViewModels;
 
 namespace NodeMonitor.MAUI
 {
@@ -19,6 +20,7 @@ namespace NodeMonitor.MAUI
             builder.Services.AddSingleton<LoginPageViewModel>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<MainPageViewModel>();
+            builder.Services.AddSingleton<User>();
             return builder.Build();
         }
     }

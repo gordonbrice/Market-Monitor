@@ -18,4 +18,9 @@
             Route="MainPage"/>
     </FlyoutItem>
 
+    <Shell.FlyoutFooter>
+        <StackLayout Padding="20">
+            <Button Background="Yellow" Text="Log Out" Command="{Binding LogoutCommand}"/>
+        </StackLayout>
+    </Shell.FlyoutFooter>
 </Shell>

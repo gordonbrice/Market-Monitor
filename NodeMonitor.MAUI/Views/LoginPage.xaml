@@ -12,14 +12,14 @@
             <Label Text="Login" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" />
             <Label Text="Log in to NodeMonitor" FontSize="15" VerticalOptions="Center" HorizontalOptions="Center" />
         </VerticalStackLayout>
-        <StackLayout Orientation="Vertical" Spacing="10">
-            <Frame HeightRequest="45" Padding="1" HorizontalOptions="Fill" >
+        <StackLayout Orientation="Vertical" Spacing="20">
+            <Frame HeightRequest="50" Padding="0" HorizontalOptions="Fill" MaximumWidthRequest="400" >
                 <Entry VerticalOptions="Center" Placeholder="Password 1" IsPassword="True" Text="{Binding Password1}"/>
             </Frame>
-            <Frame HeightRequest="45" Padding="1" HorizontalOptions="Fill"  >
+            <Frame HeightRequest="50" Padding="0" HorizontalOptions="Fill" MaximumWidthRequest="400" >
                 <Entry VerticalOptions="Center" Placeholder="Password 2" IsPassword="True" Text="{Binding Password2}"/>
             </Frame>
         </StackLayout>
-        <Button Text="Log In" Background="Grey" HorizontalOptions="Center" WidthRequest="100" Command="{Binding LoginCommand}"/>
+        <Button Text="Log In" Background="Yellow" HorizontalOptions="Center" WidthRequest="100" Command="{Binding LoginCommand}"/>
     </VerticalStackLayout>
 </ContentPage>

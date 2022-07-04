@@ -1,23 +1,25 @@
-﻿using NodeMonitor.MAUI.ViewModels;
+﻿using NodeMonitor.MAUI.Models;
+using NodeMonitor.MAUI.ViewModels;
 
 namespace NodeMonitor.MAUI
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
         MainPageViewModel vm;
-        LoginPageViewModel loginVM;
-        public MainPage(MainPageViewModel vm, LoginPageViewModel loginVM)
+        LoginPageViewModel loginPageVM;
+        public MainPage(MainPageViewModel vm, LoginPageViewModel loginPageVM)
         {
             InitializeComponent();
             BindingContext = vm;
             this.vm = vm;
-            this.loginVM = loginVM;
+            this.loginPageVM = loginPageVM;
         }
 
         private void ContentPage_Loaded(object sender, EventArgs e)
         {
-            vm.Login(loginVM.Password1, loginVM.Password2);
+            vm.Login(loginPageVM.Password1, loginPageVM.Password2);
+            loginPageVM.Password1 = String.Empty;
+            loginPageVM.Password2 = String.Empty;
         }
     }
 }
