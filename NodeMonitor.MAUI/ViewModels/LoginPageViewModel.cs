@@ -16,6 +16,12 @@ namespace NodeMonitor.MAUI.ViewModels
         [RelayCommand(CanExecute = nameof(CanLoginExecute))]
         async void Login()
         {
+            if(Preferences.ContainsKey("LoggedIn"))
+            {
+                Preferences.Remove("LoggedIn");
+            }
+                
+            Preferences.Set("LoggedIn", true);
             await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
         }
 

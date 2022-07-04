@@ -1,5 +1,4 @@
-﻿using NodeMonitor.MAUI.Models;
-using NodeMonitor.MAUI.ViewModels;
+﻿using NodeMonitor.MAUI.ViewModels;
 
 namespace NodeMonitor.MAUI
 {
@@ -17,9 +16,13 @@ namespace NodeMonitor.MAUI
 
         private void ContentPage_Loaded(object sender, EventArgs e)
         {
-            vm.Login(loginPageVM.Password1, loginPageVM.Password2);
-            loginPageVM.Password1 = String.Empty;
-            loginPageVM.Password2 = String.Empty;
+            if(!string.IsNullOrWhiteSpace(this.loginPageVM.Password1) && !string.IsNullOrWhiteSpace(this.loginPageVM.Password2))
+            {
+                vm.Login(loginPageVM.Password1, loginPageVM.Password2);
+                this.loginPageVM.Password1 = String.Empty;
+                this.loginPageVM.Password2 = String.Empty;
+            }
         }
+
     }
 }

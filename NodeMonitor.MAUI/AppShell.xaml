@@ -8,6 +8,7 @@
     <ShellContent
         Title="Login"
         FlyoutItemIsVisible="False"
+        Shell.FlyoutBehavior="Disabled"
         ContentTemplate="{DataTemplate local:LoginPage}"
         Route="LoginPage" />
 
