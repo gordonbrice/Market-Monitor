@@ -11,6 +11,7 @@
         <VerticalStackLayout Spacing="5">
             <Label Text="Login" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" />
             <Label Text="Log in to NodeMonitor" FontSize="15" VerticalOptions="Center" HorizontalOptions="Center" />
+            <Image MaximumHeightRequest="40" Source="lock_padlock_password_security_icon.ico"/>
         </VerticalStackLayout>
         <StackLayout Orientation="Vertical" Spacing="20">
             <Frame HeightRequest="50" Padding="0" HorizontalOptions="Fill" MaximumWidthRequest="400" >
@@ -20,6 +21,10 @@
                 <Entry VerticalOptions="Center" Placeholder="Password 2" IsPassword="True" Text="{Binding Password2}"/>
             </Frame>
         </StackLayout>
-        <Button Text="Log In" Background="Yellow" HorizontalOptions="Center" WidthRequest="100" Command="{Binding LoginCommand}"/>
+        <Button Text="Log In" BackgroundColor="#c56000" HorizontalOptions="Center" WidthRequest="100" Command="{Binding LoginCommand}"/>
     </VerticalStackLayout>
 </ContentPage>
+    
+    <!--
+        #c49000
+    -->

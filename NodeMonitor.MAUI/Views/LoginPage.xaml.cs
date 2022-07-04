@@ -14,7 +14,7 @@ public partial class LoginPage : ContentPage
 
 	private void ContentPage_NavigatedFrom(object sender, NavigatedFromEventArgs e)
 	{
-        this.vm.Password1 = String.Empty;
-        this.vm.Password2 = String.Empty;
+        //this.vm.Password1 = String.Empty;
+        //this.vm.Password2 = String.Empty;
     }
 }
