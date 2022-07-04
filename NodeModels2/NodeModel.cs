@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Nethereum.Contracts;
 using NodeServices;
 using System.Collections.ObjectModel;

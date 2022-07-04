@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:NodeMonitor.MAUI.ViewModels"
+             x:DataType="viewmodels:LoginPageViewModel"
+             x:Class="NodeMonitor.MAUI.LoginPage"
+             Title="NodeMonitor"
+             Shell.NavBarIsVisible="False">
+    
+    <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
+        <VerticalStackLayout Spacing="5">
+            <Label Text="Login" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" />
+            <Label Text="Log in to NodeMonitor" FontSize="15" VerticalOptions="Center" HorizontalOptions="Center" />
+        </VerticalStackLayout>
+        <StackLayout Orientation="Vertical" Spacing="10">
+            <Frame HeightRequest="45" Padding="1" HorizontalOptions="Fill" >
+                <Entry VerticalOptions="Center" Placeholder="Password 1" IsPassword="True" Text="{Binding Password1}"/>
+            </Frame>
+            <Frame HeightRequest="45" Padding="1" HorizontalOptions="Fill"  >
+                <Entry VerticalOptions="Center" Placeholder="Password 2" IsPassword="True" Text="{Binding Password2}"/>
+            </Frame>
+        </StackLayout>
+        <Button Text="Log In" Background="Grey" HorizontalOptions="Center" WidthRequest="100" Command="{Binding LoginCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>

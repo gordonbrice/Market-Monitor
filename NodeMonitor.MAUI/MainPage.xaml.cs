@@ -1,36 +1,23 @@
-﻿namespace NodeMonitor.MAUI
+﻿using NodeMonitor.MAUI.ViewModels;
+
+namespace NodeMonitor.MAUI
 {
     public partial class MainPage : ContentPage
     {
         int count = 0;
         MainPageViewModel vm;
-
-        public MainPage(MainPageViewModel vm)
+        LoginPageViewModel loginVM;
+        public MainPage(MainPageViewModel vm, LoginPageViewModel loginVM)
         {
             InitializeComponent();
             BindingContext = vm;
             this.vm = vm;
+            this.loginVM = loginVM;
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private void ContentPage_Loaded(object sender, EventArgs e)
         {
-            count += 5;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
-        }
-
-        private async void ContentPage_Loaded(object sender, EventArgs e)
-        {
-            var password1 = await DisplayPromptAsync("Authentication", "What's your first password?");
-            var password2 = await DisplayPromptAsync("Authentication", "What's your second password?");
-
-            vm.Login(password1, password2);
-            
+            vm.Login(loginVM.Password1, loginVM.Password2);
         }
     }
 }
