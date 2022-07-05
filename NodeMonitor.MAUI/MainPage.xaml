@@ -18,8 +18,36 @@
                 HorizontalOptions="Center">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="NodeModels:NodeModel">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
+                        <Frame Padding="5" Margin="5">
+                            <Grid RowDefinitions="30,30,30,30,30" ColumnDefinitions=".15*,.35*,.15*,.35*">
+                                <Label Grid.Column="0" Grid.Row="0" Text="Name:"/>
+                                <Label Grid.Column="1" Grid.Row="0" Text="{Binding EthereumServiceName}"/>
+                                <Label Grid.Column="2" Grid.Row="0" Text="Status:"/>
+                                <Label Grid.Column="3" Grid.Row="0" Text="{Binding Status}"/>
+                                <Label Grid.Column="0" Grid.Row="1" Text="Highest Block:"/>
+                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding HighestBlock}"/>
+                                <Label Grid.Column="2" Grid.Row="1" Text="Current Block:"/>
+                                <Label Grid.Column="3" Grid.Row="1" Text="{Binding CurrentBlock}"/>
+                                <Label Grid.Column="0" Grid.Row="2" Text="Syncing:"/>
+                                <Label Grid.Column="1" Grid.Row="2" Text="{Binding Syncing}"/>
+                                <Label Grid.Column="2" Grid.Row="2" Text="Protocol Version:"/>
+                                <Label Grid.Column="3" Grid.Row="2"  Text="{Binding ProtocolVersion}"/>
+                                <Label Grid.Column="0" Grid.Row="3" Text="Chain Id:"/>
+                                <Label Grid.Column="1" Grid.Row="3" Text="{Binding ChainId}"/>
+                                <Label Grid.Column="0" Grid.Row="4" Text="Execution Client Version:"/>
+                                <Label Grid.Column="1" Grid.Row="4" Text="{Binding ClientVersion}"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+ 
+</ContentPage>
+<!---->
+<!--
+                                <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120"/>
                                 <ColumnDefinition Width="75"/>
                                 <ColumnDefinition Width="80"/>
@@ -29,19 +57,5 @@
                                 <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Padding="5" Grid.Column="0"  Text="{Binding EthereumServiceName}"/>
-                            <Label Grid.Column="1"  Text="{Binding Status}"/>
-                            <Label Grid.Column="2"  Text="{Binding HighestBlock}"/>
-                            <Label Grid.Column="3"  Text="{Binding CurrentBlock}"/>
-                            <Label Grid.Column="4"  Text="{Binding Syncing}"/>
-                            <Label Grid.Column="5"  Text="{Binding ProtocolVersion}"/>
-                            <Label Grid.Column="6"  Text="{Binding ChainId}"/>
-                            <Label Grid.Column="7"  Text="{Binding ClientVersion}"/>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
-    </ScrollView>
- 
-</ContentPage>
+
+-->
