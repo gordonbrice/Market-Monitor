@@ -84,6 +84,9 @@ namespace NodeModels2
         string chainId;
 
         [ObservableProperty]
+        string gasPrice;
+
+        [ObservableProperty]
         string highestBlock;
 
         [ObservableProperty]
@@ -290,6 +293,38 @@ namespace NodeModels2
                     }
                 });
 
+                var clientVersionAwaiter = this.ethereumService.GetClientVersion().GetAwaiter();
+
+                clientVersionAwaiter.OnCompleted(() =>
+                {
+                    try
+                    {
+                        ClientVersion = clientVersionAwaiter.GetResult();
+                    }
+                    catch (Exception cvx)
+                    {
+                        Status = NodeStatus.Error;
+                        StatusDetail = cvx.Message;
+                        OnError(this.EthereumServiceName, cvx.Message);
+                    }
+                });
+
+                var gasPriceAwaiter = this.ethereumService.GetGasPrice().GetAwaiter();
+
+                gasPriceAwaiter.OnCompleted(() =>
+                {
+                    try
+                    {
+                        GasPrice = gasPriceAwaiter.GetResult().ToString();
+                    }
+                    catch (Exception cvx)
+                    {
+                        Status = NodeStatus.Error;
+                        StatusDetail = cvx.Message;
+                        OnError(this.EthereumServiceName, cvx.Message);
+                    }
+                });
+
                 GetUniswapPrices();
             }
             catch (Exception e)
@@ -313,22 +348,6 @@ namespace NodeModels2
                     catch(Exception)
                     {
                         ProtocolVersion = "N/A";
-                    }
-                });
-
-                var clientVersionAwaiter = this.ethereumService.GetClientVersion().GetAwaiter();
-
-                clientVersionAwaiter.OnCompleted(() =>
-                {
-                    try
-                    {
-                        ClientVersion = clientVersionAwaiter.GetResult();
-                    }
-                    catch (Exception cvx)
-                    {
-                        Status = NodeStatus.Error;
-                        StatusDetail = cvx.Message;
-                        OnError(this.EthereumServiceName, cvx.Message);
                     }
                 });
 

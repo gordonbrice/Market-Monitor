@@ -99,6 +99,11 @@ namespace NodeServices
             return await web3.Eth.ChainId.SendRequestAsync();
         }
 
+        public virtual async Task<HexBigInteger> GetGasPrice()
+        {
+            return await web3.Eth.GasPrice.SendRequestAsync();
+        }
+
         public virtual async Task<HexBigInteger> GetHighestBlock()
         {
             return await web3.Eth.Blocks.GetBlockNumber.SendRequestAsync();

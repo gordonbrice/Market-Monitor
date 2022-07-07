@@ -34,6 +34,8 @@
                                 <Label Grid.Column="3" Grid.Row="2"  Text="{Binding ProtocolVersion}"/>
                                 <Label Grid.Column="0" Grid.Row="3" Text="Chain Id:"/>
                                 <Label Grid.Column="1" Grid.Row="3" Text="{Binding ChainId}"/>
+                                <Label Grid.Column="2" Grid.Row="3" Text="Gas Price:"/>
+                                <Label Grid.Column="3" Grid.Row="3" Text="{Binding GasPrice}"/>
                                 <Label Grid.Column="0" Grid.Row="4" Text="Execution Client Version:"/>
                                 <Label Grid.Column="1" Grid.Row="4" Text="{Binding ClientVersion}"/>
                             </Grid>

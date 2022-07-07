@@ -10,6 +10,7 @@ namespace NodeServices
         string Name { get; }
         Task<string> GetProtocolVersion();
         Task<HexBigInteger> GetChainId();
+        Task<HexBigInteger> GetGasPrice();
         Task<HexBigInteger> GetHighestBlock();
         Task<SyncingOutput> GetSyncing();
         Task<HexBigInteger> GetBalance(string address);
