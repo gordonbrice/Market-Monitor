@@ -84,7 +84,7 @@ namespace NodeModels2
         string chainId;
 
         [ObservableProperty]
-        string gasPrice;
+        double gasPrice;
 
         [ObservableProperty]
         string highestBlock;
@@ -315,7 +315,7 @@ namespace NodeModels2
                 {
                     try
                     {
-                        GasPrice = gasPriceAwaiter.GetResult().ToString();
+                        GasPrice = Math.Round(double.Parse(gasPriceAwaiter.GetResult().ToString())/1000000000, 2);
                     }
                     catch (Exception cvx)
                     {

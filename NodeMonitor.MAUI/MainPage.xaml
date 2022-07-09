@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NodeMonitor.MAUI.MainPage" Loaded="ContentPage_Loaded"
              xmlns:viewmodel="clr-namespace:NodeMonitor.MAUI"
+             xmlns:gauge="clr-namespace:Syncfusion.Maui.Gauges;assembly=Syncfusion.Maui.Gauges"
              x:DataType="viewmodel:MainPageViewModel"
              xmlns:NodeModels="clr-namespace:NodeModels2;assembly=NodeModels2">
 			 
@@ -19,9 +20,8 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="NodeModels:NodeModel">
                         <Frame Padding="5" Margin="5">
-                            <Grid RowDefinitions="30,30,30,30,30" ColumnDefinitions=".15*,.35*,.15*,.35*">
-                                <Label Grid.Column="0" Grid.Row="0" Text="Name:"/>
-                                <Label Grid.Column="1" Grid.Row="0" Text="{Binding EthereumServiceName}"/>
+                            <Grid RowDefinitions="30,30,30,30,30,90" ColumnDefinitions=".15*,.35*,.15*,.15*,.20*">
+                                <Label Grid.Column="0" Grid.Row="0" Text="{Binding EthereumServiceName}" TextColor="#c56000"/>
                                 <Label Grid.Column="2" Grid.Row="0" Text="Status:"/>
                                 <Label Grid.Column="3" Grid.Row="0" Text="{Binding Status}"/>
                                 <Label Grid.Column="0" Grid.Row="1" Text="Highest Block:"/>
@@ -38,6 +38,20 @@
                                 <Label Grid.Column="3" Grid.Row="3" Text="{Binding GasPrice}"/>
                                 <Label Grid.Column="0" Grid.Row="4" Text="Execution Client Version:"/>
                                 <Label Grid.Column="1" Grid.Row="4" Text="{Binding ClientVersion}"/>
+                                <gauge:SfRadialGauge Grid.Row="0" Grid.Column="4" Grid.RowSpan="6">
+                                    <gauge:SfRadialGauge.Axes>
+                                        <gauge:RadialAxis Minimum="0" Maximum="200">
+                                            <gauge:RadialAxis.Ranges>
+                                                <gauge:RadialRange StartValue="0" EndValue="60" Fill="Green" />
+                                                <gauge:RadialRange StartValue="60" EndValue="120" Fill="Orange" />
+                                                <gauge:RadialRange StartValue="120" EndValue="200" Fill="Red" />
+                                            </gauge:RadialAxis.Ranges>
+                                            <gauge:RadialAxis.Pointers>
+                                                <gauge:NeedlePointer Value="{Binding GasPrice}" />
+                                            </gauge:RadialAxis.Pointers>
+                                        </gauge:RadialAxis>
+                                    </gauge:SfRadialGauge.Axes>
+                                </gauge:SfRadialGauge>
                             </Grid>
                         </Frame>
                     </DataTemplate>

@@ -1,4 +1,5 @@
 ﻿using NodeMonitor.MAUI.ViewModels;
+using Syncfusion.Maui.Core.Hosting;
 
 namespace NodeMonitor.MAUI
 {
@@ -9,6 +10,7 @@ namespace NodeMonitor.MAUI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .ConfigureSyncfusionCore()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
