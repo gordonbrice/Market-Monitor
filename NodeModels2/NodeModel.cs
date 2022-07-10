@@ -14,6 +14,20 @@ namespace NodeModels2
         Working,
         Error
     }
+
+    public enum ChainName
+    {
+        Ethereum_Mainnet = 1,
+        Ethereum_Ropsten = 3,
+        Ethereum_Rinkeby = 4,
+        Ethereum_Goerli = 5,
+        Optimism = 10,
+        Binance_Smart_Chain = 56,
+        Gnosis = 100,
+        Polygon_Mainnet = 137,
+        Arbitrum_One = 42161
+    }
+
     public partial class NodeModel : ObservableObject
     {
         INodeService ethereumService;
@@ -357,7 +371,9 @@ namespace NodeModels2
                 {
                     try
                     {
-                        ChainId = chainIdAwaiter.GetResult().Value.ToString();
+                        var chain = int.Parse(chainIdAwaiter.GetResult().Value.ToString());
+
+                        ChainId = ((ChainName)chain).ToString(); ;
                     }
                     catch(Exception x)
                     {
