@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NodeServices
 {
-    public interface INodeService
+    public interface IExecutionClientService
     {
         string Name { get; }
         Task<string> GetProtocolVersion();

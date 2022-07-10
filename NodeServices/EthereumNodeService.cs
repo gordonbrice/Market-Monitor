@@ -5,9 +5,7 @@ using Nethereum.Web3;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +18,7 @@ namespace NodeServices
         public string result { get; set; }
     }
 
-    public class EthereumNodeService : INodeService
+    public class ExecutionClientService : IExecutionClientService
     {
         Web3 web3 = null;
         string name;
@@ -39,7 +37,7 @@ namespace NodeServices
 
         //public string Uri { get; }
 
-        public EthereumNodeService(string name, string uri, HttpClient httpClient)
+        public ExecutionClientService(string name, string uri, HttpClient httpClient)
         {
             this.name = name;
             this.uri = uri;

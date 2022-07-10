@@ -18,8 +18,8 @@ namespace NodeModels2
         [ObservableProperty]
         decimal usd;
 
-        INodeService node;
-        public AccountModel(INodeService node, string name, string address)
+        IExecutionClientService node;
+        public AccountModel(IExecutionClientService node, string name, string address)
         {
             this.node = node;
             Name = name;

@@ -31,7 +31,7 @@ namespace NodeMonitor.MAUI
                 {
                     if (key.Value.Type == (int)KeyType.EthNode && !string.IsNullOrEmpty(key.Value.Value))
                     {
-                        var svc = new EthereumNodeService(key.Value.DisplayName, key.Value.Value, httpClient);
+                        var svc = new ExecutionClientService(key.Value.DisplayName, key.Value.Value, httpClient);
 
                         svc.Error += Svc_Error;
 

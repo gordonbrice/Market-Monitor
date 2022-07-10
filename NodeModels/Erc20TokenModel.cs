@@ -25,7 +25,7 @@ namespace NodeModels
         public static string WbtcContractAddr = "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599";
         #endregion
 
-        INodeService ethereumService;
+        IExecutionClientService ethereumService;
 
         string name;
         public string Name
@@ -95,7 +95,7 @@ namespace NodeModels
                 OnPropertyChanged("TotalSupply");
             }
         }
-        public Erc20TokenModel(string name, INodeService ethereumService)
+        public Erc20TokenModel(string name, IExecutionClientService ethereumService)
         {
             this.ethereumService = ethereumService;
             Name = name;

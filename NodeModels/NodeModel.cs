@@ -20,7 +20,7 @@ namespace NodeModels
     }
     public class NodeModel : ViewModelBase
     {
-        INodeService ethereumService;
+        IExecutionClientService ethereumService;
 
         public event EventHandler<NodeErrorEventArgs> Error;
         public event EventHandler<SlowQuertEventArgs> SlowQueryComplete;
@@ -341,7 +341,7 @@ namespace NodeModels
         Timer slowQueryTimer;
         bool contractInteraction;
 
-        public NodeModel(INodeService nodeService, bool getAcctData = false, bool contractInteraction = false, int fastQueryInt = 5, int slowQueryInt = 60)
+        public NodeModel(IExecutionClientService nodeService, bool getAcctData = false, bool contractInteraction = false, int fastQueryInt = 5, int slowQueryInt = 60)
         {
             this.ethereumService = nodeService;
             FastQueryInterval = fastQueryInt;
