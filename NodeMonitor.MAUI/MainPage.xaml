@@ -34,10 +34,11 @@
                                 <Label Grid.Column="2" Grid.Row="2" Text="Protocol Version:"/>
                                 <Label Grid.Column="3" Grid.Row="2"  Text="{Binding ProtocolVersion}"/>
                                 <Label Grid.Column="0" Grid.Row="3" Text="Execution Client:"/>
-                                <Label Grid.Column="1" Grid.Row="3" Text="{Binding ClientVersion}"/>
+                                <Label Grid.Column="1" Grid.Row="3" Text="{Binding ExecutionClientVersion}"/>
                                 <Label Grid.Column="2" Grid.Row="3" Text="Gas Price:"/>
                                 <Label Grid.Column="3" Grid.Row="3" Text="{Binding GasPrice}"/>
                                 <Label Grid.Column="0" Grid.Row="4" Text="Consensus Client:"/>
+                                <Label Grid.Column="1" Grid.Row="4" Text="{Binding ConsensusClientVersion}"/>
                                 <gauge:SfRadialGauge Grid.Row="0" Grid.Column="4" Grid.RowSpan="6">
                                     <gauge:SfRadialGauge.Axes>
                                         <gauge:RadialAxis Minimum="0" Maximum="200">

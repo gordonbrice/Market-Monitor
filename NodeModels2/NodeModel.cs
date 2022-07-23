@@ -30,7 +30,8 @@ namespace NodeModels2
 
     public partial class NodeModel : ObservableObject
     {
-        IExecutionClientService ethereumService;
+        IExecutionClientService executionClientService;
+        IConsensusClientService consensusClientService;
 
         public event EventHandler<NodeErrorEventArgs> Error;
         public event EventHandler<SlowQuertEventArgs> SlowQueryComplete;
@@ -92,7 +93,10 @@ namespace NodeModels2
         string protocolVersion;
 
         [ObservableProperty]
-        string clientVersion;
+        string executionClientVersion;
+
+        [ObservableProperty]
+        string consensusClientVersion;
 
         [ObservableProperty]
         string chainId;
@@ -183,12 +187,13 @@ namespace NodeModels2
         Timer slowQueryTimer;
         bool contractInteraction;
 
-        public NodeModel(IExecutionClientService nodeService, bool getAcctData = false, bool contractInteraction = false, int fastQueryInt = 5, int slowQueryInt = 60)
+        public NodeModel(IExecutionClientService executionService, IConsensusClientService consensusService, bool getAcctData = false, bool contractInteraction = false, int fastQueryInt = 5, int slowQueryInt = 60)
         {
-            this.ethereumService = nodeService;
+            this.executionClientService = executionService;
+            this.consensusClientService = consensusService;
             FastQueryInterval = fastQueryInt;
             SlowQueryInterval = slowQueryInt;
-            EthereumServiceName = nodeService.Name;
+            EthereumServiceName = executionService.Name;
             Status = NodeStatus.Connected;
             this.accounts = new ObservableCollection<AccountModel>();
             this.prices = new ObservableCollection<PriceModel>();
@@ -210,7 +215,7 @@ namespace NodeModels2
                     if (!string.IsNullOrEmpty(address.Trim()))
                     {
                         var addr = address.Split(',');
-                        var account = new AccountModel(this.ethereumService, addr[1], addr[0]);
+                        var account = new AccountModel(this.executionClientService, addr[1], addr[0]);
 
                         Accounts.Add(account);
                     }
@@ -244,7 +249,7 @@ namespace NodeModels2
             try
             {
                 var beginTime = DateTime.Now;
-                var syncingAwaiter = this.ethereumService.GetSyncing().GetAwaiter();
+                var syncingAwaiter = this.executionClientService.GetSyncing().GetAwaiter();
 
                 syncingAwaiter.OnCompleted(() =>
                 {
@@ -274,7 +279,7 @@ namespace NodeModels2
                             {
                                 beginTime = DateTime.Now;
 
-                                var highestBlockTaskAwaiter = this.ethereumService.GetHighestBlock().GetAwaiter();
+                                var highestBlockTaskAwaiter = this.executionClientService.GetHighestBlock().GetAwaiter();
 
                                 highestBlockTaskAwaiter.OnCompleted(() =>
                                 {
@@ -307,13 +312,13 @@ namespace NodeModels2
                     }
                 });
 
-                var clientVersionAwaiter = this.ethereumService.GetClientVersion().GetAwaiter();
+                var execClientVersionAwaiter = this.executionClientService.GetClientVersion().GetAwaiter();
 
-                clientVersionAwaiter.OnCompleted(() =>
+                execClientVersionAwaiter.OnCompleted(() =>
                 {
                     try
                     {
-                        ClientVersion = clientVersionAwaiter.GetResult();
+                        ExecutionClientVersion = execClientVersionAwaiter.GetResult();
                     }
                     catch (Exception cvx)
                     {
@@ -323,7 +328,26 @@ namespace NodeModels2
                     }
                 });
 
-                var gasPriceAwaiter = this.ethereumService.GetGasPrice().GetAwaiter();
+                if(consensusClientService != null)
+                {
+                    var consensusClientVersionAwaiter = this.consensusClientService.GetClientVersion().GetAwaiter();
+
+                    consensusClientVersionAwaiter.OnCompleted(() =>
+                    {
+                        try
+                        {
+                            ConsensusClientVersion = consensusClientVersionAwaiter.GetResult();
+                        }
+                        catch (Exception cvx)
+                        {
+                            Status = NodeStatus.Error;
+                            StatusDetail = cvx.Message;
+                            OnError(this.EthereumServiceName, cvx.Message);
+                        }
+                    });
+                }
+
+                var gasPriceAwaiter = this.executionClientService.GetGasPrice().GetAwaiter();
 
                 gasPriceAwaiter.OnCompleted(() =>
                 {
@@ -351,7 +375,7 @@ namespace NodeModels2
         {
             try
             {
-                var protocolVerTaskAwaiter = this.ethereumService.GetProtocolVersion().GetAwaiter();
+                var protocolVerTaskAwaiter = this.executionClientService.GetProtocolVersion().GetAwaiter();
 
                 protocolVerTaskAwaiter.OnCompleted(() =>
                 {
@@ -365,7 +389,7 @@ namespace NodeModels2
                     }
                 });
 
-                var chainIdAwaiter = this.ethereumService.GetChainId().GetAwaiter();
+                var chainIdAwaiter = this.executionClientService.GetChainId().GetAwaiter();
 
                 chainIdAwaiter.OnCompleted(() =>
                 {
@@ -409,22 +433,22 @@ namespace NodeModels2
         }
         private void AddTokens()
         {
-            var dai = new Erc20TokenModel("DAI", this.ethereumService);
+            var dai = new Erc20TokenModel("DAI", this.executionClientService);
 
             dai.QueryProperties();
             Tokens.Add(dai);
 
-            var bnb = new Erc20TokenModel("BNB", this.ethereumService);
+            var bnb = new Erc20TokenModel("BNB", this.executionClientService);
 
             bnb.QueryProperties();
             Tokens.Add(bnb);
 
-            var wbtc = new Erc20TokenModel("WBTC", this.ethereumService);
+            var wbtc = new Erc20TokenModel("WBTC", this.executionClientService);
 
             wbtc.QueryProperties();
             Tokens.Add(wbtc);
 
-            var usdt = new Erc20TokenModel("USDT", this.ethereumService);
+            var usdt = new Erc20TokenModel("USDT", this.executionClientService);
 
             usdt.QueryProperties();
             Tokens.Add(usdt);
@@ -434,22 +458,22 @@ namespace NodeModels2
             //usdc.QueryProperties();
             //Tokens.Add(usdc);
 
-            var tusd = new Erc20TokenModel("TUSD", this.ethereumService);
+            var tusd = new Erc20TokenModel("TUSD", this.executionClientService);
 
             tusd.QueryProperties();
             Tokens.Add(tusd);
 
-            var link = new Erc20TokenModel("LINK", this.ethereumService);
+            var link = new Erc20TokenModel("LINK", this.executionClientService);
 
             link.QueryProperties();
             Tokens.Add(link);
 
-            var mkr = new Erc20TokenModel("MKR", this.ethereumService);
+            var mkr = new Erc20TokenModel("MKR", this.executionClientService);
 
             mkr.QueryProperties();
             Tokens.Add(mkr);
 
-            var ht = new Erc20TokenModel("HT", this.ethereumService);
+            var ht = new Erc20TokenModel("HT", this.executionClientService);
 
             ht.QueryProperties();
             Tokens.Add(ht);
@@ -532,7 +556,7 @@ namespace NodeModels2
 
                 if(baseToken == null)
                 {
-                    baseToken = new Erc20TokenModel(baseTokenName, this.ethereumService);
+                    baseToken = new Erc20TokenModel(baseTokenName, this.executionClientService);
                     baseToken.QueryProperties();
                     Tokens.Add(baseToken);
                 }
@@ -599,7 +623,7 @@ namespace NodeModels2
                             {
                                 if (this.uniswapFactoryContract == null)
                                 {
-                                    this.uniswapFactoryContract = this.ethereumService.GetContract(this.uniswapFactoryABI, this.mainNetFactoryAddr);
+                                    this.uniswapFactoryContract = this.executionClientService.GetContract(this.uniswapFactoryABI, this.mainNetFactoryAddr);
                                 }
 
                                 var getExchangeFunction = this.uniswapFactoryContract.GetFunction("getExchange");
@@ -608,7 +632,7 @@ namespace NodeModels2
                                 daiExchangeAwaiter.OnCompleted(() =>
                                 {
                                     this.daiExchAddr = daiExchangeAwaiter.GetResult();
-                                    this.uniswapDaiExchContract = this.ethereumService.GetContract(this.uniswapExchangeABI, this.daiExchAddr);
+                                    this.uniswapDaiExchContract = this.executionClientService.GetContract(this.uniswapExchangeABI, this.daiExchAddr);
                                     GetPrice(tokenPair);
                                 });
                             }
@@ -623,7 +647,7 @@ namespace NodeModels2
                             {
                                 if (this.uniswapFactoryContract == null)
                                 {
-                                    this.uniswapFactoryContract = this.ethereumService.GetContract(this.uniswapFactoryABI, this.mainNetFactoryAddr);
+                                    this.uniswapFactoryContract = this.executionClientService.GetContract(this.uniswapFactoryABI, this.mainNetFactoryAddr);
                                 }
 
                                 var getExchangeFunction = this.uniswapFactoryContract.GetFunction("getExchange");
@@ -632,7 +656,7 @@ namespace NodeModels2
                                 tusdExchangeAwaiter.OnCompleted(() =>
                                 {
                                     this.tusdExchAddr = tusdExchangeAwaiter.GetResult();
-                                    this.uniswapTusdExchContract = this.ethereumService.GetContract(this.uniswapExchangeABI, this.tusdExchAddr);
+                                    this.uniswapTusdExchContract = this.executionClientService.GetContract(this.uniswapExchangeABI, this.tusdExchAddr);
                                     GetPrice(tokenPair);
                                 });
                             }
@@ -647,7 +671,7 @@ namespace NodeModels2
                             {
                                 if (this.uniswapFactoryContract == null)
                                 {
-                                    this.uniswapFactoryContract = this.ethereumService.GetContract(this.uniswapFactoryABI, this.mainNetFactoryAddr);
+                                    this.uniswapFactoryContract = this.executionClientService.GetContract(this.uniswapFactoryABI, this.mainNetFactoryAddr);
                                 }
 
                                 var getExchangeFunction = this.uniswapFactoryContract.GetFunction("getExchange");
@@ -656,7 +680,7 @@ namespace NodeModels2
                                 usdcExchangeAwaiter.OnCompleted(() =>
                                 {
                                     this.usdcExchAddr = usdcExchangeAwaiter.GetResult();
-                                    this.uniswapUsdcExchContract = this.ethereumService.GetContract(this.uniswapExchangeABI, this.usdcExchAddr);
+                                    this.uniswapUsdcExchContract = this.executionClientService.GetContract(this.uniswapExchangeABI, this.usdcExchAddr);
                                     GetPrice(tokenPair);
                                 });
                             }

@@ -10,7 +10,8 @@ namespace KeyStore
     public enum KeyType
     {
         EthNode = 0,
-        MarketData = 1
+        MarketData = 1,
+        Eth1Node = 2
     }
 
     public class KeyProperties
@@ -21,8 +22,11 @@ namespace KeyStore
         public int DisplayOrder { get; private set; }
         public int FastQueryInterval { get; private set; }
         public int SlowQueryInterval { get; private set; }
+        public string CLEndpoint { get; private set; }
+        public string ELEndpoint { get; private set; }
 
-        public KeyProperties(string value, int type, string displayName, int displayOrder, int fastQueryInterval, int slowQueryInterval, int queryIntervalMultiplier)
+        public KeyProperties(string value, int type, string displayName, int displayOrder, int fastQueryInterval, int slowQueryInterval
+            , int queryIntervalMultiplier, string elEndpoint, string clEndpoint)
         {
             Value = value;
             Type = type;
@@ -30,6 +34,8 @@ namespace KeyStore
             DisplayOrder = displayOrder;
             FastQueryInterval = fastQueryInterval * queryIntervalMultiplier;
             SlowQueryInterval = slowQueryInterval * queryIntervalMultiplier;
+            CLEndpoint = clEndpoint;
+            ELEndpoint = elEndpoint;
         }
     }
 
@@ -45,7 +51,8 @@ namespace KeyStore
 
             using (var conn = new SqlConnection(connectionStr))
             {
-                var command = new SqlCommand("select [Key], Value, KeyType, Disabled, d.DisplayName, d.DisplayOrder, d.FastQueryInterval, d.SlowQueryInterval, d.QueryIntervalMultiplier from KeyStore k join DisplayProperties d on d.KeyId = k.Id where Disabled = 0 order by d.DisplayOrder", conn);
+                var command = new SqlCommand(
+                    "select * from KeyStore k join DisplayProperties dp on dp.KeyId = k.Id join NodeProperties np on np.KeyId = k.Id order by DisplayOrder", conn);
                 
                 command.Connection.Open();
                 KeyCollection = new Dictionary<string, KeyProperties>();
@@ -57,7 +64,10 @@ namespace KeyStore
                     if(Convert.ToInt16(reader["Disabled"]) == 0)
                     {
                         KeyCollection.Add(reader["Key"].ToString(), new KeyProperties(reader["Value"].ToString(), Convert.ToInt32(reader["KeyType"]), reader["DisplayName"].ToString()
-                            , Convert.ToInt32(reader["DisplayOrder"]), Convert.ToInt32(reader["FastQueryInterval"]), Convert.ToInt32(reader["SlowQueryInterval"]), Convert.ToInt32(reader["QueryIntervalMultiplier"])));
+                            , Convert.ToInt32(reader["DisplayOrder"]), Convert.ToInt32(reader["FastQueryInterval"]), Convert.ToInt32(reader["SlowQueryInterval"])
+                            , Convert.ToInt32(reader["QueryIntervalMultiplier"])
+                            , reader["ELEndpoint"] == DBNull.Value ? string.Empty : reader["ELEndpoint"].ToString()
+                            , reader["CLEndpoint"] == DBNull.Value ? string.Empty : reader["CLEndpoint"].ToString()));
                     }
                 }
             }

@@ -31,11 +31,24 @@ namespace NodeMonitor.MAUI
                 {
                     if (key.Value.Type == (int)KeyType.EthNode && !string.IsNullOrEmpty(key.Value.Value))
                     {
-                        var svc = new ExecutionClientService(key.Value.DisplayName, key.Value.Value, httpClient);
+                        var executionClientSvc = new ExecutionClientService(key.Value.DisplayName, key.Value.ELEndpoint, httpClient);
+                        var consensusClientSvc = new ConsensusClientService(key.Value.DisplayName, key.Value.CLEndpoint, httpClient);
 
-                        svc.Error += Svc_Error;
+                        executionClientSvc.Error += Svc_Error;
+                        
+                        var node = new NodeModel(executionClientSvc, consensusClientSvc, false, false, key.Value.FastQueryInterval, key.Value.SlowQueryInterval);
 
-                        var node = new NodeModel(svc, false, false, key.Value.FastQueryInterval, key.Value.SlowQueryInterval);
+                        node.Error += Node_Error;
+                        node.SlowQueryComplete += Node_SlowQueryComplete;
+                        Nodes.Add(node);
+                    }
+                    else if(key.Value.Type == (int)KeyType.Eth1Node && !string.IsNullOrEmpty(key.Value.Value))
+                    {
+                        var executionClientSvc = new ExecutionClientService(key.Value.DisplayName, key.Value.ELEndpoint, httpClient);
+
+                        executionClientSvc.Error += Svc_Error;
+
+                        var node = new NodeModel(executionClientSvc, null, false, false, key.Value.FastQueryInterval, key.Value.SlowQueryInterval);
 
                         node.Error += Node_Error;
                         node.SlowQueryComplete += Node_SlowQueryComplete;

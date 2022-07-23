@@ -24,7 +24,7 @@ namespace NodeServices
         string name;
         HttpClient httpClient = null;
         protected string uri = null;
-
+ 
         public event EventHandler<EthNodeServiceErrorEventArgs> Error;
 
         public string Name
@@ -58,7 +58,7 @@ namespace NodeServices
             arr.Add(paramData);
             var payload = "{\"jsonrpc\":\"2.0\",\"method\":\"web3_clientVersion\",\"params\":[],\"id\":67}";
             var stringContent = new StringContent(payload, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(this.uri, stringContent);
+            var response = await httpClient.PostAsync($"{this.uri}", stringContent);
 
             if (response.IsSuccessStatusCode)
             {
