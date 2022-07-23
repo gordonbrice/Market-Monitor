@@ -99,6 +99,9 @@ namespace NodeModels2
         string consensusClientVersion;
 
         [ObservableProperty]
+        BlockHeaders beaconBlockHeaders;
+
+        [ObservableProperty]
         string chainId;
 
         [ObservableProperty]
@@ -337,6 +340,22 @@ namespace NodeModels2
                         try
                         {
                             ConsensusClientVersion = consensusClientVersionAwaiter.GetResult();
+                        }
+                        catch (Exception cvx)
+                        {
+                            Status = NodeStatus.Error;
+                            StatusDetail = cvx.Message;
+                            OnError(this.EthereumServiceName, cvx.Message);
+                        }
+                    });
+
+                    var beaconHeaderAwaiter = this.consensusClientService.GetBeaconHeaders().GetAwaiter();
+
+                    beaconHeaderAwaiter.OnCompleted(() =>
+                    {
+                        try
+                        {
+                            BeaconBlockHeaders = beaconHeaderAwaiter.GetResult();
                         }
                         catch (Exception cvx)
                         {

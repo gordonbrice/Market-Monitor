@@ -24,9 +24,10 @@ namespace KeyStore
         public int SlowQueryInterval { get; private set; }
         public string CLEndpoint { get; private set; }
         public string ELEndpoint { get; private set; }
+        public string CLEndpointAuth { get; private set; }
 
         public KeyProperties(string value, int type, string displayName, int displayOrder, int fastQueryInterval, int slowQueryInterval
-            , int queryIntervalMultiplier, string elEndpoint, string clEndpoint)
+            , int queryIntervalMultiplier, string elEndpoint, string clEndpoint, string clEndpointAuth)
         {
             Value = value;
             Type = type;
@@ -36,6 +37,7 @@ namespace KeyStore
             SlowQueryInterval = slowQueryInterval * queryIntervalMultiplier;
             CLEndpoint = clEndpoint;
             ELEndpoint = elEndpoint;
+            CLEndpointAuth = clEndpointAuth;
         }
     }
 
@@ -63,11 +65,13 @@ namespace KeyStore
                 {
                     if(Convert.ToInt16(reader["Disabled"]) == 0)
                     {
-                        KeyCollection.Add(reader["Key"].ToString(), new KeyProperties(reader["Value"].ToString(), Convert.ToInt32(reader["KeyType"]), reader["DisplayName"].ToString()
-                            , Convert.ToInt32(reader["DisplayOrder"]), Convert.ToInt32(reader["FastQueryInterval"]), Convert.ToInt32(reader["SlowQueryInterval"])
+                        KeyCollection.Add(reader["Key"].ToString(), new KeyProperties(reader["Value"].ToString()
+                            , Convert.ToInt32(reader["KeyType"]), reader["DisplayName"].ToString(), Convert.ToInt32(reader["DisplayOrder"])
+                            , Convert.ToInt32(reader["FastQueryInterval"]), Convert.ToInt32(reader["SlowQueryInterval"])
                             , Convert.ToInt32(reader["QueryIntervalMultiplier"])
                             , reader["ELEndpoint"] == DBNull.Value ? string.Empty : reader["ELEndpoint"].ToString()
-                            , reader["CLEndpoint"] == DBNull.Value ? string.Empty : reader["CLEndpoint"].ToString()));
+                            , reader["CLEndpoint"] == DBNull.Value ? string.Empty : reader["CLEndpoint"].ToString()
+                            , reader["CLEndpointAuth"] == DBNull.Value ? string.Empty : reader["CLEndpointAuth"].ToString()));
                     }
                 }
             }

@@ -29,10 +29,10 @@ namespace NodeMonitor.MAUI
 
                 foreach (var key in store.KeyCollection)
                 {
-                    if (key.Value.Type == (int)KeyType.EthNode && !string.IsNullOrEmpty(key.Value.Value))
+                    if (key.Value.Type == (int)KeyType.EthNode || (!string.IsNullOrEmpty(key.Value.CLEndpoint) && !string.IsNullOrEmpty(key.Value.ELEndpoint)))
                     {
                         var executionClientSvc = new ExecutionClientService(key.Value.DisplayName, key.Value.ELEndpoint, httpClient);
-                        var consensusClientSvc = new ConsensusClientService(key.Value.DisplayName, key.Value.CLEndpoint, httpClient);
+                        var consensusClientSvc = new ConsensusClientService(key.Value.DisplayName, key.Value.CLEndpoint, httpClient, key.Value.CLEndpointAuth);
 
                         executionClientSvc.Error += Svc_Error;
                         

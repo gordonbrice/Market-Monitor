@@ -46,7 +46,7 @@ namespace NodeMonitor.WPF
                     {
                         if(key.Value.Type == (int)KeyType.EthNode && !string.IsNullOrEmpty(key.Value.Value))
                         {
-                            var svc = new ExecutionClientService(key.Value.DisplayName, key.Value.Value, key.Value.ELPort, httpClient);
+                            var svc = new ExecutionClientService(key.Value.DisplayName, key.Value.Value, httpClient);
 
                             svc.Error += Svc_Error;
 
