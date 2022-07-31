@@ -40,9 +40,9 @@
                                 <Label Grid.Column="0" Grid.Row="3" Text="Consensus Client:"/>
                                 <Label Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" Text="{Binding ConsensusClientVersion}"/>
                                 <Label Grid.Column="0" Grid.Row="4" Text="Beacon Block Head Slot:"/>
-                                <Label Grid.Column="1" Grid.Row="4" Text="{Binding BeaconBlockHeaders.data[0].header.message.slot}"/>
+                                <Label Grid.Column="1" Grid.Row="4" Text="{Binding Slot}"/>
                                 <Label Grid.Column="2" Grid.Row="4" Text="Proposer:"/>
-                                <Label Grid.Column="3" Grid.Row="4" Text="{Binding BeaconBlockHeaders.data[0].header.message.proposer_index}"/>
+                                <Label Grid.Column="3" Grid.Row="4" Text="{Binding ProposerIndex}"/>
                                 <gauge:SfRadialGauge Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="2" Grid.RowSpan="6">
                                     <gauge:SfRadialGauge.Axes>
                                         <gauge:RadialAxis Minimum="0" Maximum="200">

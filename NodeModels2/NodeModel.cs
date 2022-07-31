@@ -99,7 +99,10 @@ namespace NodeModels2
         string consensusClientVersion;
 
         [ObservableProperty]
-        BlockHeaders beaconBlockHeaders;
+        string slot;
+
+        [ObservableProperty]
+        string proposerIndex;
 
         [ObservableProperty]
         string chainId;
@@ -355,7 +358,13 @@ namespace NodeModels2
                     {
                         try
                         {
-                            BeaconBlockHeaders = beaconHeaderAwaiter.GetResult();
+                            var beaconBlock = beaconHeaderAwaiter.GetResult();
+
+                            if(beaconBlock != null && beaconBlock.data[0] != null)
+                            {
+                                Slot = beaconBlock.data[0].header.message.slot;
+                                ProposerIndex = beaconHeaderAwaiter.GetResult().data[0].header.message.proposer_index;
+                            }
                         }
                         catch (Exception cvx)
                         {
