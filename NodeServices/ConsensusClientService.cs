@@ -25,6 +25,10 @@ namespace NodeServices
         public string body_root { get; set; }
 
     }
+    public class SingleBlockHeader
+    {
+        public BlockHeader data { get; set; }
+    }
     public class BlockHeader
     {
         public string root { get; set; }
@@ -99,6 +103,43 @@ namespace NodeServices
             }
 
             return null;
+        }
+        public async Task<SingleBlockHeader> GetBlockHeader(string blockId)
+        {
+            var req = $"/eth/v1/beacon/headers/{blockId}";
+
+            this.httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Basic", Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(auth)));
+
+            var response = await httpClient.GetAsync($"{this.uri}{req}");
+
+            this.httpClient.DefaultRequestHeaders.Clear();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseStr = await response.Content.ReadAsStringAsync();
+                var blockHeader = JsonConvert.DeserializeObject<SingleBlockHeader>(responseStr);
+
+                return blockHeader;
+            }
+
+            return null;
+        }
+        public async Task SubscribeToEvent(string eventName)
+        {
+            var req = $"/eth/v1/events/{eventName}";
+
+            this.httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Basic", Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(auth)));
+
+            var response = await httpClient.GetAsync($"{this.uri}{req}");
+
+            this.httpClient.DefaultRequestHeaders.Clear();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseStr = await response.Content.ReadAsStringAsync();
+            }
         }
     }
 }

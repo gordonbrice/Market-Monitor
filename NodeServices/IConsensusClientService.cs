@@ -8,5 +8,7 @@ namespace NodeServices
     public interface IConsensusClientService : IClientService
     {
         Task<BlockHeaders> GetBeaconHeaders();
+        Task<SingleBlockHeader> GetBlockHeader(string blockId);
+        Task SubscribeToEvent(string eventName);
     }
 }

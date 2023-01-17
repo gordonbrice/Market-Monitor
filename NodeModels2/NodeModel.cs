@@ -105,6 +105,24 @@ namespace NodeModels2
         string proposerIndex;
 
         [ObservableProperty]
+        string finalizedSlot;
+
+        [ObservableProperty]
+        string finalizedProposerIndex;
+
+        [ObservableProperty]
+        string justifiedSlot;
+
+        [ObservableProperty]
+        string justifiedProposerIndex;
+
+        [ObservableProperty]
+        string headSlot;
+
+        [ObservableProperty]
+        string headProposerIndex;
+
+        [ObservableProperty]
         string chainId;
 
         [ObservableProperty]
@@ -241,8 +259,13 @@ namespace NodeModels2
                 OnSlowQueryComplete();
             }, null, new TimeSpan(0, 0, 0), new TimeSpan(0, 0, SlowQueryInterval));
 
+            InitializeEvents();
         }
 
+        private void InitializeEvents()
+        {
+
+        }
         private void OnSlowQueryComplete()
         {
             if(SlowQueryComplete != null)
@@ -373,6 +396,73 @@ namespace NodeModels2
                             OnError(this.EthereumServiceName, cvx.Message);
                         }
                     });
+
+                    var finalizedBlockHeaderAwaiter = this.consensusClientService.GetBlockHeader("finalized").GetAwaiter();
+
+                    finalizedBlockHeaderAwaiter.OnCompleted(() =>
+                    {
+                        try
+                        {
+                            var finalizedBlock = finalizedBlockHeaderAwaiter.GetResult();
+
+                            if (finalizedBlock != null && finalizedBlock.data != null)
+                            {
+                                FinalizedSlot = finalizedBlock.data.header.message.slot;
+                                FinalizedProposerIndex = finalizedBlock.data.header.message.proposer_index;
+                            }
+                        }
+                        catch (Exception cvx)
+                        {
+                            Status = NodeStatus.Error;
+                            StatusDetail = cvx.Message;
+                            OnError(this.EthereumServiceName, cvx.Message);
+                        }
+                    });
+
+                    var headBlockHeaderAwaiter = this.consensusClientService.GetBlockHeader("head").GetAwaiter();
+
+                    headBlockHeaderAwaiter.OnCompleted(() =>
+                    {
+                        try
+                        {
+                            var headBlock = headBlockHeaderAwaiter.GetResult();
+
+                            if (headBlock != null && headBlock.data != null)
+                            {
+                                HeadSlot = headBlock.data.header.message.slot;
+                                HeadProposerIndex = headBlock.data.header.message.proposer_index;
+                            }
+                        }
+                        catch (Exception cvx)
+                        {
+                            Status = NodeStatus.Error;
+                            StatusDetail = cvx.Message;
+                            OnError(this.EthereumServiceName, cvx.Message);
+                        }
+                    });
+
+                    var justifiedBlockHeaderAwaiter = this.consensusClientService.GetBlockHeader("justified").GetAwaiter();
+
+                    justifiedBlockHeaderAwaiter.OnCompleted(() =>
+                    {
+                        try
+                        {
+                            var justifiedBlock = finalizedBlockHeaderAwaiter.GetResult();
+
+                            if (justifiedBlock != null && justifiedBlock.data != null)
+                            {
+                                JustifiedSlot = justifiedBlock.data.header.message.slot;
+                                JustifiedProposerIndex = justifiedBlock.data.header.message.proposer_index;
+                            }
+                        }
+                        catch (Exception cvx)
+                        {
+                            Status = NodeStatus.Error;
+                            StatusDetail = cvx.Message;
+                            OnError(this.EthereumServiceName, cvx.Message);
+                        }
+                    });
+
                 }
 
                 var gasPriceAwaiter = this.executionClientService.GetGasPrice().GetAwaiter();
@@ -381,7 +471,7 @@ namespace NodeModels2
                 {
                     try
                     {
-                        GasPrice = Math.Round(double.Parse(gasPriceAwaiter.GetResult().ToString())/1000000000, 2);
+                        GasPrice = Math.Round(double.Parse(gasPriceAwaiter.GetResult().ToString()) / 1000000000, 2);
                     }
                     catch (Exception cvx)
                     {
@@ -390,7 +480,6 @@ namespace NodeModels2
                         OnError(this.EthereumServiceName, cvx.Message);
                     }
                 });
-
                 GetUniswapPrices();
             }
             catch (Exception e)

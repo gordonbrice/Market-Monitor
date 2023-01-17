@@ -20,7 +20,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="NodeModels:NodeModel">
                         <Frame Padding="5" Margin="5">
-                            <Grid RowDefinitions="30,30,30,30,30,30,60" ColumnDefinitions=".15*,.15*,.15*,.15*,.15*,.15*,.10*">
+                            <Grid RowDefinitions="30,30,30,30,30,30,30,30" ColumnDefinitions=".15*,.15*,.15*,.15*,.15*,.15*,.10*">
                                 <Label Grid.Column="0" Grid.Row="0" Text="{Binding EthereumServiceName}" TextColor="#c56000"/>
                                 <Label Grid.Column="1" Grid.Row="0" Text="{Binding ChainId}" TextColor="#c56000"/>
                                 <Label Grid.Column="2" Grid.Row="0" Text="Status:"/>
@@ -43,21 +43,19 @@
                                 <Label Grid.Column="1" Grid.Row="4" Text="{Binding Slot}"/>
                                 <Label Grid.Column="2" Grid.Row="4" Text="Proposer:"/>
                                 <Label Grid.Column="3" Grid.Row="4" Text="{Binding ProposerIndex}"/>
-                                <gauge:SfRadialGauge Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="2" Grid.RowSpan="6">
-                                    <gauge:SfRadialGauge.Axes>
-                                        <gauge:RadialAxis Minimum="0" Maximum="200">
-                                            <gauge:RadialAxis.Ranges>
-                                                <gauge:RadialRange StartValue="0" EndValue="60" Fill="Green" />
-                                                <gauge:RadialRange StartValue="60" EndValue="120" Fill="Orange" />
-                                                <gauge:RadialRange StartValue="120" EndValue="200" Fill="Red" />
-                                            </gauge:RadialAxis.Ranges>
-                                            <gauge:RadialAxis.Pointers>
-                                                <gauge:NeedlePointer Value="{Binding GasPrice}" />
-                                            </gauge:RadialAxis.Pointers>
-                                        </gauge:RadialAxis>
-                                    </gauge:SfRadialGauge.Axes>
-                                </gauge:SfRadialGauge>
-                            </Grid>
+                                <Label Grid.Column="0" Grid.Row="5" Text="Head Slot:"/>
+                                <Label Grid.Column="1" Grid.Row="5" Text="{Binding HeadSlot}"/>
+                                <Label Grid.Column="2" Grid.Row="5" Text="Head Proposer:"/>
+                                <Label Grid.Column="3" Grid.Row="5" Text="{Binding HeadProposerIndex}"/>
+                                <Label Grid.Column="0" Grid.Row="6" Text="Justified Slot:"/>
+                                <Label Grid.Column="1" Grid.Row="6" Text="{Binding JustifiedSlot}"/>
+                                <Label Grid.Column="2" Grid.Row="6" Text= "Justified Proposer:"/>
+                                <Label Grid.Column="3" Grid.Row="6" Text="{Binding JustifiedProposerIndex}"/>
+                                <Label Grid.Column="0" Grid.Row="7" Text="Finalized Slot:"/>
+                                <Label Grid.Column="1" Grid.Row="7" Text="{Binding FinalizedSlot}"/>
+                                <Label Grid.Column="2" Grid.Row="7" Text="Finalized Proposer:"/>
+                                <Label Grid.Column="3" Grid.Row="7" Text="{Binding FinalizedProposerIndex}"/>
+                             </Grid>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -66,17 +64,3 @@
     </ScrollView>
  
 </ContentPage>
-<!---->
-<!--
-                                <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="120"/>
-                                <ColumnDefinition Width="75"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
--->
